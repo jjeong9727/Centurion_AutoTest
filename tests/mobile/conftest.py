@@ -1,6 +1,6 @@
 import pytest
 from playwright.sync_api import sync_playwright
-from helpers.language_mapping import generate_language_json
+from scripts.language_mapping import generate_language_json
 
 @pytest.fixture(scope="session", autouse=True)
 def prepare_language_mapping():

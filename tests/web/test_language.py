@@ -1,6 +1,7 @@
 import pytest
 import json
 from playwright.sync_api import Page
+from config import URLS
 
 LANGUAGE_CODES = ["ko", "en", "ja", "zh-cn", "th", "vi"]
 
@@ -40,7 +41,7 @@ def navigate_and_check_texts(page: Page, texts: dict, lang_code: str):
 @pytest.mark.order(1)
 def test_korean_default(page: Page):
     texts = load_language_mapping()
-    page.goto("https://daybeauclinic01.com/branch/")
+    page.goto(URLS["home_main"])
     navigate_and_check_texts(page, texts, "ko")
 
 # 다른 언어 확인 (영어~베트남어)
@@ -48,7 +49,7 @@ def test_korean_default(page: Page):
 @pytest.mark.parametrize("lang_idx,lang_code", list(enumerate(LANGUAGE_CODES[1:])))  # ko 제외
 def test_other_languages(page: Page, lang_idx, lang_code):
     texts = load_language_mapping()
-    page.goto("https://daybeauclinic01.com/branch/")
+    page.goto(URLS["home_main"])
 
     # 언어 선택 열기
     page.click(".language2")
