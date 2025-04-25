@@ -1,12 +1,12 @@
 import pytest
 import json
-from playwright.sync_api import Page
+from playwright.sync_api import Page, sync_playwright
 from config import URLS
 
 LANGUAGE_CODES = ["ko", "en", "ja", "zh-cn", "th", "vi"]
 
 # JSON 불러오기 함수
-def load_language_mapping(path="json/language.json"):
+def load_language_mapping(path="data/language.json"):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
