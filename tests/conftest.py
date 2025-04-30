@@ -1,6 +1,7 @@
 # conftest.py
 import pytest
 from playwright.sync_api import sync_playwright, Page, Browser, BrowserContext
+from helpers.auth_helper import ensure_valid_token
 from typing import Generator
 
 @pytest.fixture(scope="session")
@@ -26,3 +27,9 @@ def page(context: BrowserContext) -> Generator[Page, None, None]:
     page = context.new_page()
     yield page
     page.close()
+    
+@pytest.fixture(scope="session")
+def access_token():
+    """세션 전체에서 재사용할 access_token fixture"""
+    token = ensure_valid_token()
+    return token
