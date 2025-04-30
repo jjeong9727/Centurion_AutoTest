@@ -9,5 +9,6 @@ URLS = {
 
 Account={
     "testid" :"test1234",
-    "testpw" :"test1234"
+    "testpw" :"test1234",
+    "cust_name" : "" #고객명 
 }
