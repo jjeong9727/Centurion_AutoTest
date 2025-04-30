@@ -1,0 +1,15 @@
+[
+    {
+      "customer_name": "홍길동",
+      "chart_id": "CHT001",
+      "birth": "1990-01-23",
+      "gender": "남",
+      "phone": "010-1234-5678",
+      "email": "hong@test.com",
+      "nationality": "대한민국",
+      "grade" : "VIP",
+      "amount": 150000,
+      "mileage": 3000,
+      "balance": 147000
+    }
+  ]

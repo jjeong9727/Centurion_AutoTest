@@ -14,6 +14,7 @@ def test_register_multiple_customers():
             "phone": "010-1000-0001",
             "email": "hana@test.com",
             "nationality": "대한민국",
+            "grade" : "VIP",
             "amount": 100000,
             "mileage": 2000,
             "balance": 98000
@@ -26,6 +27,7 @@ def test_register_multiple_customers():
             "phone": "010-1000-0002",
             "email": "dul@test.com",
             "nationality": "대한민국",
+            "grade" : "VIP",
             "amount": 200000,
             "mileage": 5000,
             "balance": 195000
