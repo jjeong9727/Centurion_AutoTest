@@ -11,10 +11,9 @@ URLS = {
 
 
 
-    
-    "instagram" : "",
-    "kakaoch": "",
-    "navermap" :""
+
+    "footer_instagram" : "https://www.instagram.com/daybeau_kd/", #임시 URL 데이뷰 건대점 
+    "kakaoch": "https://pf.kakao.com/_vxcxmhn", # 임시 URL 데이뷰  건대점
 }
 
 Account={
