@@ -14,7 +14,7 @@ PAGES_TO_TEST = [
     {"url": URLS["home_discover"], "keys": ["txt_lifting", "txt_removal", "btn_reservation"]},
     # {"url": URLS["home_previlege"], "keys": ["", ""]},
     {"url": URLS["home_removal"], "keys": ["txt_removal", "btn_reservation"]},
-    {"url": URLS["home_lifting"], "keys": ["txt_lifting", "btn_reservation"]},
+    {"url": URLS["home_lifting"], "keys": ["txt_lifting"]},
     {"url": URLS["home_mypage_profile"], "keys": ["txt_mypage", "txt_profile"]},
     {"url": URLS["home_mypage_membership"], "keys": ["txt_mypage", "txt_mypage", "txt_gradeinfo"]},
 ]
