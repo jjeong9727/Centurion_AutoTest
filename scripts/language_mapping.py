@@ -4,6 +4,14 @@ from pathlib import Path
 
 def generate_language_json(excel_path="data/language.xlsx", json_path="data/language.json"):
     df = pd.read_excel(excel_path)
+
+    # 열 이름을 내부 처리용으로 변환
+    df = df.rename(columns={
+        "KEY": "key",
+        "한국어": "ko",
+        "영어": "en"
+    })
+
     data = {}
 
     for _, row in df.iterrows():
@@ -11,11 +19,6 @@ def generate_language_json(excel_path="data/language.xlsx", json_path="data/lang
         data[key] = {
             "ko": row["ko"],
             "en": row["en"]
-            # ,
-            # "ja": row["ja"],
-            # "ch": row["zh-cn"],
-            # "th": row["th"],
-            # "vi": row["vi"]
         }
 
     Path(json_path).parent.mkdir(parents=True, exist_ok=True)
@@ -24,6 +27,6 @@ def generate_language_json(excel_path="data/language.xlsx", json_path="data/lang
 
     print(f"[OK] language.json 생성 완료 → {json_path}")
 
-# 단독 실행 시 바로 생성
+# 단독 실행 시
 if __name__ == "__main__":
     generate_language_json()

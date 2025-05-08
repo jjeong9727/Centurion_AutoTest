@@ -9,14 +9,14 @@ LANGUAGE_TESTID = {
     "en": "language_eng"
 }
 PAGES_TO_TEST = [
-    {"url": URLS["home_landing"], "keys": ["about_title", "about_subtitle"]},
-    {"url": URLS["home_login"], "keys": ["mypage_title", "mypage_button"]},
-    {"url": URLS["home_discover"], "keys": ["mypage_title", "mypage_button"]},
-    # {"url": URLS["home_previlege"], "keys": ["mypage_title", "mypage_button"]},
-    {"url": URLS["home_removal"], "keys": ["mypage_title", "mypage_button"]},
-    {"url": URLS["home_lifting"], "keys": ["mypage_title", "mypage_button"]},
-    {"url": URLS["home_mypage_profile"], "keys": ["mypage_title", "mypage_button"]},
-    {"url": URLS["home_mypage_membership"], "keys": ["mypage_title", "mypage_button"]}
+    {"url": URLS["home_landing"], "keys": ["btn_removal", "btn_lifting"]},
+    {"url": URLS["home_login"], "keys": ["txt_login", "btn_login", "header_reservation", "footer_branch"]},
+    {"url": URLS["home_discover"], "keys": ["txt_lifting", "txt_removal", "btn_reservation"]},
+    # {"url": URLS["home_previlege"], "keys": ["", ""]},
+    {"url": URLS["home_removal"], "keys": ["txt_removal", "btn_reservation"]},
+    {"url": URLS["home_lifting"], "keys": ["txt_lifting", "btn_reservation"]},
+    {"url": URLS["home_mypage_profile"], "keys": ["txt_mypage", "txt_profile"]},
+    {"url": URLS["home_mypage_membership"], "keys": ["txt_mypage", "txt_mypage", "txt_gradeinfo"]},
 ]
 
 def load_language_mapping(path="data/language.json"):
