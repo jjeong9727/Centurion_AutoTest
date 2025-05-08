@@ -1,60 +1,55 @@
-import json
-from playwright.sync_api import sync_playwright
+import pytest
+from playwright.sync_api import Page
 from config import URLS
-from helpers.nav_menu import navigate_all_menus
 
-# 디바이스 프로필 불러오기
-with open("data/device_profiles.json", "r", encoding="utf-8") as f:
-    device_profiles = json.load(f)
+# 공통으로 보여야 하는 항목
+COMMON_MENU_ITEMS = [
+    "menu_discover",
+    "menu_program",
+    "menu_privilege",
+    "language_kor",
+    "language_eng"
+]
 
-def is_ios_device(profile: dict) -> bool:
-    ua = profile.get("user_agent", "")
-    return "iPhone" in ua or "iOS" in ua
+# 비로그인 시 보여야 할 항목
+GUEST_MENU_ITEMS = [
+    "menu_login",
+    "menu_register"
+]
 
-def run_menu_navigation_test(device_name: str, profile: dict):
-    from helpers.auth_helper import ensure_valid_token
+# 로그인 시 보여야 할 항목
+LOGGEDIN_MENU_ITEMS = [
+    "menu_logout",
+    "menu_mypage"
+]
 
-    with sync_playwright() as p:
-        browser = (
-            p.webkit.launch(headless=False)
-            if is_ios_device(profile)
-            else p.chromium.launch(headless=False)
-        )
+# 공통 메뉴 확인 함수
+def verify_menu_visibility(page: Page, expected_ids: list):
+    for testid in expected_ids:
+        locator = page.locator(f'[data-testid={testid}]')
+        assert locator.is_visible(), f"❌ {testid} 메뉴가 표시되지 않음"
 
-        context = browser.new_context(**profile)
+# 비로그인 상태 테스트
+@pytest.mark.order(1)
+def test_menu_guest(page: Page):
+    page.goto(URLS["home_main"])
+    page.click('[data-testid=menu_ham]')
+    verify_menu_visibility(page, COMMON_MENU_ITEMS + GUEST_MENU_ITEMS)
 
-        # ✅ access_token 세팅 추가
-        access_token = ensure_valid_token()
-        context.add_cookies([{
-            "name": "access_token",
-            "value": access_token,
-            "domain": "your-domain.com",  # 테스트 서버 도메인
+# 로그인 상태 테스트 (토큰 직접 주입 방식)
+@pytest.mark.order(2)
+def test_menu_logged_in(page: Page):
+    # 로그인 토큰 세팅
+    page.context.add_cookies([
+        {
+            "name": "auth_token",
+            "value": "YOUR_TOKEN_VALUE_HERE",  # 실제 발급된 토큰으로 교체
+            "domain": "your-site.com",
             "path": "/",
             "httpOnly": True,
-            "secure": True,
-            "sameSite": "Lax"
-        }])
-
-        page = context.new_page()
-
-        # 디바이스 정보 주입
-        page.device_name = device_name
-        page.is_mobile = profile.get("is_mobile", False)
-        page.is_ios = is_ios_device(profile)
-        page.is_android = "Android" in profile.get("user_agent", "")
-
-        # 메인 페이지 진입 후 메뉴 이동 및 타이틀 검증
-        navigate_all_menus(page, base_url=URLS["home_main"])
-
-        browser.close()
-
-
-def test_all_device_menu_navigation():
-    for device_name, profile in device_profiles.items():
-        print(f"\n🚀 [START] {device_name} 메뉴 진입 테스트")
-        run_menu_navigation_test(device_name, profile)
-        print(f"✅ [PASS] {device_name} 완료\n")
-
-# 메인 실행
-if __name__ == "__main__":
-    test_all_device_menu_navigation()
+            "secure": True
+        }
+    ])
+    page.goto(URLS["home_main"])
+    page.click('[data-testid=menu_ham]')
+    verify_menu_visibility(page, COMMON_MENU_ITEMS + LOGGEDIN_MENU_ITEMS)

@@ -1,26 +1,58 @@
 {
-  "menu_treatment": {
-    "ko": "시술 안내",
-    "ja": "施術案内",
-    "zh-cn": "治疗指南",
-    "zh-tw": "療程指南",
-    "th": "ข้อมูลการรักษา",
-    "vi": "Hướng dẫn điều trị"
+  "txt_login": {
+    "ko": "로그인",
+    "en": "LOGIN"
   },
-  "menu_product": {
-    "ko": "제품 정보",
-    "ja": "製品情報",
-    "zh-cn": "产品信息",
-    "zh-tw": "產品資訊",
-    "th": "ข้อมูลสินค้า",
-    "vi": "Thông tin sản phẩm"
+  "btn_login": {
+    "ko": "카카오로 시작하기",
+    "en": "구글로 시작하기"
   },
-  "btn_apply": {
-    "ko": "적용하기",
-    "ja": "適用する",
-    "zh-cn": "应用",
-    "zh-tw": "套用",
-    "th": "ใช้",
-    "vi": "Áp dụng"
+  "txt_membership": {
+    "ko": "멤버십 조회",
+    "en": "Membership"
+  },
+  "txt_info": {
+    "ko": "세라미크 제모 시술 비교",
+    "en": "nude_information"
+  },
+  "txt_mileage": {
+    "ko": "회원정보수정",
+    "en": "Edit profile"
+  },
+  "footer_branch": {
+    "ko": "세라미크의원 강남",
+    "en": "CERAMIQUE Clinic Gangnam"
+  },
+  "txt_profile": {
+    "ko": "대표원장소개",
+    "en": "profile"
+  },
+  "txt_floorInfo": {
+    "ko": "층별안내",
+    "en": "floor information"
+  },
+  "btn_lifting": {
+    "ko": "리프팅",
+    "en": "lifting"
+  },
+  "btn_nude": {
+    "ko": "제모",
+    "en": "nude"
+  },
+  "txt_direction": {
+    "ko": "세라미크 오시는 길",
+    "en": "direction"
+  },
+  "txt_contact": {
+    "ko": "문의 방법",
+    "en": "contact"
+  },
+  "btn_reservation": {
+    "ko": "예약하러 가기",
+    "en": "reservation"
+  },
+  "txt_branch": {
+    "ko": "세라미크 의원",
+    "en": "CERAMIQUE Clinic Gangnam"
   }
 }

@@ -2,7 +2,7 @@ import pandas as pd
 import json
 from pathlib import Path
 
-def generate_language_json(excel_path="language.xlsx", json_path="json/language.json"):
+def generate_language_json(excel_path="data/language.xlsx", json_path="data/language.json"):
     df = pd.read_excel(excel_path)
     data = {}
 
@@ -10,11 +10,12 @@ def generate_language_json(excel_path="language.xlsx", json_path="json/language.
         key = row["key"]
         data[key] = {
             "ko": row["ko"],
-            "en": row["en"],
-            "ja": row["ja"],
-            "ch": row["zh-cn"],
-            "th": row["th"],
-            "vi": row["vi"]
+            "en": row["en"]
+            # ,
+            # "ja": row["ja"],
+            # "ch": row["zh-cn"],
+            # "th": row["th"],
+            # "vi": row["vi"]
         }
 
     Path(json_path).parent.mkdir(parents=True, exist_ok=True)
