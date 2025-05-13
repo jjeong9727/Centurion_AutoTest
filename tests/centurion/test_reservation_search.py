@@ -1,6 +1,7 @@
 import json
 import random
 from playwright.sync_api import Page, expect
+from helpers.reservation_utils import get_reservations_by_status
 
 RESERVATION_FILE = "data/reservations.json"
 
@@ -53,3 +54,40 @@ def test_search_and_reset_reservation_filters(page: Page):
 
     # 6. 테이블 결과가 0건인지 확인
     expect(page.locator("table tbody tr")).to_have_count(0)
+
+# 예약 상태에 따른 확정/취소 버튼 활성화 확인
+def test_button_enable_by_status(page: Page):
+    status_button_rules = {
+        # "대기":  (True,  True),
+        "확정":  (False, True),
+        "취소":  (False, False),
+    }
+
+    for status, (accept_enabled, cancel_enabled) in status_button_rules.items():
+        res_list = get_reservations_by_status(status)
+        if not res_list:
+            print(f"⚠️ 상태 '{status}' 예약 없음")
+            continue
+
+        target = res_list[0]
+        name = target["name"]
+
+        # 드롭다운 상태 선택 + 이름 입력 후 포커스 아웃
+        page.get_by_test_id("search_status").select_option(label=status)
+        page.fill('[data-testid="search_name"]', name)
+        page.locator("body").click()
+
+        row = page.locator("table tbody tr").first
+
+        btn_accept = row.locator('[data-testid="btn_accept"]')
+        btn_cancel = row.locator('[data-testid="btn_cancel"]')
+
+        if accept_enabled:
+            expect(btn_accept).to_be_enabled()
+        else:
+            expect(btn_accept).to_be_disabled()
+
+        if cancel_enabled:
+            expect(btn_cancel).to_be_enabled()
+        else:
+            expect(btn_cancel).to_be_disabled()
