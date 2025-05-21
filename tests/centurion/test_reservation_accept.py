@@ -1,17 +1,9 @@
-# 확정 / 취소 플로우
-# 1. 대기 -> 확정(cen에서 예약 추가 시 바로 확정되므로 home 테스트와 연동 필요)
-# 2. 대기 -> 취소(cen에서 예약 추가 시 바로 확정되므로 home 테스트와 연동 필요)
-# 3. 확정 -> 취소
-# 각 상태별 UI 확인 
-# 1. 대기 상태 -> 확정 활성 / 취소 활성 (cen에서 예약 추가 시 바로 확정되므로 home 테스트와 연동 필요)
-# 2. 확정 상태 -> 확정 비활성 / 취소 활성
-# 3. 취소 상태 -> 확정 비활성 / 취소 비활성
-
-
 from playwright.sync_api import Page, expect
 from helpers.reservation_utils import get_reservations_by_status, update_reservation_status
-# 예약 확정 / 예약 취소 확인
+# 예약 대기 -> 취소, 확정
+# 예약 대기 -> 확정 -> 취소
 def test_confirm_and_cancel_reservations(page: Page):
+    # 홈페이지 예약 스크립트 작성 시 3건 이상 등록 필요
     # 대기 상태 예약 3건 불러오기
     pending = get_reservations_by_status("대기")
     if len(pending) < 3:
@@ -62,6 +54,7 @@ def test_confirm_and_cancel_reservations(page: Page):
             page.click('[data-testid="btn_yes"]')
             update_reservation_status(name, "취소")
 
+# 일괄 확정을 위해 대기 상태 2개 이상 있어야 함
 # 일괄 확정 / 일괄 수정 확인 
 def test_bulk_confirm_and_cancel(page: Page):
     # 1. 가장 최근 대기 예약 4건 가져오기

@@ -58,7 +58,7 @@ def test_search_and_reset_reservation_filters(page: Page):
 # 예약 상태에 따른 확정/취소 버튼 활성화 확인
 def test_button_enable_by_status(page: Page):
     status_button_rules = {
-        # "대기":  (True,  True),
+        "대기":  (True,  True),
         "확정":  (False, True),
         "취소":  (False, False),
     }

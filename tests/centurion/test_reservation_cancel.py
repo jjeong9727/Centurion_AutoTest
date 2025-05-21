@@ -1,18 +1,19 @@
 from playwright.sync_api import Page, expect
 from helpers.reservation_utils import get_reservations_by_status, update_reservation_status
 
-def test_single_cancel_from_confirmed(page: Page):
-    confirmed = get_reservations_by_status("확정")[-3:]
-    if len(confirmed) < 1:
-        print("❌ 확정 상태 예약 1건 이상 필요")
+def test_single_cancel_from_waiting(page: Page):
+    waiting = get_reservations_by_status("대기")[-1:]
+    if len(waiting) < 1:
+        print("❌ 대기 상태 예약 1건 이상 필요")
         return
 
-    single = confirmed[0]
+    single = waiting[0]
 
-    page.get_by_test_id("search_status").select_option(label="확정")
+    page.get_by_test_id("search_status").select_option(label="대기")
     page.fill('[data-testid="search_name"]', single["name"])
     page.locator("body").click()
 
+    row = page.locator("table tbody tr").first
     row.locator('[data-testid="btn_cancel"]').click()
     page.click('[data-testid="btn_no"]')
     row.locator('[data-testid="btn_cancel"]').click()
@@ -26,6 +27,7 @@ def test_single_cancel_from_confirmed(page: Page):
     name_in_row = row.locator("td").nth(2).inner_text().strip()
     assert name_in_row == single["name"], "❌ 단일 취소 후 내역 미확인"
     update_reservation_status(single["name"], "취소")
+
 
 def test_bulk_cancel_from_confirmed(page: Page):
     confirmed = get_reservations_by_status("확정")[-2:]
@@ -50,13 +52,11 @@ def test_bulk_cancel_from_confirmed(page: Page):
         if selected == 2:
             break
 
-    # 일괄 취소 버튼 클릭 → btn_no → 재시도 → btn_yes
     page.click('[data-testid="btn_cancel_bulk"]')
     page.click('[data-testid="btn_no"]')
     page.click('[data-testid="btn_cancel_bulk"]')
     page.click('[data-testid="btn_yes"]')
 
-    # 상태 필터를 취소로 변경 후 확인
     page.get_by_test_id("search_status").select_option(label="취소")
     page.locator("body").click()
 
