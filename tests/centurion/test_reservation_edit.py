@@ -1,3 +1,7 @@
+# 테스트 흐름
+# 1. 예약 관리 화면에서 각 항목 선택
+# 2. 데이터 값 삭제 후 유효성 체크
+# 3. 정상 데이터 입력 후 수정 확인
 from playwright.sync_api import Page, expect
 from config import URLS
 

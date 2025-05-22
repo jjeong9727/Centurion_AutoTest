@@ -1,3 +1,7 @@
+# 테스트 흐름
+# 1. 예약 정보 생성 후 예약 4건 추가
+# 2. 이름을 기준으로 예약 내역에서 예약 4건 확인
+
 import random
 import string
 from datetime import datetime, timedelta
