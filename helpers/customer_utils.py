@@ -1,27 +1,24 @@
 import os
 import json
+import random
+from datetime import datetime, timedelta
 
+#고객 등록 후 json에 추가  
 def add_customer_to_json(new_customer: dict, file_path="data/customers.json"):
-    """고객명 기준으로 중복 없는 경우 전체 신규 고객 정보 추가"""
     customers = []
     if os.path.exists(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             customers = json.load(f)
-
-    if any(c["customer_name"] == new_customer["customer_name"] for c in customers):
-        print(f"❌ 이미 등록된 고객: {new_customer['customer_name']}")
-        return
 
     customers.append(new_customer)
 
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(customers, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ 고객 '{new_customer['customer_name']}' 등록 완료")
+    print(f"✅ 고객 '{new_customer['customer_name']}' 정보 저장 완료")
 
-
+# 고객 정보 수정 후 json 업데이트
 def update_customer_in_json(customer_name: str, updates: dict, file_path="data/customers.json"):
-    """customer_name 기준으로 일부 필드만 선택적으로 업데이트 (chart_id, balance 제외)"""
     if not os.path.exists(file_path):
         print("❌ 고객 데이터 없음")
         return
@@ -44,3 +41,50 @@ def update_customer_in_json(customer_name: str, updates: dict, file_path="data/c
         print(f"✅ 고객 '{customer_name}' 정보 수정 완료")
     else:
         print(f"❌ 고객 '{customer_name}' 을 찾을 수 없습니다.")
+
+
+# 고객 등록 데이터 랜덤 생성 
+def generate_customer_name(prefix="자동화", count_file="data/daily_count.json"):
+    today = datetime.now().strftime("%m%d")  # 예: "0522"
+
+    # 기존 카운트 파일 로드 또는 초기화
+    if os.path.exists(count_file):
+        with open(count_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    else:
+        data = {}
+
+    # 날짜별 카운트 증가
+    if today not in data:
+        data[today] = 1
+    else:
+        data[today] += 1
+
+    count = data[today]
+    customer_name = f"{prefix}-{today}.{count}"
+
+    # 카운트 저장
+    with open(count_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    return customer_name
+def generate_random_birth():
+    start = datetime.strptime("1960-01-01", "%Y-%m-%d")
+    end = datetime.strptime("2004-12-31", "%Y-%m-%d")
+    return (start + timedelta(days=random.randint(0, (end - start).days))).strftime("%Y-%m-%d")
+def generate_random_phone():
+    return f"010-{random.randint(1000,9999):04}-{random.randint(1000,9999):04}"
+def generate_random_email():
+    prefix = ''.join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=8))
+    return f"{prefix}@test.com"
+def generate_random_customer():
+    return {
+        "customer_name": generate_customer_name(),
+        "birth": generate_random_birth(),
+        "gender": random.choice(["남성", "여성"]),
+        "phone": generate_random_phone(),
+        "email": generate_random_email()
+    }
+
+
+

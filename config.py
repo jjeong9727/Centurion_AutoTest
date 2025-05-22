@@ -8,7 +8,8 @@ URLS = {
     "home_mypage" : f"{home_base_url}/",
     "cen_membership" : f"{cen_base_url}/",
     "cen_customer" :f"{cen_base_url}/customer",
-
+    "cen_cust_register" :f"{cen_base_url}/customer/register",
+    
 
 
 
