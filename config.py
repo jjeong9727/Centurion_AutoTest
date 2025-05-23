@@ -6,10 +6,11 @@ URLS = {
     "home_main" : f"{home_base_url}/main",
     "home_about" : f"{home_base_url}/about",
     "home_mypage" : f"{home_base_url}/",
+    "home_reservation" : f"{home_base_url}/",
     "cen_membership" : f"{cen_base_url}/",
     "cen_customer" :f"{cen_base_url}/customer",
     "cen_cust_register" :f"{cen_base_url}/customer/register",
-    
+
 
 
 
