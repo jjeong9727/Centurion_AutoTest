@@ -1,54 +1,51 @@
 {
-  "btn_removal": {
-    "ko": "제모 시술 ",
-    "en": "Hair Removal"
-  },
-  "btn_lifting": {
-    "ko": "리프팅 시술",
-    "en": "Lifting"
-  },
   "header_reservation": {
     "ko": "예약 문의",
     "en": "Reservation"
   },
-  "txt_login": {
-    "ko": "로그인",
-    "en": "LOGIN"
+  "txt_name": {
+    "ko": "세라미크 의원",
+    "en": "CERAMIQUE CLINIC"
   },
-  "btn_login": {
-    "ko": "카카오로 시작하기",
-    "en": "구글로 시작하기"
+  "txt_preopen": {
+    "ko": "세라미크 의원 사전 예약 오픈",
+    "en": "Pre-Opening Reservation"
   },
-  "footer_branch": {
+  "txt_event": {
     "ko": "세라미크의원 강남",
     "en": "CERAMIQUE Clinic Gangnam"
   },
-  "txt_lifting": {
-    "ko": "리프팅 시술",
-    "en": "Lifting"
+  "txt_male": {
+    "ko": "남성 제모",
+    "en": "Male"
   },
-  "txt_removal": {
-    "ko": "제모 시술 ",
-    "en": "Hair Removal"
+  "txt_female": {
+    "ko": "여성 제모",
+    "en": "Female"
   },
-  "btn_reservation": {
+  "btn_reserve": {
     "ko": "예약하러 가기",
     "en": "Reservation"
   },
-  "txt_mypage": {
-    "ko": "마이페이지",
-    "en": "My Page"
+  "txt_direction": {
+    "ko": "오시는 길",
+    "en": "Directions"
   },
-  "txt_profile": {
-    "ko": "회원정보수정",
-    "en": "Edit profile"
+  "txt_parking": {
+    "ko": "주차안내",
+    "en": "Parking"
   },
-  "txt_membership": {
-    "ko": "멤버십 조회",
-    "en": "Membership"
+  "txt_reserve": {
+    "ko": "예약하러 가기 버튼을 눌러보세요.",
+    "en": "Click the \"Reservation\" button."
+
   },
-  "txt_info": {
-    "ko": "등급 혜택 안내사항",
-    "en": "Membership Benefits Info"
+  "txt_branch": {
+    "ko": "세라미크의원 강남",
+    "en": "CERAMIQUE Clinic Gangnam"
+  },
+  "txt_policy": {
+    "ko": "개인정보취급방침",
+    "en": "Privacy Policy"
   }
 }

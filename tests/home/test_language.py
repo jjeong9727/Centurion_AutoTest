@@ -1,50 +1,42 @@
 import pytest
 import json
-from playwright.sync_api import Page
+from pathlib import Path
+from playwright.sync_api import Page, expect
 from config import URLS
 
-LANGUAGE_CODES = ["ko", "en"]
-LANGUAGE_TESTID = {
-    "ko": "language_kor",
-    "en": "language_eng"
-}
-PAGES_TO_TEST = [
-    {"url": URLS["home_landing"], "keys": ["btn_removal", "btn_lifting"]},
-    {"url": URLS["home_login"], "keys": ["txt_login", "btn_login", "header_reservation", "footer_branch"]},
-    {"url": URLS["home_discover"], "keys": ["txt_lifting", "txt_removal", "btn_reservation"]},
-    # {"url": URLS["home_previlege"], "keys": ["", ""]},
-    {"url": URLS["home_removal"], "keys": ["txt_removal", "btn_reservation"]},
-    {"url": URLS["home_lifting"], "keys": ["txt_lifting"]},
-    {"url": URLS["home_mypage_profile"], "keys": ["txt_mypage", "txt_profile"]},
-    {"url": URLS["home_mypage_membership"], "keys": ["txt_mypage", "txt_mypage", "txt_gradeinfo"]},
-]
-
-def load_language_mapping(path="data/language.json"):
+# 언어 매핑 로딩 함수
+def load_language_mapping(path: Path = Path("data/language.json")):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
 
-def change_language(page: Page, lang_code: str):
-    page.click('[data-testid=menu_ham]')
-    page.wait_for_timeout(3000)
-    page.click(f'[data-testid={LANGUAGE_TESTID[lang_code]}]')
-    page.wait_for_timeout(5000)
+# 화면에 노출되는지 확인하는 함수
+def verify_translations_visible(page: Page, lang: str, mapping: dict):
+    for key, val in mapping.items():
+        expected_text = val.get(lang)
+        if not expected_text:
+            continue
 
-def verify_translations(page: Page, texts: dict, lang_code: str, keys: list):
-    for key in keys:
-        locator = page.locator(f"[data-testid={key}]")
-        locator.scroll_into_view_if_needed()
-        actual = locator.inner_text().strip()
-        expected = texts[key][lang_code]
-        assert actual == expected, f"❌ {key}: {actual} != {expected}"
+        # 예약어 " 포함 시 정확 매칭 방지 위해 has_text 사용
+        locator = page.locator(f"text={expected_text}")
+        try:
+            locator.scroll_into_view_if_needed(timeout=2000)
+            expect(locator).to_be_visible(timeout=3000)
+            print(f"✅ '{expected_text}' is visible.")
+        except:
+            print(f"❌ '{expected_text}' is NOT visible.")
+            raise  # 실패 시 테스트 실패 처리
 
-@pytest.mark.parametrize("lang_code", LANGUAGE_CODES)
-@pytest.mark.parametrize("page_info", PAGES_TO_TEST)
-def test_language_per_page(page: Page, lang_code: str, page_info: dict):
-    texts = load_language_mapping()
+# 메인 테스트
+def test_language_display_after_switch(page: Page):
+    mapping = load_language_mapping()
     page.goto(URLS["home_main"])
 
-    if lang_code != "ko":
-        change_language(page, lang_code)
+    # --- Korean 확인 ---
+    page.locator("button:has-text('KOR')").click()
+    page.locator("a:has-text('Korean')").click()
+    verify_translations_visible(page, "ko", mapping)
 
-    page.goto(page_info["url"])
-    verify_translations(page, texts, lang_code, page_info["keys"])
+    # --- English 확인 ---
+    page.locator("button:has-text('KOR')").click()
+    page.locator("a:has-text('English')").click()
+    verify_translations_visible(page, "en", mapping)
