@@ -6,14 +6,16 @@ from datetime import datetime
 import os
 import platform
 from collections import defaultdict
+from dotenv import load_dotenv
+
 
 # ---------- 설정 ----------
 DEVICE_FILE = Path("data/device_profile.json")
 TESTS_DIR = Path("tests")
 RESULT_JSON = Path("result.json")
 JIRA_JSON = Path("jira_payload.json")
-SLACK_WEBHOOK_URL="https://hooks.slack.com/services/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" #Private
-# SLACK_WEBHOOK_URL="https://hooks.slack.com/services/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" #채널
+load_dotenv()
+SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 
 # 테스트 파일명을 한글로 매핑
 TEST_NAME_KR = {
