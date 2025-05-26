@@ -1,8 +1,5 @@
 {
-  "header_reservation": {
-    "ko": "예약 문의",
-    "en": "Reservation"
-  },
+  
   "txt_name": {
     "ko": "세라미크 의원",
     "en": "CERAMIQUE CLINIC"
@@ -12,8 +9,8 @@
     "en": "Pre-Opening Reservation"
   },
   "txt_event": {
-    "ko": "제모 첫방문 이벤트",
-    "en": "Hair Removal First-time Visit Event"
+    "ko": "첫방문 이벤트",
+    "en": "First-time Visit Event"
   },
   "btn_reserve": {
     "ko": "예약하러 가기",

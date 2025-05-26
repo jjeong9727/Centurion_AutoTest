@@ -1,7 +1,7 @@
 [
   {
-    "summary": "[Galaxy S24] E   SyntaxError: unmatched ')'",
-    "description": "📱 *디바이스*: Galaxy S24\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "summary": "[Galaxy S24] 화면 진입 테스트 실패 - E   playwright._impl._errors.TimeoutError: Timeout 30000ms e",
+    "description": "📱 *디바이스*: Galaxy S24\n🧪 *에러*: E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.",
     "project": "QA",
     "issuetype": "Bug",
     "priority": "Medium",
@@ -11,8 +11,8 @@
     ]
   },
   {
-    "summary": "[Galaxy A15] E   SyntaxError: unmatched ')'",
-    "description": "📱 *디바이스*: Galaxy A15\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "summary": "[Galaxy A15] 화면 진입 테스트 실패 - E   playwright._impl._errors.TargetClosedError: Page.wait_fo",
+    "description": "📱 *디바이스*: Galaxy A15\n🧪 *에러*: E   playwright._impl._errors.TargetClosedError: Page.wait_for_timeout: Target page, context or browser has been closed",
     "project": "QA",
     "issuetype": "Bug",
     "priority": "Medium",
@@ -22,8 +22,8 @@
     ]
   },
   {
-    "summary": "[iPhone 14 Pro Max] E   SyntaxError: unmatched ')'",
-    "description": "📱 *디바이스*: iPhone 14 Pro Max\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "summary": "[iPhone 14 Pro Max] 화면 진입 테스트 실패 - E   playwright._impl._errors.Error: Page.goto: net::ERR_ABOR",
+    "description": "📱 *디바이스*: iPhone 14 Pro Max\n🧪 *에러*: E   playwright._impl._errors.Error: Page.goto: net::ERR_ABORTED; maybe frame was detached?",
     "project": "QA",
     "issuetype": "Bug",
     "priority": "Medium",
@@ -33,8 +33,8 @@
     ]
   },
   {
-    "summary": "[iPhone 15] E   SyntaxError: unmatched ')'",
-    "description": "📱 *디바이스*: iPhone 15\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "summary": "[iPhone 15] 화면 진입 테스트 실패 - E   playwright._impl._errors.TimeoutError: Timeout 30000ms e",
+    "description": "📱 *디바이스*: iPhone 15\n🧪 *에러*: E   playwright._impl._errors.TimeoutError: Timeout 30000ms exceeded.",
     "project": "QA",
     "issuetype": "Bug",
     "priority": "Medium",
