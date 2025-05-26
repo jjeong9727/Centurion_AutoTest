@@ -1,0 +1,46 @@
+[
+  {
+    "summary": "[Galaxy S24] E   SyntaxError: unmatched ')'",
+    "description": "📱 *디바이스*: Galaxy S24\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "project": "QA",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "playwright",
+      "automated-test"
+    ]
+  },
+  {
+    "summary": "[Galaxy A15] E   SyntaxError: unmatched ')'",
+    "description": "📱 *디바이스*: Galaxy A15\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "project": "QA",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "playwright",
+      "automated-test"
+    ]
+  },
+  {
+    "summary": "[iPhone 14 Pro Max] E   SyntaxError: unmatched ')'",
+    "description": "📱 *디바이스*: iPhone 14 Pro Max\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "project": "QA",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "playwright",
+      "automated-test"
+    ]
+  },
+  {
+    "summary": "[iPhone 15] E   SyntaxError: unmatched ')'",
+    "description": "📱 *디바이스*: iPhone 15\n\n🧪 *에러*: E   SyntaxError: unmatched ')'",
+    "project": "QA",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "playwright",
+      "automated-test"
+    ]
+  }
+]

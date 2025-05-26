@@ -12,16 +12,8 @@
     "en": "Pre-Opening Reservation"
   },
   "txt_event": {
-    "ko": "세라미크의원 강남",
-    "en": "CERAMIQUE Clinic Gangnam"
-  },
-  "txt_male": {
-    "ko": "남성 제모",
-    "en": "Male"
-  },
-  "txt_female": {
-    "ko": "여성 제모",
-    "en": "Female"
+    "ko": "제모 첫방문 이벤트",
+    "en": "Hair Removal First-time Visit Event"
   },
   "btn_reserve": {
     "ko": "예약하러 가기",

@@ -10,8 +10,8 @@ def playwright_instance():
 
 @pytest.fixture(scope="session")
 def browser(playwright_instance) -> Generator[Browser, None, None]:
-    # browser = playwright_instance.chromium.launch(headless=False)  # 브라우저 ON
-    browser = playwright_instance.chromium.launch(headless=True)  # 브라우저 OFF
+    browser = playwright_instance.chromium.launch(headless=False)  # 브라우저 ON
+    # browser = playwright_instance.chromium.launch(headless=True)  # 브라우저 OFF
     yield browser
     browser.close()
 
