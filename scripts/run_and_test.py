@@ -33,7 +33,7 @@ def run_pytest_with_device(name: str, profile: dict) -> list:
         "PLAYWRIGHT_VIEWPORT_WIDTH": str(profile['viewport']['width']),
         "PLAYWRIGHT_VIEWPORT_HEIGHT": str(profile['viewport']['height']),
         "PLAYWRIGHT_DEVICE_SCALE": str(profile['device_scale_factor']),
-        "PLAYWRIGHT_IS_MOBILE": str(profile['is_mobile']),
+        "PLAYWRIGHT_IS_MOBILE": str(profile["is_mobile"]).lower(), 
         "PLAYWRIGHT_HAS_TOUCH": str(profile['has_touch']),
         "PLAYWRIGHT_USER_AGENT": profile['user_agent'],
         "PLAYWRIGHT_TEST_BASE_URL": base_url
