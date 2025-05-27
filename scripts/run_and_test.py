@@ -20,7 +20,7 @@ SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
 # 테스트 파일명을 한글로 매핑
 TEST_NAME_KR = {
     "test_landing.py": "화면 진입 테스트",
-    "test_language.py": "언어 변환 테스트",
+    "test_language.py": "언어 변경 테스트",
     "test_pre-reserve.py": "예약 신청 테스트"
 }
 
