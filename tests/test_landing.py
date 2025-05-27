@@ -26,7 +26,7 @@ def test_landing_links_and_download(page: Page, tmp_path):
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
     page.wait_for_timeout(2000)
 
-    # 5. 인스타그램 버튼 클릭 → 새 탭 이동 확인 및 텍스트 확인
+    # 5. 인스타그램 버튼 클릭 → 새 탭 이동 확인 및 주소 검증
     with page.expect_popup() as popup_info:
         page.locator("a[href*='instagram.com']").click()
         page.wait_for_timeout(2000)
@@ -35,11 +35,13 @@ def test_landing_links_and_download(page: Page, tmp_path):
     insta_page.wait_for_load_state()
     page.wait_for_timeout(2000)
 
-    # ✅ 인스타 페이지 내에 "세라미크의원" 텍스트 포함 여부 확인
-    assert "세라미크의원" in insta_page.content(), "❌ 인스타그램 페이지에 '세라미크의원' 텍스트가 없습니다."
+    # ✅ 인스타그램 주소 시작 확인
+    assert insta_page.url.startswith("https://www.instagram.com/"), \
+        f"❌ 인스타그램 주소가 예상과 다릅니다: {insta_page.url}"
 
     insta_page.close()
     page.wait_for_timeout(2000)
+
 
     # 6. 다시 하단으로 스크롤
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")

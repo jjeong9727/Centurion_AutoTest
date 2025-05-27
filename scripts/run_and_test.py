@@ -27,7 +27,7 @@ TEST_NAME_KR = {
 # ---------- 유틸: 테스트 실행 ----------
 def run_pytest_with_device(name: str, profile: dict) -> list:
     is_mobile = profile["is_mobile"]
-    base_url = "https://stg.ceramiqueclinic.com/ko/m/pre-booking" if is_mobile else "https://stg.ceramiqueclinic.com/ko/pre-booking"
+    base_url = "https://www.gangnam.ceramiqueclinic.com/ko/m/pre-booking" if is_mobile else "https://www.gangnam.ceramiqueclinic.com/ko/pre-booking"
 
     env = {
         "PLAYWRIGHT_VIEWPORT_WIDTH": str(profile['viewport']['width']),
