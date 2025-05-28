@@ -41,7 +41,7 @@ def run_pytest_with_device(name: str, profile: dict) -> list:
 
     test_files = [
         "test_landing.py",
-        # "test_language.py"
+        "test_language.py"
     ]
     if not is_mobile:
         test_files.append("test_pre-reserve.py")

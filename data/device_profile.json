@@ -1,5 +1,25 @@
 {
-
+    "Windows11": {
+      "viewport": { "width": 1440, "height": 900 },
+      "device_scale_factor": 1,
+      "is_mobile": false,
+      "has_touch": false,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    },
+    "Galaxy S24": {
+      "viewport": { "width": 360, "height": 780 },
+      "device_scale_factor": 3,
+      "is_mobile": true,
+      "has_touch": true,
+      "user_agent": "Mozilla/5.0 (Linux; Android 14; SM-S921N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"
+    },
+      "Galaxy A15": {
+      "viewport": { "width": 360, "height": 800 },
+      "device_scale_factor": 2.625,
+      "is_mobile": true,
+      "has_touch": true,
+      "user_agent": "Mozilla/5.0 (Linux; Android 14; SM-A155N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+    },
     "iPhone 14 Pro Max": {
       "viewport": { "width": 430, "height": 932 },
       "device_scale_factor": 3,
