@@ -24,3 +24,23 @@ Account={
     "testpw" :"test1234",
     "cust_name" : "" #고객명 
 }
+
+
+# 세라미크 예약 정보 
+
+ReservationInfo = {
+    # 예약자 정보
+    "booker": {
+        "name": "예약자테스트",
+        "birth": "1990-09-09",
+        "gender": "여자",
+        "phone": "010-1234-5678",
+    },
+    # 방문자 정보
+    "visitor": {
+        "name": "방문자테스트",
+        "birth": "1990-10-10",
+        "gender": "남자",
+        "phone": "010-9876-5432",
+    }
+}

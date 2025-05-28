@@ -1,93 +1,120 @@
 # 테스트 흐름
+# *** 예약자==방문자 / 예약자!=방문자 케이스 나누어 진행 
 # 1. API를 통해 로그인 상태로 예약 화면 진입 
 # 2. 테스트 일자 기준 20일 이후면 다음달 내에서 날짜 선택, 20일 이전이면 이번달 당일보다 미래 날짜 선택
 # 3. 시간은 활성화된 시간들중 미래 시간 선택
 # 4. 희망시술 내용 고정 "자동화 테스트 MM월 DD일 HH시 MM분 예약"
 # 5. 약관 동의 후 완료 -> 예약 완료 페이지 진입
-# 6. 예약 시 저장한 데이터 json 파일과 완료 화면 데이터 비교
+# 6. 예약 시 저장한 데이터와 완료 화면 데이터 비교
+# 7. 예약 정보 json 파일로 저장 해서 CEN 테스트에 활용 
 import json
-from config import URLS
-from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect
+from config import ReservationInfo, URLS
+from helpers.homepage_utils import get_reservation_datetime, get_available_time_button
+import os
+from datetime import datetime
 
-def get_reservation_datetime():
-    now = datetime.now()
-    if now.day > 20:
-        target_date = (now.replace(day=1) + timedelta(days=32)).replace(day=1)  # 다음 달 1일
-        use_next_month = True
-    else:
-        target_date = now + timedelta(days=1)
-        use_next_month = False
-
-    return {
-        "date": target_date.strftime("%Y-%m-%d"),
-        "day": target_date.day,
-        "month": target_date.month,
-        "use_next_month": use_next_month,
-    }
-
-def get_available_time_button(page: Page):
-    now = datetime.now()
-    time_buttons = page.locator("[data-testid^='btn_time_']")
-    count = time_buttons.count()
-    for i in range(count):
-        btn = time_buttons.nth(i)
-        if btn.is_enabled():
-            time_text = btn.inner_text()
-            time_value = btn.get_attribute("data-testid").split("_")[-1]
-            hour, minute = int(time_value[:2]), int(time_value[2:])
-            time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
-            if time_obj > now:
-                return btn, f"{hour:02}:{minute:02}"
-    raise Exception("선택 가능한 미래 시간이 없습니다")
-
-def test_reservation(page: Page):
-    # 예약 신청 페이지 진입 (로그인 토큰 context 포함 상태여야 함)
+# 예약 추가 공통 함수 
+def run_reservation(page: Page, visitor_info: dict | None = None):
+    reservation = get_reservation_datetime()
     page.goto(URLS["home_reservation"])
 
-    reservation = get_reservation_datetime()
-
-    # 캘린더 이동
     if reservation["use_next_month"]:
         page.click("[data-testid=btn_next]")
 
-    # 날짜 선택
     page.click(f"[data-testid=btn_day__{reservation['day']:02}]")
 
-    # 시간 선택
     btn, time_str = get_available_time_button(page)
     btn.click()
 
-    # 희망 시술 입력
+    # 방문자 정보 입력
+    if visitor_info and visitor_info["name"] != ReservationInfo["booker"]["name"]:
+        page.click("[data-testid=btn_visitor]")
+        page.fill("[data-testid=input_name]", visitor_info["name"])
+        page.click("[data-testid=drop_year_trigger]")
+        page.locator(f"li:has-text('{visitor_info['birth'][:4]}')").click()
+        page.click("[data-testid=drop_month_trigger]")
+        page.locator(f"li:has-text('{int(visitor_info['birth'][5:7])}')").click()
+        page.click("[data-testid=drop_day_trigger]")
+        page.locator(f"li:has-text('{int(visitor_info['birth'][8:])}')").click()
+        page.click(f"[data-testid=radio_{'male' if visitor_info['gender'] == '남자' else 'female'}]")
+        page.fill("[data-testid=input_phone]", visitor_info["phone"])
+
     memo = f"자동화 테스트 {reservation['month']:02}월 {reservation['day']:02}일 {time_str.replace(':', '시 ')}분 예약"
     page.fill("[data-testid=input_memo]", memo)
 
-    # 약관 동의 및 예약
     page.click("[data-testid=btn_agree]")
     page.click("[data-testid=btn_confirm]")
 
-    # 완료 문구 확인
     expect(page.locator("[data-testid=txt_complete]")).to_be_visible()
 
-    # 예약 정보 저장
+    # 예약자 및 방문자 기준 정보 분리
+    booker = ReservationInfo["booker"]
+    visitor = visitor_info or booker
+
+    # 파일 경로
+    json_path = "reservation.json"
+
+    # ✅ 기존 데이터 불러오기
+    if os.path.exists(json_path):
+        with open(json_path, "r", encoding="utf-8") as f:
+            try:
+                existing_data = json.load(f)
+            except json.JSONDecodeError:
+                existing_data = []
+    else:
+        existing_data = []
+
+    # ✅ 저장용 이름
+    if visitor["name"] != booker["name"]:
+        name_for_save = f"{visitor['name']}({booker['name']})"
+    else:
+        name_for_save = booker["name"]
+
+    # ✅ 생성 시각
+    created_at = datetime.now().strftime("%Y.%m.%d %H시 %M분")
+
+    # ✅ 저장할 예약 정보
     reserved_info = {
-        "name": "자동화고객",
-        "birth": "1995-05-01",
-        "gender": "여성",
-        "phone": "010-1234-5678",
+        "name": name_for_save,
+        "birth": visitor["birth"],
+        "gender": visitor["gender"],
+        "phone": visitor["phone"],
         "date": reservation["date"],
         "time": time_str,
-        "memo": memo
+        "memo": memo,
+        "created_at": created_at
     }
 
-    with open("reservation.json", "w", encoding="utf-8") as f:
-        json.dump(reserved_info, f, ensure_ascii=False, indent=2)
+    # ✅ 누적 저장
+    existing_data.append(reserved_info)
 
-    # 예약 완료 화면 정보와 비교
-    assert page.locator("[data-testid=result_name]").inner_text() == reserved_info["name"]
-    assert page.locator("[data-testid=result_birth]").inner_text() == reserved_info["birth"]
-    assert page.locator("[data-testid=result_gender]").inner_text() == reserved_info["gender"]
-    assert page.locator("[data-testid=result_phone]").inner_text() == reserved_info["phone"]
-    assert page.locator("[data-testid=result_date]").inner_text() == reserved_info["date"]
-    assert page.locator("[data-testid=result_time]").inner_text() == reserved_info["time"]
-    assert page.locator("[data-testid=result_memo]").inner_text() == reserved_info["memo"]
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(existing_data, f, ensure_ascii=False, indent=2)
+
+
+    # ✅ 예약자 정보 검증 (예약 완료 화면)
+    assert page.locator("[data-testid=result_name]").inner_text() == booker["name"]
+    assert page.locator("[data-testid=result_birth]").inner_text() == booker["birth"]
+    assert page.locator("[data-testid=result_gender]").inner_text() == booker["gender"]
+    assert page.locator("[data-testid=result_phone]").inner_text() == booker["phone"]
+    assert page.locator("[data-testid=result_date]").inner_text() == reservation["date"]
+    assert page.locator("[data-testid=result_time]").inner_text() == time_str
+    assert page.locator("[data-testid=result_memo]").inner_text() == memo
+
+    # ✅ 방문자 정보 검증 (다른 경우에만 노출됨)
+    if visitor["name"] != booker["name"]:
+        assert page.locator("[data-testid=visitor_name]").inner_text() == visitor["name"]
+        assert page.locator("[data-testid=visitor_birth]").inner_text() == visitor["birth"]
+        assert page.locator("[data-testid=visitor_gender]").inner_text() == visitor["gender"]
+        assert page.locator("[data-testid=visitor_phone]").inner_text() == visitor["phone"]
+    else:
+        assert page.locator("[data-testid=visitor_name]").count() == 0
+
+# 예약자==방문자
+def test_reservation_self(page: Page):
+    run_reservation(page, visitor_info=ReservationInfo["booker"])
+
+# 예약자!=방문자 
+def test_reservation_for_visitor(page: Page):
+    run_reservation(page, visitor_info=ReservationInfo["visitor"])

@@ -1,6 +1,7 @@
 from playwright.sync_api import Page
 from helpers.auth_helper import ensure_valid_token
 from config import URLS
+from datetime import datetime, timedelta
 
 # 고객명과 멤버십 잔액 확인
 def verify_membership_balance(page: Page, expected_customer_name: str, expected_balance: int):
@@ -47,6 +48,35 @@ def verify_popup_link(page, testid: str):
     assert actual_url == expected_url, f"❌ URL 불일치: {actual_url} != {expected_url}"
     
     new_page.close()
-# 호출 시 verify_popup_link(page, testid)
+    # 호출 시 verify_popup_link(page, testid)
 
-# 
+
+# 예약 정보 생성 (날짜 선택 기준)
+def get_reservation_datetime():
+    now = datetime.now()
+    if now.day > 20:
+        target_date = (now.replace(day=1) + timedelta(days=32)).replace(day=1)
+        use_next_month = True
+    else:
+        target_date = now + timedelta(days=1)
+        use_next_month = False
+
+    return {
+        "date": target_date.strftime("%Y-%m-%d"),
+        "day": target_date.day,
+        "month": target_date.month,
+        "use_next_month": use_next_month,
+    }
+# 예약 정보 생성 (시간 선택 기준)
+def get_available_time_button(page: Page):
+    now = datetime.now()
+    time_buttons = page.locator("[data-testid^='btn_time_']")
+    for i in range(time_buttons.count()):
+        btn = time_buttons.nth(i)
+        if btn.is_enabled():
+            time_value = btn.get_attribute("data-testid").split("_")[-1]
+            hour, minute = int(time_value[:2]), int(time_value[2:])
+            time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+            if time_obj > now:
+                return btn, f"{hour:02}:{minute:02}"
+    raise Exception("선택 가능한 미래 시간이 없습니다")
