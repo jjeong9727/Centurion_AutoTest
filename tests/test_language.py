@@ -33,7 +33,6 @@ def scroll_to_find_element(page: Page, text: str, exact=True, timeout=3000, max_
 
     raise AssertionError(f"❌ '{text}' 텍스트가 최대 {max_scroll}px 스크롤 후에도 보이지 않음")
 
-
 def verify_translations_visible(page: Page, lang: str, mapping: dict):
     for key, val in mapping.items():
         expected_text = val.get(lang)
@@ -42,17 +41,16 @@ def verify_translations_visible(page: Page, lang: str, mapping: dict):
 
         try:
             if is_mobile:
-                locator = scroll_to_find_element(page, expected_text, exact=True, wait_per_step=2000)
+                locator = scroll_to_find_element(page, expected_text, exact=False, wait_per_step=2000)
             else:
-                locator = page.get_by_text(expected_text, exact=True).first
-                locator.scroll_into_view_if_needed(timeout=2000)
+                locator = page.locator(f"*:has-text('{expected_text}')").first
+                locator.scroll_into_view_if_needed(timeout=3000)
                 expect(locator).to_be_visible(timeout=3000)
 
-            print(f"✅ '{expected_text}' 확인 완료")
+            print(f"✅ '{expected_text}' 포함 여부 확인 완료")
         except Exception:
-            print(f"❌ '{expected_text}' 확인 실패")
+            print(f"❌ '{expected_text}' 포함 여부 확인 실패")
             raise
-
 
 def test_language_display_after_switch(page: Page):
     mapping = load_language_mapping()

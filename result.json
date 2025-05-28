@@ -1,79 +1,16 @@
 [
   {
-    "device": "Windows11",
-    "test_file": "test_landing.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 41.45s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Windows11",
-    "test_file": "test_language.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_language.py .                                                 [100%]\n\n============================= 1 passed in 13.49s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Windows11",
-    "test_file": "test_pre-reserve.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_pre-reserve.py .                                              [100%]\n\n============================= 1 passed in 19.66s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Galaxy S24",
-    "test_file": "test_landing.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 35.75s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Galaxy S24",
-    "test_file": "test_language.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_language.py .                                                 [100%]\n\n============================= 1 passed in 15.13s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Galaxy A15",
-    "test_file": "test_landing.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 35.69s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "Galaxy A15",
-    "test_file": "test_language.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_language.py .                                                 [100%]\n\n============================= 1 passed in 13.98s ==============================\n",
-    "stderr": ""
-  },
-  {
     "device": "iPhone 14 Pro Max",
     "test_file": "test_landing.py",
     "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 35.61s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "iPhone 14 Pro Max",
-    "test_file": "test_language.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_language.py .                                                 [100%]\n\n============================= 1 passed in 13.56s ==============================\n",
+    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 34.12s ==============================\n",
     "stderr": ""
   },
   {
     "device": "iPhone 15",
     "test_file": "test_landing.py",
     "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 35.51s ==============================\n",
-    "stderr": ""
-  },
-  {
-    "device": "iPhone 15",
-    "test_file": "test_language.py",
-    "status": "success",
-    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_language.py .                                                 [100%]\n\n============================= 1 passed in 17.05s ==============================\n",
+    "stdout": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_landing.py .                                                  [100%]\n\n============================= 1 passed in 32.95s ==============================\n",
     "stderr": ""
   }
 ]
