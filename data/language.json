@@ -1,86 +1,100 @@
 {
-  "btn_removal": {
-    "ko": "제모 시술",
-    "en": "Removal"
+  "main": {
+    "btn_removal": {
+      "ko": "제모 시술",
+      "en": "Removal"
+    },
+    "btn_lifting": {
+      "ko": "리프팅 시술",
+      "en": "Lifting"
+    }
   },
-  "btn_lifting": {
-    "ko": "리프팅 시술",
-    "en": "Lifting"
+  "login": {
+    "txt_login": {
+      "ko": "로그인",
+      "en": "LOGIN"
+    },
+    "btn_login": {
+      "ko": "카카오로 시작하기",
+      "en": "Sign in with Google"
+    },
+    "footer_branch": {
+      "ko": "세라미크의원 강남",
+      "en": "CERAMIQUE Clinic Gangnam"
+    },
+    "footer_terms": {
+      "ko": "이용약관",
+      "en": "Terms of Use"
+    },
+    "footer_policy": {
+      "ko": "개인정보취급방침",
+      "en": "Privacy Policy"
+    },
+    "float_reserve": {
+      "ko": "예약",
+      "en": "Book"
+    },
+    "float_consult": {
+      "ko": "상담",
+      "en": "Consult"
+    }
   },
-  "txt_login": {
-    "ko": "로그인",
-    "en": "LOGIN"
+  "reservation": {
+    "txt_date": {
+      "ko": "예약 날짜",
+      "en": "Date"
+    },
+    "txt_time": {
+      "ko": "예약 시간",
+      "en": "Time"
+    },
+    "txt_consent": {
+      "ko": "[필수] 개인정보 수집 및 이용 동의",
+      "en": "[Required] Consent to Collection and Use of Personal Information"
+    },
+    "btn_confirm": {
+      "ko": "예약하기",
+      "en": "Reservation"
+    }
   },
-  "btn_login": {
-    "ko": "카카오로 시작하기",
-    "en": "Sign in with Google"
+  "policy": {
+    "txt_policy": {
+      "ko": "개인정보취급방침",
+      "en": "Privacy Policy"
+    },
+    "txt_terms": {
+      "ko": "이용약관",
+      "en": "Terms of Use"
+    }
   },
-  "footer_branch": {
-    "ko": "세라미크의원 강남",
-    "en": "CERAMIQUE Clinic Gangnam"
+  "removal": {
+    "txt_removal": {
+      "ko": "제모 시술",
+      "en": "Hair Removal"
+    }
   },
-  "footer_terms": {
-    "ko": "이용약관",
-    "en": "Terms of Use"
+  "lifting": {
+    "txt_lifting": {
+      "ko": "리프팅 시술",
+      "en": "Lifting"
+    }
   },
-  "footer_policy": {
-    "ko": "개인정보취급방침",
-    "en": "Privacy Policy"
-  },
-  "float_reserve": {
-    "ko": "예약",
-    "en": "Book"
-  },
-  "float_consult": {
-    "ko": "상담",
-    "en": "Consult"
-  },
-  "txt_date": {
-    "ko": "예약 날짜",
-    "en": "Date"
-  },
-  "txt_time": {
-    "ko": "예약 시간",
-    "en": "Time"
-  },
-  "txt_consent": {
-    "ko": "[필수] 개인정보 수집 및 이용 동의",
-    "en": "[Required] Consent to Collection and Use of Personal Information"
-  },
-  "btn_confirm": {
-    "ko": "예약하기",
-    "en": "Reservation"
-  },
-  "txt_policy": {
-    "ko": "개인정보취급방침",
-    "en": "Privacy Policy"
-  },
-  "txt_terms": {
-    "ko": "이용약관",
-    "en": "Terms of Use"
-  },
-  "txt_removal": {
-    "ko": "제모 시술",
-    "en": "Hair Removal"
-  },
-  "txt_lifting": {
-    "ko": "리프팅 시술",
-    "en": "Lifting"
-  },
-  "txt_mypage": {
-    "ko": "마이페이지",
-    "en": "My Page"
-  },
-  "menu_membership": {
-    "ko": "멤버십 조회",
-    "en": "Membership"
-  },
-  "menu_profile": {
-    "ko": "회원정보수정",
-    "en": "Edit profile"
-  },
-  "menu_history": {
-    "ko": "예약 내역 확인",
-    "en": "Reservation History"
+  "mypage": {
+    "txt_mypage": {
+      "ko": "마이페이지",
+      "en": "My Page"
+    },
+    "menu_membership": {
+      "ko": "멤버십 조회",
+      "en": "Membership"
+    },
+    "menu_profile": {
+      "ko": "회원정보수정",
+      "en": "Edit profile"
+    },
+    "menu_history": {
+      "ko": "예약 내역 확인",
+      "en": "Reservation History"
+    }
   }
 }
