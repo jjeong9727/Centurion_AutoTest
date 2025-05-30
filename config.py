@@ -15,7 +15,7 @@ URLS = {
 
 
 
-    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 
+    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 URL
     "kakaoch": "https://pf.kakao.com/_kzxmxfG", # 임시 URL 데이뷰  건대점
     "naverbk" : "https://booking.naver.com/booking/13/bizes/1048655" # 임시 URL 데이뷰 건대점
 }
