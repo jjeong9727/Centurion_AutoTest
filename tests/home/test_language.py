@@ -1,50 +1,86 @@
 import pytest
+from playwright.sync_api import sync_playwright, expect
 import json
-from playwright.sync_api import Page
-from config import URLS
 
-LANGUAGE_CODES = ["ko", "en"]
-LANGUAGE_TESTID = {
-    "ko": "language_kor",
-    "en": "language_eng"
+# 화면별 언어 텍스트 비교 함수
+def check_language_for_screen(page, screen_data, device_type):
+    # 스크롤하여 화면을 확인
+    page.evaluate("window.scrollTo(0, document.body.scrollHeight);")
+    page.wait_for_timeout(1000)  # 잠시 기다려서 로딩 완료될 시간 확보
+
+    # 화면에 해당하는 테스트 아이디로 요소를 찾아 텍스트가 일치하는지 확인
+    for element_id, texts in screen_data.items():
+        # 텍스트 값 확인 (한국어/영어)
+        element = page.locator(f'[data-testid="{element_id}"]')
+        
+        # 한국어 텍스트 확인
+        expect(element).to_have_text(texts['ko'], timeout=3000)
+        
+        # 영어 텍스트 확인
+        expect(element).to_have_text(texts['en'], timeout=3000)
+
+# 단말 정보를 불러오는 함수 (PC와 Mobile 구분)
+def get_device_profile(device_type):
+    with open('data/device_profile.json', 'r') as f:
+        device_profile = json.load(f)
+    return device_profile[device_type]
+
+# 화면별 언어 데이터 (중복 제거)
+screen_text_data = {
+    "main": {
+        "btn_removal": {"ko": "제모 시술", "en": "Removal"},
+        "btn_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
+    },
+    "login": {
+        "txt_login": {"ko": "로그인", "en": "LOGIN"},
+        "btn_login": {"ko": "카카오로 시작하기", "en": "Sign in with Google"},
+        "footer_branch": {"ko": "세라미크의원 강남", "en": "CERAMIQUE Clinic Gangnam"},
+        "footer_terms": {"ko": "이용약관", "en": "Terms of Use"},
+        "footer_policy": {"ko": "개인정보취급방침", "en": "Privacy Policy"},
+        "float_reserve": {"ko": "예약", "en": "Book"},
+        "float_consult": {"ko": "상담", "en": "Consult"}
+    },
+    "reservation": {
+        "txt_date": {"ko": "예약 날짜", "en": "Date"},
+        "txt_time": {"ko": "예약 시간", "en": "Time"},
+        "txt_consent": {"ko": "[필수] 개인정보 수집 및 이용 동의", "en": "[Required] Consent to Collection and Use of Personal Information"},
+        "btn_confirm": {"ko": "예약하기", "en": "Reservation"}
+    },
+    "policy": {
+        "txt_policy": {"ko": "개인정보취급방침", "en": "Privacy Policy"},
+        "txt_terms": {"ko": "이용약관", "en": "Terms of Use"}
+    },
+    "removal": {
+        "txt_removal": {"ko": "제모 시술", "en": "Hair Removal"}
+    },
+    "lifting": {
+        "txt_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
+    },
+    "mypage": {
+        "txt_mypage": {"ko": "마이페이지", "en": "My Page"},
+        "menu_membership": {"ko": "멤버십 조회", "en": "Membership"},
+        "menu_profile": {"ko": "회원정보수정", "en": "Edit profile"},
+        "menu_history": {"ko": "예약 내역 확인", "en": "Reservation History"}
+    }
 }
-PAGES_TO_TEST = [
-    {"url": URLS["home_landing"], "keys": ["btn_removal", "btn_lifting"]},
-    {"url": URLS["home_login"], "keys": ["txt_login", "btn_login", "header_reservation", "footer_branch"]},
-    {"url": URLS["home_discover"], "keys": ["txt_lifting", "txt_removal", "btn_reservation"]},
-    # {"url": URLS["home_previlege"], "keys": ["", ""]},
-    {"url": URLS["home_removal"], "keys": ["txt_removal", "btn_reservation"]},
-    {"url": URLS["home_lifting"], "keys": ["txt_lifting"]},
-    {"url": URLS["home_mypage_profile"], "keys": ["txt_mypage", "txt_profile"]},
-    {"url": URLS["home_mypage_membership"], "keys": ["txt_mypage", "txt_mypage", "txt_gradeinfo"]},
-]
 
-def load_language_mapping(path="data/language.json"):
-    with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+@pytest.mark.playwright
+def test_language_check_pc(page):
+    # PC 단말 정보 불러오기
+    device_profile = get_device_profile("pc")
+    page.set_viewport_size(device_profile['viewport'])
 
-def change_language(page: Page, lang_code: str):
-    page.click('[data-testid=menu_ham]')
-    page.wait_for_timeout(3000)
-    page.click(f'[data-testid={LANGUAGE_TESTID[lang_code]}]')
-    page.wait_for_timeout(5000)
+    # 각 화면에 대해 언어 확인
+    for screen_name, screen_data in screen_text_data.items():
+        check_language_for_screen(page, screen_data, "pc")
 
-def verify_translations(page: Page, texts: dict, lang_code: str, keys: list):
-    for key in keys:
-        locator = page.locator(f"[data-testid={key}]")
-        locator.scroll_into_view_if_needed()
-        actual = locator.inner_text().strip()
-        expected = texts[key][lang_code]
-        assert actual == expected, f"❌ {key}: {actual} != {expected}"
 
-@pytest.mark.parametrize("lang_code", LANGUAGE_CODES)
-@pytest.mark.parametrize("page_info", PAGES_TO_TEST)
-def test_language_per_page(page: Page, lang_code: str, page_info: dict):
-    texts = load_language_mapping()
-    page.goto(URLS["home_main"])
+@pytest.mark.playwright
+def test_language_check_mobile(page):
+    # Mobile 단말 정보 불러오기
+    device_profile = get_device_profile("mobile")
+    page.set_viewport_size(device_profile['viewport'])
 
-    if lang_code != "ko":
-        change_language(page, lang_code)
-
-    page.goto(page_info["url"])
-    verify_translations(page, texts, lang_code, page_info["keys"])
+    # 각 화면에 대해 언어 확인
+    for screen_name, screen_data in screen_text_data.items():
+        check_language_for_screen(page, screen_data, "mobile")

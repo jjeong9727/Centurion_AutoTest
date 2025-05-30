@@ -1,31 +1,45 @@
 {
-    "Galaxy S24": {
+  "Windows Chrome": {
+    "viewport": { "width": 1200, "height": 800 },
+    "device_scale_factor": 1,
+    "is_mobile": false,
+    "has_touch": false,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+  },
+  "Windows Safari": {
+    "viewport": { "width": 1200, "height": 800 },
+    "device_scale_factor": 1,
+    "is_mobile": false,
+    "has_touch": false,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Version/16.0 Safari/537.36"
+  },
+  "Galaxy S24": {
       "viewport": { "width": 360, "height": 780 },
       "device_scale_factor": 3,
       "is_mobile": true,
       "has_touch": true,
       "user_agent": "Mozilla/5.0 (Linux; Android 14; SM-S921N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36"
-    },
-    "Galaxy A15": {
+  },
+  "Galaxy A15": {
       "viewport": { "width": 360, "height": 800 },
       "device_scale_factor": 2.625,
       "is_mobile": true,
       "has_touch": true,
       "user_agent": "Mozilla/5.0 (Linux; Android 14; SM-A155N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-    },
-    "iPhone 14 Pro Max": {
-      "viewport": { "width": 430, "height": 932 },
-      "device_scale_factor": 3,
-      "is_mobile": true,
-      "has_touch": true,
-      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"
-    },
-    "iPhone 15": {
-      "viewport": { "width": 393, "height": 852 },
-      "device_scale_factor": 3,
-      "is_mobile": true,
-      "has_touch": true,
-      "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
-    }
+  },
+  "iPhone 14 Pro Max": {
+    "viewport": { "width": 430, "height": 932 },
+    "device_scale_factor": 3,
+    "is_mobile": true,
+    "has_touch": true,
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1"
+  },
+  "iPhone 15": {
+    "viewport": { "width": 393, "height": 852 },
+    "device_scale_factor": 3,
+    "is_mobile": true,
+    "has_touch": true,
+    "user_agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+  }
   }
   
