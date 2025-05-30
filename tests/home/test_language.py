@@ -1,21 +1,20 @@
 import pytest
 from playwright.sync_api import sync_playwright, expect
 import json
+from config import URLS  
 
 # 화면별 언어 텍스트 비교 함수
 def check_language_for_screen(page, screen_data, device_type):
-    # 스크롤하여 화면을 확인
-    page.evaluate("window.scrollTo(0, document.body.scrollHeight);")
-    page.wait_for_timeout(1000)  # 잠시 기다려서 로딩 완료될 시간 확보
+    # 페이지 로딩 대기
+    page.wait_for_load_state('load')
 
     # 화면에 해당하는 테스트 아이디로 요소를 찾아 텍스트가 일치하는지 확인
     for element_id, texts in screen_data.items():
-        # 텍스트 값 확인 (한국어/영어)
         element = page.locator(f'[data-testid="{element_id}"]')
-        
+
         # 한국어 텍스트 확인
         expect(element).to_have_text(texts['ko'], timeout=3000)
-        
+
         # 영어 텍스트 확인
         expect(element).to_have_text(texts['en'], timeout=3000)
 
@@ -64,15 +63,24 @@ screen_text_data = {
     }
 }
 
+# 화면별 언어 확인 및 페이지 진입 함수
+def check_language_for_screen_and_navigate(page, screen_name, screen_data):
+    # 각 화면 URL로 이동
+    url = URLS[f"home_{screen_name}"]
+    page.goto(url)
+    
+    # 텍스트 비교
+    check_language_for_screen(page, screen_data, screen_name)
+
 @pytest.mark.playwright
 def test_language_check_pc(page):
     # PC 단말 정보 불러오기
     device_profile = get_device_profile("pc")
     page.set_viewport_size(device_profile['viewport'])
 
-    # 각 화면에 대해 언어 확인
+    # 각 화면에 대해 언어 확인 및 페이지 진입
     for screen_name, screen_data in screen_text_data.items():
-        check_language_for_screen(page, screen_data, "pc")
+        check_language_for_screen_and_navigate(page, screen_name, screen_data)
 
 
 @pytest.mark.playwright
@@ -81,6 +89,6 @@ def test_language_check_mobile(page):
     device_profile = get_device_profile("mobile")
     page.set_viewport_size(device_profile['viewport'])
 
-    # 각 화면에 대해 언어 확인
+    # 각 화면에 대해 언어 확인 및 페이지 진입
     for screen_name, screen_data in screen_text_data.items():
-        check_language_for_screen(page, screen_data, "mobile")
+        check_language_for_screen_and_navigate(page, screen_name, screen_data)
