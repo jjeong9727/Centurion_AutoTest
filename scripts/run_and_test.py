@@ -174,7 +174,7 @@ def main():
         json.dump(results, f, ensure_ascii=False, indent=2)
 
     summary_text, failures = parse_failures_and_format_slack()
-    # send_slack_summary(summary_text)
+    send_slack_summary(summary_text)
 
     jira_issues = format_jira_issues(failures)
     with open(JIRA_JSON, "w", encoding="utf-8") as f:
