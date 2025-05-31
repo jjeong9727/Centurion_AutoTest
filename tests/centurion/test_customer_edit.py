@@ -26,7 +26,8 @@ def test_edit_customer_list_and_detail(page: Page):
     # ========== 리스트에서 셀 수정 ==========
     page.goto("/고객관리")
     page.fill('[data-testid="input_search_phone"]', list_target["phone"])
-    page.locator("body").click()
+    # page.locator("body").click()
+    page.blur()
     row = page.locator("table tbody tr").first
     cells = row.locator("td")
 
@@ -48,10 +49,10 @@ def test_edit_customer_list_and_detail(page: Page):
         else:
             input_box = page.locator("input").first
             input_box.fill("")
-            page.locator("body").click()
+            page.blur()
             expect(page.locator('[data-testid="toast_required"]')).to_be_visible()
             input_box.fill(new_values[key])
-            page.locator("body").click()
+            page.blur()
 
     update_customer_in_json(list_target["customer_name"], new_values)
 

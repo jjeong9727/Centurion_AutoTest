@@ -27,22 +27,23 @@ def test_customer_search_and_reset(page: Page):
 
     # 3. 검색 항목 입력 및 자동 검색 (포커스 아웃)
     page.fill('[data-testid="input_search_name"]', cust["customer_name"])
-    page.locator("body").click()
+    # page.locator("body").click()
+    page.blur()
     page.fill('[data-testid="input_search_birth"]', cust["birth"])
-    page.locator("body").click()
+    page.blur()
     page.locator('[data-testid="drop_search_gender"]').select_option(label=cust["gender"])
-    page.locator("body").click()
+    page.blur()
     page.fill('[data-testid="input_search_phone"]', cust["phone"])
-    page.locator("body").click()
+    page.blur()
     page.locator('[data-testid="drop_search_nation"]').select_option(label=cust["nation"])
-    page.locator("body").click()
+    page.blur()
 
     # 4. 검색 결과 1건 확인
     expect(page.locator("table tbody tr")).to_have_count(1)
 
     # 5. 고객명에 숫자 추가 → 검색 안됨 확인
     page.fill('[data-testid="input_search_name"]', cust["customer_name"] + "12345")
-    page.locator("body").click()
+    page.blur()
     expect(page.locator('[data-testid="txt_noresult"]')).to_be_visible()
 
     # 6. 초기화 버튼 클릭
