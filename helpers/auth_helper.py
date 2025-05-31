@@ -4,7 +4,7 @@ import time
 import requests
 from config import URLS, Account
 
-TOKEN_FILE = "state/login_token.json"
+TOKEN_FILE = "data/login_token.json"
 
 def get_login_token():
     """백엔드 API 호출해서 access_token 얻기"""

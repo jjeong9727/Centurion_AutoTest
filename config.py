@@ -2,10 +2,10 @@ home_base_url = "https://stg.ceramiqueclinic.com/ko" #홈페이지 도메인
 cen_base_url = "https://" #centurion 도메인
 
 URLS = {
+    # ==============HOME==============
     "login_api" : "" , # API 호출 URL
     "home_main" : f"{home_base_url}",
     "home_login" : f"{home_base_url}/login",
-
     "home_discover" : f"{home_base_url}/discover",
     "home_removal" : f"{home_base_url}/removal/info",
     "home_lifting" : f"{home_base_url}/lifting/info",
@@ -14,16 +14,20 @@ URLS = {
     "home_mypage_pc" : f"{home_base_url}/my-page/membership",
     "home_mypage_mo" : f"{home_base_url}/m/my-page",
     "home_reservation" : f"{home_base_url}/",
+    "home_complete" : f"{home_base_url}/complete",
+
+
+    # ==============Centurion==============
     "cen_membership" : f"{cen_base_url}/",
     "cen_customer" :f"{cen_base_url}/customer",
     "cen_cust_register" :f"{cen_base_url}/customer/register",
 
 
 
-
-    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 
-    "kakaoch": "https://pf.kakao.com/_kzxmxfG", # 임시 URL 데이뷰  건대점
-    "naverbk" : "https://booking.naver.com/booking/13/bizes/1048655" # 임시 URL 데이뷰 건대점
+    # ==============외부 URL==============
+    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 링크 
+    "kakaoch": "https://pf.kakao.com/_kzxmxfG", # 카카오 상담 채널 링크
+    "naver" : "https://booking.naver.com/booking/13/bizes/1048655" # 네이버 플레이스 링크
 }
 
 
