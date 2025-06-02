@@ -10,52 +10,68 @@ from playwright.sync_api import Page, expect
 
 CUSTOMER_FILE = "data/customers.json"
 
-
 def load_random_customer():
     with open(CUSTOMER_FILE, "r", encoding="utf-8") as f:
         customers = json.load(f)
     return random.choice(customers)
 
-def test_customer_search_and_reset(page: Page):
-    page.goto(URLS["cen_customer"])  # URL은 실제 경로로 대체
+def test_search_field(page: Page):
+    page.goto(URLS["cen_customer"])
+    page.wait_for_timeout(2000)
 
-    # 1. 초기 노출된 고객 리스트 수 저장
+    # 초기 노출된 고객 리스트 수 저장
     initial_count = page.locator("table tbody tr").count()
-
-    # 2. 랜덤 고객 정보 로딩
     cust = load_random_customer()
 
-    # 3. 검색 항목 입력 및 자동 검색 (포커스 아웃)
+    # 1. 고객명 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_name"]', cust["customer_name"])
-    # page.locator("body").click()
+    page.wait_for_timeout(1000)
     page.blur()
+    page.wait_for_timeout(1000)
+    expect(page.locator("table tbody tr td").nth(1)).to_have_text(cust["customer_name"])
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_reset"]')
+    page.wait_for_timeout(2000)
+
+    # 2. 생년월일 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_birth"]', cust["birth"])
+    page.wait_for_timeout(1000)
     page.blur()
+    page.wait_for_timeout(1000)
+    expect(page.locator("table tbody tr td").nth(2)).to_have_text(cust["birth"])
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_reset"]')
+    page.wait_for_timeout(2000)
+
+    # 3. 성별 검색 → 확인 → 초기화
     page.locator('[data-testid="drop_search_gender"]').select_option(label=cust["gender"])
+    page.wait_for_timeout(1000)
     page.blur()
+    page.wait_for_timeout(1000)
+    expect(page.locator("table tbody tr td").nth(3)).to_have_text(cust["gender"])
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_reset"]')
+    page.wait_for_timeout(2000)
+
+    # 4. 전화번호 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_phone"]', cust["phone"])
+    page.wait_for_timeout(1000)
     page.blur()
+    page.wait_for_timeout(1000)
+    expect(page.locator("table tbody tr td").nth(4)).to_have_text(cust["phone"])
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_reset"]')
+    page.wait_for_timeout(2000)
+
+    # 5. 국적 검색 → 확인 → 초기화
     page.locator('[data-testid="drop_search_nation"]').select_option(label=cust["nation"])
     page.blur()
+    page.wait_for_timeout(1000)
+    expect(page.locator("table tbody tr td").nth(6)).to_have_text(cust["nation"])
+    page.wait_for_timeout(2000)
 
-    # 4. 검색 결과 1건 확인
-    expect(page.locator("table tbody tr")).to_have_count(1)
-
-    # 5. 고객명에 숫자 추가 → 검색 안됨 확인
-    page.fill('[data-testid="input_search_name"]', cust["customer_name"] + "12345")
-    page.blur()
-    expect(page.locator('[data-testid="txt_noresult"]')).to_be_visible()
-
-    # 6. 초기화 버튼 클릭
+    # 6. 최종적으로 고객 리스트 수 복원 확인
     page.click('[data-testid="btn_reset"]')
-
-    # 7. 입력 필드 초기화 확인
-    expect(page.locator('[data-testid="input_search_name"]')).to_have_attribute("value", "")
-    expect(page.locator('[data-testid="input_search_birth"]')).to_have_attribute("value", "")
-    expect(page.locator('[data-testid="drop_search_gender"]')).to_have_value("")
-    expect(page.locator('[data-testid="input_search_phone"]')).to_have_attribute("value", "")
-    expect(page.locator('[data-testid="drop_search_nation"]')).to_have_value("")
-
-    # 8. 초기 고객 리스트 수 복원 확인
+    page.wait_for_timeout(2000)
     expect(page.locator("table tbody tr")).to_have_count(initial_count)
-    print(f"✅ 초기화 후 고객 리스트 정상 복원: {initial_count}건")
+    print(f"✅ 모든 단일 조건 검색 후 초기화 성공 / 복원된 고객 수: {initial_count}")

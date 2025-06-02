@@ -1,12 +1,12 @@
 [
     {
-      "customer_name": "홍길동",
+      "customer_name": "권정의",
       "chart_id": "CHT001",
-      "birth": "1990-01-23",
-      "gender": "남",
-      "phone": "010-1234-5678",
-      "email": "hong@test.com",
-      "nationality": "대한민국",
+      "birth": "1997-09-27",
+      "gender": "여",
+      "phone": "010-6275-4153",
+      "email": "jekwon@medisolveai.com",
+      "nationality": "한국인",
       "grade" : "VIP",
       "amount": 150000,
       "mileage": 3000,

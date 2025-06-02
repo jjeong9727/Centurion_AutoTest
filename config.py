@@ -1,5 +1,5 @@
 home_base_url = "https://stg.ceramiqueclinic.com/ko" #홈페이지 도메인
-cen_base_url = "https://" #centurion 도메인
+cen_base_url = "https://stg.centurion.ai.kr" #centurion 도메인
 
 URLS = {
     # ==============HOME==============
@@ -19,8 +19,10 @@ URLS = {
 
     # ==============Centurion==============
     "cen_membership" : f"{cen_base_url}/",
-    "cen_customer" :f"{cen_base_url}/customer",
-    "cen_cust_register" :f"{cen_base_url}/customer/register",
+    "cen_customer" :f"{cen_base_url}/",
+    "cen_cust_register" :f"{cen_base_url}/",
+    "cen_login" : f"{cen_base_url}/login",
+    "cen_main" : f"{cen_base_url}/reservations/management",
 
 
 
@@ -30,7 +32,11 @@ URLS = {
     "naver" : "https://booking.naver.com/booking/13/bizes/1048655" # 네이버 플레이스 링크
 }
 
-
+Account = {
+    "testid" : "stg@medisolve.com",
+    "testpw" : "12341234",
+    "wrongpw" : "00000000"
+}
 
 # 세라미크 예약 정보 
 ReservationInfo = {

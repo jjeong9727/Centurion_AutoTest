@@ -1,0 +1,48 @@
+# Centurion 로그인 테스트
+# ID/PW 미입력 | 불일치 | 정상 로그인 확인
+
+import pytest
+from playwright.sync_api import Page, expect
+from config import Account, URLS
+
+def test_login_flow(page: Page):
+    # 1. 로그인 페이지 진입
+    page.goto(URLS["cen_login"])
+    page.wait_for_timeout(2000)
+
+    # 2. 입력 필드 노출 확인
+    expect(page.locator('[data-testid="input_id"]')).to_be_visible()
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="input_pw"]')).to_be_visible()
+    page.wait_for_timeout(500)
+
+    # 3. 아이디만 입력 → 로그인 버튼 비활성화 확인
+    page.fill('[data-testid="input_id"]', Account(["testid"]))
+    page.wait_for_timeout(1000)
+    expect(page.locator('[data-testid="btn_login"]')).to_be_disabled()
+    page.wait_for_timeout(1000)
+
+    # 4. 잘못된 비밀번호 입력 → 불일치 문구 노출 확인
+    page.fill('[data-testid="input_pw"]', Account(["wrongpw"]))
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_login"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="alert_mismatch"]')).to_be_visible()
+
+    # 5. 올바른 비밀번호 입력 → 로그인 성공 및 메인 진입 확인
+    page.fill('[data-testid="input_pw"]', Account(["testpw"]))
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_login"]')
+    page.wait_for_timeout(2000)
+    page.wait_for_url(URLS["cen_main"])  # 메인 화면 URL 패턴에 맞게 수정
+    page.wait_for_timeout(500)
+    expect(page.locator("text=로그아웃")).to_be_visible()
+    page.wait_for_timeout(2000)
+
+    # 6. 로그아웃 절차 → 토스트 확인 및 로그인 화면 이동 확인
+    page.click('[data-testid="btn_logout"]')
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="toast_logout"]')).to_be_visible()
+    page.wait_for_url(URLS["cen_login"])
