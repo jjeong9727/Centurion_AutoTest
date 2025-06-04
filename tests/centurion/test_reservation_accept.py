@@ -20,9 +20,7 @@ def test_confirm_and_cancel_reservations(page: Page):
         # 상태 + 이름 검색
         page.get_by_test_id("search_status").select_option(label="대기")
         page.fill('[data-testid="search_name"]', name)
-        # page.locator("body").click() # 포커스 아웃을 위한 다른 영역 클릭 
-        page.blur()
-
+        page.locator("body").click() # 포커스 아웃을 위한 다른 영역 클릭 
         row = page.locator("table tbody tr").first
 
         if flow == "cancel":
@@ -72,7 +70,7 @@ def test_bulk_confirm_and_cancel(page: Page):
 
     # 2. 예약 상태 '대기'로 검색
     page.get_by_test_id("search_status").select_option(label="대기")
-    page.blur()
+    page.click("body")
 
     rows = page.locator("table tbody tr")
     selected = 0
@@ -95,7 +93,7 @@ def test_bulk_confirm_and_cancel(page: Page):
 
     # 5. 다시 대기 상태 검색 → 나머지 2건 체크
     page.get_by_test_id("search_status").select_option(label="대기")
-    page.blur()
+    page.click("body")
     
     rows = page.locator("table tbody tr")
     selected = 0

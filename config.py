@@ -24,6 +24,7 @@ URLS = {
     "cen_cust_detail" :f"{cen_base_url}/",
     "cen_login" : f"{cen_base_url}/login",
     "cen_main" : f"{cen_base_url}/reservations/management",
+    "cen_grade" : f"{cen_base_url}",
 
 
 

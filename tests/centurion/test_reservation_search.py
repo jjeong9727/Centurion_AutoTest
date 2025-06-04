@@ -34,18 +34,18 @@ def test_search_and_reset_reservation_filters(page: Page):
         page.get_by_test_id("search_status").select_option(label=status)
         page.locator("body").click()
     page.fill('[data-testid="search_name"]', name)
-    page.blur()
+    page.click("body")
     page.fill('[data-testid="search_birth"]', birth)
-    page.blur()
+    page.click("body")
     page.get_by_test_id("search_gender").select_option(label=gender)
     if phone:
         page.fill('[data-testid="search_phone"]', phone)
-        page.blur()
+        page.click("body")
     if email:
         page.fill('[data-testid="search_email"]', email)
-        page.blur()
+        page.click("body")
     page.fill('[data-testid="search_date"]', date)
-    page.blur()
+    page.click("body")
 
     # 4. 검색 결과 확인 (1건으로 제한되도록 설계됨)
     expect(page.locator("table tbody tr")).to_have_count(1)
@@ -87,7 +87,7 @@ def test_button_enable_by_status(page: Page):
 
         page.get_by_test_id("search_status").select_option(label=status)
         page.fill('[data-testid="search_name"]', name)
-        page.blur()
+        page.click("body")
         row = page.locator("table tbody tr").first
 
         btn_accept = row.locator('[data-testid="btn_accept"]')

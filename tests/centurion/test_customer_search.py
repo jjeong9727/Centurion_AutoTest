@@ -26,7 +26,7 @@ def test_search_field(page: Page):
     # 1. 고객명 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_name"]', cust["customer_name"])
     page.wait_for_timeout(1000)
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(1000)
     expect(page.locator("table tbody tr td").nth(1)).to_have_text(cust["customer_name"])
     page.wait_for_timeout(1000)
@@ -36,7 +36,7 @@ def test_search_field(page: Page):
     # 2. 생년월일 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_birth"]', cust["birth"])
     page.wait_for_timeout(1000)
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(1000)
     expect(page.locator("table tbody tr td").nth(2)).to_have_text(cust["birth"])
     page.wait_for_timeout(1000)
@@ -46,7 +46,7 @@ def test_search_field(page: Page):
     # 3. 성별 검색 → 확인 → 초기화
     page.locator('[data-testid="drop_search_gender"]').select_option(label=cust["gender"])
     page.wait_for_timeout(1000)
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(1000)
     expect(page.locator("table tbody tr td").nth(3)).to_have_text(cust["gender"])
     page.wait_for_timeout(1000)
@@ -56,7 +56,7 @@ def test_search_field(page: Page):
     # 4. 전화번호 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_phone"]', cust["phone"])
     page.wait_for_timeout(1000)
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(1000)
     expect(page.locator("table tbody tr td").nth(4)).to_have_text(cust["phone"])
     page.wait_for_timeout(1000)
@@ -65,7 +65,7 @@ def test_search_field(page: Page):
 
     # 5. 국적 검색 → 확인 → 초기화
     page.locator('[data-testid="drop_search_nation"]').select_option(label=cust["nation"])
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(1000)
     expect(page.locator("table tbody tr td").nth(6)).to_have_text(cust["nation"])
     page.wait_for_timeout(2000)

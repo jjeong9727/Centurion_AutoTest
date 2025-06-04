@@ -24,15 +24,14 @@ def test_edit_reservation_fields_validation(page: Page):
         # 빈값 입력 후 토스트 확인
         cell.click()
         cell.locator("input").fill("")
-        # page.locator("body").click()
-        page.blur() #포커싱 아웃
+        page.locator("body").click()
         expect(page.locator('[data-testid="toast_required"]')).to_be_visible(timeout=3000)
         print(f"✅ {label} 빈값 유효성 확인됨")
 
         # 정상값 입력
         cell.click()
         cell.locator("input").fill(valid_input)
-        page.blur()
+        page.click("body")
 
         # 수정된 값 확인
         updated_text = cell.inner_text().strip()
@@ -43,7 +42,7 @@ def test_edit_reservation_fields_validation(page: Page):
     gender_cell = row.locator("td").nth(4)
     gender_cell.click()
     gender_cell.locator("select").select_option(label="여성")  # 실제 옵션 label 확인
-    page.blur()
+    page.click("body")
 
     updated_gender = gender_cell.inner_text().strip()
     assert "여성" in updated_gender, "❌ 성별 수정 반영 실패"
@@ -53,7 +52,7 @@ def test_edit_reservation_fields_validation(page: Page):
     date_cell = row.locator("td").nth(7)
     date_cell.click()
     page.click('[data-testid="btn_day_15"]')
-    page.blur()
+    page.click("body")
 
     updated_date = date_cell.inner_text().strip()
     assert "15" in updated_date, "❌ 예약일 수정 반영 실패"
@@ -63,7 +62,7 @@ def test_edit_reservation_fields_validation(page: Page):
     memo_cell = row.locator("td").nth(8)
     memo_cell.click()
     memo_cell.locator("textarea").fill("")
-    page.blur()
+    page.click("body")
 
     updated_memo = memo_cell.inner_text().strip()
     assert updated_memo == "-", "❌ 메모 빈값 수정 시 '-'로 반영되지 않음"
@@ -71,7 +70,7 @@ def test_edit_reservation_fields_validation(page: Page):
 
     memo_cell.click()
     memo_cell.locator("textarea").fill("자동화 테스트 메모")
-    page.blur()
+    page.click("body")
 
     final_memo = memo_cell.inner_text().strip()
     assert "자동화 테스트 메모" in final_memo, f"❌ 메모 정상 수정 실패 (기대: 자동화 테스트 메모, 실제: {final_memo})"

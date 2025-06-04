@@ -148,7 +148,7 @@ def test_membership_charge_and_deduct(page: Page):
     page.goto(URLS["cen_customer"])
     page.fill('[data-testid="input_search_phone"]', customer["phone"])
     page.wait_for_timeout(1000)
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(3000)
     row = page.locator("table tbody tr").first
     row.locator("td").nth(6).click()

@@ -25,7 +25,7 @@ def test_edit_customer_list_and_detail_single(page: Page):
 
     # ✅ 리스트 수정
     page.fill('[data-testid="input_search_phone"]', customer["phone"])
-    page.blur()
+    page.click("body")
     row = page.locator("table tbody tr").first
     cells = row.locator("td")
 
@@ -47,14 +47,14 @@ def test_edit_customer_list_and_detail_single(page: Page):
         else:
             input_box = page.locator("input").first
             input_box.fill("")
-            page.blur()
+            page.click("body")
             expect(page.locator('[data-testid="toast_required"]')).to_be_visible()
             input_box.fill(new_list_values[key])
-            page.blur()
+            page.click("body")
 
     # ✅ 상세 진입 → 리스트 수정된 전화번호 기준으로 검색
     page.fill('[data-testid="input_search_phone"]', new_list_values["phone"])
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(3000)
     row = page.locator("table tbody tr").first
     row.locator("td").nth(6).click()
@@ -84,7 +84,7 @@ def test_edit_customer_list_and_detail_single(page: Page):
     # ✅ 고객관리 리스트 수정 확인
     page.goto(URLS["cen_customer"])
     page.fill('[data-testid="input_search_phone"]', new_detail_values["phone"])
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(3000)
     row = page.locator("table tbody tr").first
     row_text = row.inner_text()
@@ -94,7 +94,7 @@ def test_edit_customer_list_and_detail_single(page: Page):
     # ✅ 예약관리 리스트 수정 확인
     page.goto(URLS["cen_reservation"])
     page.fill('[data-testid="input_search_phone"]', new_detail_values["phone"])
-    page.blur()
+    page.click("body")
     page.wait_for_timeout(3000)
     row = page.locator("table tbody tr").first
     row_text = row.inner_text()
