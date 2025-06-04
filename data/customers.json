@@ -10,6 +10,6 @@
       "grade" : "VIP",
       "amount": 150000,
       "mileage": 3000,
-      "balance": 147000
+      "charged": 10000
     }
   ]
