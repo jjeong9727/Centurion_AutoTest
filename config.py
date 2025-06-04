@@ -15,12 +15,13 @@ URLS = {
     "home_mypage_mo" : f"{home_base_url}/m/my-page",
     "home_reservation" : f"{home_base_url}/",
     "home_complete" : f"{home_base_url}/complete",
+    "home_mypage_profile": f"{home_base_url}/my-page/profile/edit",
 
 
     # ==============Centurion==============
     "cen_membership" : f"{cen_base_url}/",
     "cen_customer" :f"{cen_base_url}/",
-    "cen_cust_register" :f"{cen_base_url}/",
+    "cen_cust_detail" :f"{cen_base_url}/",
     "cen_login" : f"{cen_base_url}/login",
     "cen_main" : f"{cen_base_url}/reservations/management",
 
