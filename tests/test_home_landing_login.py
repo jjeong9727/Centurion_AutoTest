@@ -3,20 +3,10 @@
 import pytest
 from playwright.sync_api import sync_playwright, expect
 from config import URLS
-from helpers.auth_helper import ensure_valid_token
+from helpers.auth_helper import login_with_token
+
 
 # 메뉴 항목 및 예상 URL
-def go_to_home_page(page, url, access_token=None):
-    page.goto(url)
-    if access_token:
-        # 로그인된 상태로 테스트 진행, 토큰을 사용하여 로그인 처리
-        page.add_cookie({
-            'name': 'access_token',
-            'value': access_token,
-            'domain': 'example.com'  # 실제 도메인으로 변경 필요
-        })
-    page.wait_for_load_state('load')
-
 def check_menu_visibility(page):
     menu_items = page.locator('[data-testid="header_menu"]')
     expect(menu_items).to_be_visible()
@@ -64,9 +54,9 @@ def click_float_button_and_reserve(page, device_type):
 @pytest.mark.playwright
 def test_logged_in_pc(page):
     # 로그인 상태로 메인 화면 진입
-    access_token = ensure_valid_token()  # 로그인 토큰 확보
-    go_to_home_page(page, URLS["home_main"], access_token)
-
+    login_with_google(page)
+    page.goto(URLS["home_main"])
+    page.wait_for_timeout(3000)
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
     page.locator('[data-testid="hamburger-menu"]').click()
     check_menu_visibility(page)

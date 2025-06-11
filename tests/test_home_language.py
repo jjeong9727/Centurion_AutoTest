@@ -2,6 +2,7 @@ import pytest
 import json
 from playwright.sync_api import Page, expect
 from config import URLS
+from helpers.auth_helper import login_with_token
 
 
 # 화면별 언어 데이터
@@ -77,6 +78,7 @@ def get_device_profile(device_type: str) -> dict:
 
 # 언어 변경 테스트 수행 (한글 → 영어)
 def check_language_and_switch(page: Page, screen_name: str, screen_data: dict):
+    login_with_token(page)
     url = URLS[f"home_{screen_name}"]
     page.goto(url)
     check_language_for_screen(page, screen_data, lang_code="ko")

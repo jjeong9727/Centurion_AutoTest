@@ -1,9 +1,8 @@
-home_base_url = "https://stg.ceramiqueclinic.com/ko" #홈페이지 도메인
+home_base_url = "https://stg.ceramiqueclinic.com" #홈페이지 도메인
 cen_base_url = "https://stg.centurion.ai.kr" #centurion 도메인
 
 URLS = {
     # ==============HOME==============
-    "login_api" : "" , # API 호출 URL
     "home_main" : f"{home_base_url}",
     "home_login" : f"{home_base_url}/login",
     "home_discover" : f"{home_base_url}/discover",
@@ -37,7 +36,7 @@ URLS = {
     # ==============외부 URL==============
     "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 링크 
     "naver" : "https://booking.naver.com/booking/13/bizes/1048655", # 네이버 플레이스 링크
-    "whatsapp" : "" #왓츠앱 앱 설치 링크 
+    "whatsapp" : "https://api.whatsapp.com/send/?phone=821076094217&text&type=phone_number&app_absent=0" #왓츠앱 앱 설치 링크 
 }
 
 Account = {
