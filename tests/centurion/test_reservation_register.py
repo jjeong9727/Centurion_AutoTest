@@ -7,6 +7,8 @@ import string
 from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect
 from helpers.reservation_utils import save_reservation_to_json, verify_multiple_reservations_in_list
+from config import URLS
+from helpers.customer_utils import cen_login
 
 def generate_random_birth():
     year = random.randint(1990, 1999)
@@ -43,7 +45,11 @@ def register_reservation(page: Page):
     day = str(tomorrow.day)
     date_testid = f"btn_day__{day}"
 
+    cen_login(page) # 로그인
+
     # 1. 예약 추가 팝업 열기
+    page.goto(URLS["cen_reservation"])
+    page.wait_for_timeout(3000)
     page.click('[data-testid="btn_register"]')
 
     # 2. 취소 → 팝업 닫힘 확인

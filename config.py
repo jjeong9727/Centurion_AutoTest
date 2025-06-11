@@ -25,19 +25,19 @@ URLS = {
 
 
     # ==============Centurion==============
-    "cen_membership" : f"{cen_base_url}/",
-    "cen_customer" :f"{cen_base_url}/",
-    "cen_cust_detail" :f"{cen_base_url}/",
+    "cen_membership" : f"{cen_base_url}/customers/memberships/grades",
+    "cen_customer" :f"{cen_base_url}/customers/management",
     "cen_login" : f"{cen_base_url}/login",
     "cen_main" : f"{cen_base_url}/reservations/management",
+    "cen_reservation" : f"{cen_base_url}/reservations/management",
     "cen_grade" : f"{cen_base_url}",
 
 
 
     # ==============외부 URL==============
     "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 링크 
-    "kakaoch": "https://pf.kakao.com/_kzxmxfG", # 카카오 상담 채널 링크
-    "naver" : "https://booking.naver.com/booking/13/bizes/1048655" # 네이버 플레이스 링크
+    "naver" : "https://booking.naver.com/booking/13/bizes/1048655", # 네이버 플레이스 링크
+    "whatsapp" : "" #왓츠앱 앱 설치 링크 
 }
 
 Account = {

@@ -7,6 +7,7 @@ import json
 import random
 from config import URLS
 from playwright.sync_api import Page, expect
+from helpers.customer_utils import cen_login
 
 CUSTOMER_FILE = "data/customers.json"
 
@@ -16,6 +17,8 @@ def load_random_customer():
     return random.choice(customers)
 
 def test_search_field(page: Page):
+    cen_login(page) #로그인 
+
     page.goto(URLS["cen_customer"])
     page.wait_for_timeout(2000)
 

@@ -34,7 +34,7 @@ def test_login_flow(page: Page):
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_login"]')
     page.wait_for_timeout(2000)
-    page.wait_for_url(URLS["cen_main"])  # 메인 화면 URL 패턴에 맞게 수정
+    page.wait_for_url(URLS["cen_main"])
     page.wait_for_timeout(500)
     expect(page.locator("text=로그아웃")).to_be_visible()
     page.wait_for_timeout(2000)

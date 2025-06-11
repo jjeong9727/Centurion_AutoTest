@@ -7,6 +7,8 @@ import json
 import random
 from playwright.sync_api import Page, expect
 from helpers.reservation_utils import get_reservations_by_status
+from config import URLS
+from helpers.customer_utils import cen_login
 
 RESERVATION_FILE = "data/reservations.json"
 
@@ -28,6 +30,10 @@ def test_search_and_reset_reservation_filters(page: Page):
     email = res.get("email", "")
     date = res["datetime"].split(" / ")[0]
     status = res.get("status", "")
+
+    cen_login(page) # 로그인
+    page.goto(URLS["cen_reservation"])
+    page.wait_for_timeout(3000)
 
     # 3. 검색 필드 입력
     if status:

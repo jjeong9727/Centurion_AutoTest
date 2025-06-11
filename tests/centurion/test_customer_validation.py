@@ -5,9 +5,11 @@
 import random
 from playwright.sync_api import Page, expect
 from config import URLS
-from helpers.customer_utils import (generate_random_customer, add_customer_to_json)
+from helpers.customer_utils import (generate_random_customer, add_customer_to_json, cen_login)
 
 def test_register_customer(page: Page):
+    cen_login(page) # 로그인 
+
     page.goto(URLS["cen_cust_register"])
 
     # ✅ 고객 정보 두 세트 미리 생성

@@ -6,10 +6,13 @@
 
 import random
 from playwright.sync_api import Page, expect
-from helpers.customer_utils import find_vip_row
+from helpers.customer_utils import find_grade_row, cen_login
 from config import URLS
 
 def test_membership_register_and_toggle(page: Page):
+    # 로그인 
+    cen_login(page)
+
     # 1. 등급 등록 팝업 진입 및 취소
     page.goto(URLS["cen_grade"])
     page.click('[data-testid="btn_register"]')  # 등록 버튼
@@ -19,7 +22,7 @@ def test_membership_register_and_toggle(page: Page):
     page.click('[data-testid="btn_register"]')  # 재진입
 
     # 2. 등급명 입력 → 완료 버튼 활성화 확인
-    page.fill('[data-testid="input_grade"]', "VIP")
+    page.fill('[data-testid="input_grade"]', "자동화")
     expect(page.locator('[data-testid="btn_confirm"]')).to_be_enabled()
 
     # 3. 중복 등록 시도 → 중복 토스트 확인
@@ -49,16 +52,16 @@ def test_membership_register_and_toggle(page: Page):
     page.click('[data-testid="btn_confirm"]')  # 수정 안내 팝업 확인
     expect(page.locator('[data-testid="toast_edit"]')).to_be_visible()
 
-    # 6. 리스트에서 "VIP" 등급 찾기
-    vip_row = find_vip_row(page)
-    assert vip_row, "❌ VIP 등급을 찾을 수 없습니다."
+    # 6. 리스트에서 "자동화" 등급 찾기
+    grade_row = find_grade_row(page)
+    assert grade_row, "❌ VIP 등급을 찾을 수 없습니다."
 
     # 이후 toggle 버튼 클릭
-    vip_row.locator('[data-testid="btn_toggle"]').click()
+    grade_row.locator('[data-testid="btn_toggle"]').click()
     page.wait_for_timeout(2000)
     page.click('[data-testid="btn_cancel"]')  # 비활성화 안내 팝업 취소
     page.wait_for_timeout(2000)
-    vip_row.locator('[data-testid="btn_toggle"]').click()
+    grade_row.locator('[data-testid="btn_toggle"]').click()
     page.wait_for_timeout(2000)
     page.click('[data-testid="btn_confirm"]')  # 비활성화 확인
     page.wait_for_timeout(500)

@@ -4,6 +4,8 @@
 
 from playwright.sync_api import Page, expect
 from helpers.reservation_utils import get_reservations_by_status, update_reservation_status
+from config import URLS
+from helpers.customer_utils import cen_login
 
 def test_confirm_and_cancel_reservations(page: Page):
     # 홈페이지 예약 스크립트 작성 시 3건 이상 등록 필요
@@ -17,7 +19,9 @@ def test_confirm_and_cancel_reservations(page: Page):
         target = pending[idx]
         name = target["name"]
 
+        cen_login(page) # 로그인
         # 상태 + 이름 검색
+        page.goto(URLS["cen_reservation"])
         page.get_by_test_id("search_status").select_option(label="대기")
         page.fill('[data-testid="search_name"]', name)
         page.locator("body").click() # 포커스 아웃을 위한 다른 영역 클릭 

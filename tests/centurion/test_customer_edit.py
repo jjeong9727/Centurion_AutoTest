@@ -7,7 +7,7 @@
 import json
 import random
 from playwright.sync_api import Page, expect
-from helpers.customer_utils import (generate_random_birth, update_customer_in_json)
+from helpers.customer_utils import generate_random_birth, update_customer_in_json, cen_login
 from config import URLS
 
 CUSTOMER_FILE = "data/customers.json"
@@ -21,6 +21,7 @@ def test_edit_customer_list_and_detail_single(page: Page):
     customer = load_one_customer()
     assert customer, "❌ 수정 대상 고객이 필요합니다."
 
+    cen_login(page) #로그인 
     page.goto(URLS["cen_customer"])
 
     # ✅ 리스트 수정

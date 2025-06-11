@@ -2,7 +2,8 @@ import os
 import json
 import random
 from datetime import datetime, timedelta
-from playwright.sync_api import Page  # ← 이게 없다면 Page를 알 수 없음
+from playwright.sync_api import Page  
+from config import URLS, Account
 
 #고객 등록 후 json에 추가  
 def add_customer_to_json(new_customer: dict, file_path="data/customers.json"):
@@ -93,7 +94,7 @@ def generate_random_customer():
 
 
 # 페이지네이션으로 등급 찾기
-def find_vip_row(page: Page):
+def find_grade_row(page: Page):
     while True:
         rows = page.locator("table tbody tr")
         row_count = rows.count()
@@ -103,8 +104,8 @@ def find_vip_row(page: Page):
             page.evaluate("(element) => element.scrollIntoView()", row)  # ✅ 스크롤
             cell_text = row.locator("td").nth(1).inner_text()
 
-            if "VIP" in cell_text:
-                return row  # ✅ VIP 등급 행 반환
+            if "자동화" in cell_text:
+                return row  # ✅ 자동화 등급 행 반환
 
         # ✅ 다음 페이지 버튼이 활성화돼 있으면 클릭
         next_button = page.locator('[data-testid="page_next"]')
@@ -114,4 +115,18 @@ def find_vip_row(page: Page):
         else:
             break
 
-    return None  # VIP 등급을 찾지 못한 경우
+    return None  # 자동화 등급을 찾지 못한 경우
+
+
+# Centurion 로그인 동작
+def cen_login(page: Page):
+    page.goto(URLS["cen_login"])
+    page.wait_for_timeout(2000)
+    page.fill('[data-testid="input_id"]', Account(["testid"]))
+    page.wait_for_timeout(1000)
+    page.fill('[data-testid="input_pw"]', Account(["testpw"]))
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_login"]')
+    page.wait_for_timeout(2000)
+    page.wait_for_url(URLS["cen_main"])
+    page.wait_for_timeout(500)

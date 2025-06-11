@@ -4,6 +4,8 @@
 # 3. 정상 데이터 입력 후 수정 확인
 from playwright.sync_api import Page, expect
 from datetime import datetime, timedelta
+from config import URLS
+from helpers.customer_utils import cen_login
 
 def test_editable_columns_by_status(page: Page):
     # 상태별 수정 가능 열 정의 (예약일 8열, 직원 메모 10열)
@@ -17,7 +19,9 @@ def test_editable_columns_by_status(page: Page):
     for status, editable_cols in status_editable_columns.items():
         print(f"\n🔍 상태: {status} - 수정테스트 고객 예약 검색 시작")
 
+        cen_login(page) # 로그인
         # 상태 + 이름 검색
+        page.goto(URLS["cen_reservation"])
         page.get_by_test_id("search_status").select_option(label=status)
         page.fill('[data-testid="search_name"]', "수정테스트")
         page.click("body")

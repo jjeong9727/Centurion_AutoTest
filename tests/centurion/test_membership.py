@@ -6,7 +6,7 @@
 
 import json
 from playwright.sync_api import Page, expect
-from helpers.customer_utils import update_customer_in_json
+from helpers.customer_utils import update_customer_in_json, cen_login
 from config import URLS
 
 CUSTOMER_FILE = "data/customers.json"
@@ -20,6 +20,7 @@ def test_membership_charge_and_deduct(page: Page):
     customer = load_one_customer()
     assert customer, "❌ 고객 정보가 필요합니다."
 
+    cen_login(page) # 로그인인
     page.goto(URLS["cen_customer"])
     page.wait_for_timeout(2000)
 
