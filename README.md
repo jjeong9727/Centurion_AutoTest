@@ -10,7 +10,11 @@
 - 최상단 폴더
 - `config.py`  
   > 공통 변수 저장 파일 (예: URL, 계정 정보 등)
-
+  
+- `.gitignore`  
+  > Git 커밋 시 대상에서 제외할 데이터를 명시하는 파일
+  > 개인 정보 / URL 등 공유 불가 데이터 등 
+  > `.env` 등등 
 ---------------------------------
 
 ### 2. `data/` 폴더
@@ -72,6 +76,10 @@
   > `language.xlsx` → `language.json` 변환 스크립트  
   > 다국어 테스트 데이터를 자동 변환
 
+- `delete_account.py`  
+  > 홈페이지 계정 삭제 API 호출 함수
+  > .env 파일에 명시한 계정 삭제 처리
+
 ---
 
 ### 5. `tests/` 폴더
@@ -80,6 +88,10 @@
 - `conftest.py`  
   > 웹 및 모바일(Android, iOS) 테스트 설정 및 브라우저 구성  
   > 모든 테스트 파일에 영향을 주는 공통 설정
+
+- `.env`  
+  > 테스트에 사용하는 보안이 필요한 데이터 저장
+  > Webhook URL, API Endpoint, Account 등등 
 
 ### 5-1. `centurion`
 - `test_reservation~.py`
