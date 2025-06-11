@@ -71,9 +71,16 @@ def test_search_and_reset_reservation_filters(page: Page):
 # 예약 상태별 확정/취소 버튼 활성화 체크 
 def test_button_enable_by_status(page: Page):
     status_button_rules = {
-        "대기":  (True,  True),
-        "확정":  (False, True),
-        "취소":  (False, False),
+        "대기": (True, True),
+        "확정": (False, True),
+        "취소": (False, False),
+        "완료": (False, False)
+    }
+    status_editable_columns = {
+        "대기": [8, 10],
+        "확정": [8, 10],
+        "취소": [10],
+        "완료": [10]
     }
 
     for status, (accept_enabled, cancel_enabled) in status_button_rules.items():
@@ -90,6 +97,7 @@ def test_button_enable_by_status(page: Page):
         page.click("body")
         row = page.locator("table tbody tr").first
 
+        # 버튼 상태 확인
         btn_accept = row.locator('[data-testid="btn_accept"]')
         btn_cancel = row.locator('[data-testid="btn_cancel"]')
 
@@ -102,3 +110,16 @@ def test_button_enable_by_status(page: Page):
             expect(btn_cancel).to_be_enabled()
         else:
             expect(btn_cancel).to_be_disabled()
+
+        # 열 수정 가능 여부 확인
+        editable_cols = status_editable_columns.get(status, [])
+        for col_index in [8, 10]:
+            cell = row.locator(f"td:nth-of-type({col_index + 1})")
+            has_button = cell.locator("button").count() > 0
+
+            if col_index in editable_cols:
+                assert has_button, f"❌ {status} 상태에서 {col_index}열은 수정 가능해야 함 (버튼 없음)"
+                print(f"✅ {status} 상태에서 {col_index}열: 수정 가능 (버튼 있음)")
+            else:
+                assert not has_button, f"❌ {status} 상태에서 {col_index}열은 수정 불가해야 함 (버튼 있음)"
+                print(f"✅ {status} 상태에서 {col_index}열: 수정 불가 (버튼 없음)")

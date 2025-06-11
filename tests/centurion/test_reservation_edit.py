@@ -3,75 +3,78 @@
 # 2. 데이터 값 삭제 후 유효성 체크
 # 3. 정상 데이터 입력 후 수정 확인
 from playwright.sync_api import Page, expect
-from config import URLS
+from datetime import datetime, timedelta
 
-def test_edit_reservation_fields_validation(page: Page):
-    page.goto(URLS["cen_res_history"])  
-
-    row = page.locator("table tbody tr").first
-
-    # 필수 필드 (텍스트 입력): 고객명, 생년월일, 전화번호, 이메일
-    text_fields = {
-        2: ("고객명", "테스터"),
-        3: ("생년월일", "1990-01-01"),
-        5: ("전화번호", "010-1234-5678"),
-        6: ("이메일", "test@example.com")
+def test_editable_columns_by_status(page: Page):
+    # 상태별 수정 가능 열 정의 (예약일 8열, 직원 메모 10열)
+    status_editable_columns = {
+        "대기": [8, 10],
+        "확정": [8, 10],
+        "취소": [10],
+        "완료": [10]
     }
 
-    for col_idx, (label, valid_input) in text_fields.items():
-        cell = row.locator("td").nth(col_idx)
+    for status, editable_cols in status_editable_columns.items():
+        print(f"\n🔍 상태: {status} - 수정테스트 고객 예약 검색 시작")
 
-        # 빈값 입력 후 토스트 확인
-        cell.click()
-        cell.locator("input").fill("")
-        page.locator("body").click()
-        expect(page.locator('[data-testid="toast_required"]')).to_be_visible(timeout=3000)
-        print(f"✅ {label} 빈값 유효성 확인됨")
-
-        # 정상값 입력
-        cell.click()
-        cell.locator("input").fill(valid_input)
+        # 상태 + 이름 검색
+        page.get_by_test_id("search_status").select_option(label=status)
+        page.fill('[data-testid="search_name"]', "수정테스트")
         page.click("body")
 
-        # 수정된 값 확인
-        updated_text = cell.inner_text().strip()
-        assert valid_input in updated_text, f"❌ {label} 수정값 반영 실패 (기대: {valid_input}, 실제: {updated_text})"
-        print(f"✅ {label} 정상 수정 및 반영 확인됨: {updated_text}")
+        rows = page.locator("table tbody tr")
+        row_count = rows.count()
 
-    # 성별 (5열)
-    gender_cell = row.locator("td").nth(4)
-    gender_cell.click()
-    gender_cell.locator("select").select_option(label="여성")  # 실제 옵션 label 확인
-    page.click("body")
+        if row_count == 0:
+            print(f"⚠️ 상태 '{status}'의 검색 결과가 없습니다.")
+            continue
+        elif row_count > 1:
+            print(f"⚠️ 상태 '{status}' 검색 결과가 {row_count}건입니다. 첫 번째 예약만 수정합니다.")
 
-    updated_gender = gender_cell.inner_text().strip()
-    assert "여성" in updated_gender, "❌ 성별 수정 반영 실패"
-    print(f"✅ 성별 수정 완료 및 반영 확인됨: {updated_gender}")
+        # 첫 번째 예약 행 선택
+        row = rows.first
 
-    # 예약일 (8열)
-    date_cell = row.locator("td").nth(7)
-    date_cell.click()
-    page.click('[data-testid="btn_day_15"]')
-    page.click("body")
+        # ✅ 예약일 (8열 = nth(7))
+        if 8 in editable_cols:
+            date_cell = row.locator("td").nth(7)
+            date_cell.click()
 
-    updated_date = date_cell.inner_text().strip()
-    assert "15" in updated_date, "❌ 예약일 수정 반영 실패"
-    print(f"✅ 예약일 수정 완료 및 반영 확인됨: {updated_date}")
+            # 오늘 +1일 선택
+            tomorrow = datetime.today() + timedelta(days=1)
+            day = tomorrow.day
+            date_selector = f'[data-testid="btn_day_{day}"]'
+            page.click(date_selector)
 
-    # 메모 (9열) – 빈값 → '-' → 정상값
-    memo_cell = row.locator("td").nth(8)
-    memo_cell.click()
-    memo_cell.locator("textarea").fill("")
-    page.click("body")
+            # 가장 이른 활성화된 시간 버튼 선택
+            time_buttons = page.locator('[data-testid^="btn_time_"]')
+            found = False
+            for i in range(time_buttons.count()):
+                btn = time_buttons.nth(i)
+                if btn.is_enabled():
+                    btn.click()
+                    print(f"✅ 선택된 시간: {btn.inner_text()}")
+                    found = True
+                    break
 
-    updated_memo = memo_cell.inner_text().strip()
-    assert updated_memo == "-", "❌ 메모 빈값 수정 시 '-'로 반영되지 않음"
-    print("✅ 메모 빈값 처리 확인 ('-' 노출)")
+            assert found, "❌ 선택 가능한 시간이 없습니다."
+            page.click("body")
 
-    memo_cell.click()
-    memo_cell.locator("textarea").fill("자동화 테스트 메모")
-    page.click("body")
+            # 결과 확인
+            updated_date = date_cell.inner_text().strip()
+            assert str(day) in updated_date, f"❌ {status} 예약일 수정 반영 실패"
+            print(f"✅ 예약일 수정 완료 및 확인됨: {updated_date}")
+        else:
+            print(f"⏭️ {status} 상태에서는 예약일 수정 불가")
 
-    final_memo = memo_cell.inner_text().strip()
-    assert "자동화 테스트 메모" in final_memo, f"❌ 메모 정상 수정 실패 (기대: 자동화 테스트 메모, 실제: {final_memo})"
-    print(f"✅ 메모 수정 완료 및 반영 확인됨: {final_memo}")
+        # ✅ 직원 메모 (10열 = nth(9))
+        if 10 in editable_cols:
+            memo_cell = row.locator("td").nth(9)
+            memo_cell.click()
+            memo_cell.locator("textarea").fill("자동화 메모 수정")
+            page.click("body")
+
+            updated_memo = memo_cell.inner_text().strip()
+            assert "자동화" in updated_memo, f"❌ {status} 직원메모 수정 반영 실패"
+            print(f"✅ 직원메모 수정 완료 및 확인됨: {updated_memo}")
+        else:
+            print(f"⏭️ {status} 상태에서는 직원메모 수정 불가")
