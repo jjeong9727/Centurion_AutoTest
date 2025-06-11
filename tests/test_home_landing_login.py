@@ -54,7 +54,7 @@ def click_float_button_and_reserve(page, device_type):
 @pytest.mark.playwright
 def test_logged_in_pc(page):
     # 로그인 상태로 메인 화면 진입
-    login_with_google(page)
+    login_with_token(page)
     page.goto(URLS["home_main"])
     page.wait_for_timeout(3000)
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
@@ -88,9 +88,9 @@ def test_logged_in_pc(page):
 @pytest.mark.playwright
 def test_logged_in_mobile(page):
     # 로그인 상태로 메인 화면 진입
-    access_token = ensure_valid_token()  # 로그인 토큰 확보
-    go_to_home_page(page, URLS["home_main"], access_token)
-
+    login_with_token(page)
+    page.goto(URLS["home_main"])
+    page.wait_for_timeout(3000)
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
     page.locator('[data-testid="hamburger-menu"]').click()
     check_menu_visibility(page)
