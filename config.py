@@ -9,13 +9,19 @@ URLS = {
     "home_discover" : f"{home_base_url}/discover",
     "home_removal" : f"{home_base_url}/removal/info",
     "home_lifting" : f"{home_base_url}/lifting/info",
+    "home_privacy" : f"{home_base_url}/privacy",
+    "home_terms" : f"{home_base_url}/terms",
     "home_privilege" : f"{home_base_url}/privilege",
     "home_discover" : f"{home_base_url}/discover",
-    "home_mypage_pc" : f"{home_base_url}/my-page/membership",
-    "home_mypage_mo" : f"{home_base_url}/m/my-page",
-    "home_reservation" : f"{home_base_url}/",
+    "home_mypage_mem" : f"{home_base_url}/my-page/membership",
+    "home_mypage_profile" : f"{home_base_url}/my-page/profile/edit",
+    "home_mypage_history" : f"{home_base_url}/my-page/reservations",
+    "home_mypage_mo" : f"{home_base_url}/my-page",
+    "home_reservation" : f"{home_base_url}/reservation",
     "home_complete" : f"{home_base_url}/complete",
     "home_mypage_profile": f"{home_base_url}/my-page/profile/edit",
+
+
 
 
     # ==============Centurion==============
