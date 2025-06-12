@@ -69,11 +69,22 @@ def check_language_for_screen(page: Page, screen_data: dict, lang_code: str):
 
 # 디바이스 설정 불러오기
 def get_device_profile(device_type: str) -> dict:
-    with open('data/device_profile.json', 'r') as f:
+    with open("data/device_profile.json", "r", encoding="utf-8") as f:
         profiles = json.load(f)
-    if device_type not in profiles:
-        raise ValueError(f"❌ '{device_type}' 단말 정보가 device_profile.json에 없습니다.")
-    return profiles[device_type]
+
+    is_mobile = device_type == "mobile"
+
+    # 조건에 맞는 프로필 목록 필터링
+    matching_profiles = [
+        profile for profile in profiles.values()
+        if profile.get("is_mobile", False) == is_mobile
+    ]
+
+    if not matching_profiles:
+        raise ValueError(f"❌ '{device_type}'에 해당하는 단말 정보가 없습니다.")
+
+    # 일단 첫 번째 matching 프로필 반환 (원하면 우선순위 로직 추가 가능)
+    return matching_profiles[0]
 
 
 # 언어 변경 테스트 수행 (한글 → 영어)
