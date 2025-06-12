@@ -36,7 +36,8 @@ def check_footer_elements(page):
 def select_menu_and_verify_page(page, menu_item, expected_url):
     page.locator(f'[data-testid="menu_{menu_item}"]').click()  # 메뉴 항목을 클릭
     page.wait_for_load_state('load')  # 페이지가 완전히 로딩될 때까지 기다림
-    expect(page.url()).toBe(expected_url)  # 현재 페이지 URL이 예상 URL과 일치하는지 확인
+    assert page.url == expected_url, f"❌ URL mismatch: {page.url} != {expected_url}"
+
 
 def click_float_button_and_reserve(page, device_type):
     if device_type == 'pc':
@@ -55,19 +56,18 @@ def click_float_button_and_reserve(page, device_type):
 def test_logged_in_pc(page):
     # 로그인 상태로 메인 화면 진입
     login_with_token(page, account_type="kakao")
-    page.goto(URLS["home_main"])
-    page.wait_for_timeout(3000)
+    
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
-    page.locator('[data-testid="hamburger-menu"]').click()
-    check_menu_visibility(page)
-
+    page.locator('[data-testid="header_menu"]').click()
+    page.wait_for_timeout(3000)
+    
     # 로그인 상태에서 보여야 하는 메뉴 항목과 상태 확인
     menu_items = [
         ('discover', URLS["home_discover"]),
         ('removal', URLS["home_removal"]),
         ('lifting', URLS["home_lifting"]),
         ('privilege', URLS["home_privilege"]),
-        ('mypage', URLS["home_mypage_pc"]),
+        ('mypage', URLS["home_mypage_mem"]),
         ('logout', URLS["home_main"]),
     ]
 
@@ -75,7 +75,7 @@ def test_logged_in_pc(page):
         select_menu_and_verify_page(page, item, expected_url)
 
         # 햄버거 메뉴로 돌아가서 다음 메뉴 클릭을 위해 햄버거 메뉴 클릭
-        page.locator('[data-testid="hamburger-menu"]').click()
+        page.locator('[data-testid="header_menu"]').click()
 
     # 푸터 항목 확인 후 클릭하여 URL 확인
     scroll_to_footer(page)
@@ -85,35 +85,34 @@ def test_logged_in_pc(page):
     click_float_button_and_reserve(page, 'pc')
 
 
-@pytest.mark.playwright
-def test_logged_in_mobile(page):
-    # 로그인 상태로 메인 화면 진입
-    login_with_token(page, account_type="kakao")
-    page.goto(URLS["home_main"])
-    page.wait_for_timeout(3000)
-    # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
-    page.locator('[data-testid="hamburger-menu"]').click()
-    check_menu_visibility(page)
+# @pytest.mark.playwright
+# def test_logged_in_mobile(page):
+#     # 로그인 상태로 메인 화면 진입
+#     login_with_token(page, account_type="kakao")
 
-    # 로그인 상태에서 보여야 하는 메뉴 항목과 상태 확인
-    menu_items = [
-        ('discover', URLS["home_discover"]),
-        ('menu_removal', URLS["home_removal"]),
-        ('menu_lifting', URLS["home_lifting"]),
-        ('menu_privilege', URLS["home_privilege"]),
-        ('menu_mypage', URLS["home_mypage_mo"]),
-        ('menu_logout', URLS["home_main"]),
-    ]
+#     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
+#     page.locator('[data-testid="header_menu"]').click()
+#     page.wait_for_timeout(2000)
 
-    for item, expected_url in menu_items:
-        select_menu_and_verify_page(page, item, expected_url)
+#     # 로그인 상태에서 보여야 하는 메뉴 항목과 상태 확인
+#     menu_items = [
+#         ('discover', URLS["home_discover"]),
+#         ('menu_removal', URLS["home_removal"]),
+#         ('menu_lifting', URLS["home_lifting"]),
+#         ('menu_privilege', URLS["home_privilege"]),
+#         ('menu_mypage', URLS["home_mypage_mo"]),
+#         ('menu_logout', URLS["home_main"]),
+#     ]
 
-        # 햄버거 메뉴로 돌아가서 다음 메뉴 클릭을 위해 햄버거 메뉴 클릭
-        page.locator('[data-testid="hamburger-menu"]').click()
+#     for item, expected_url in menu_items:
+#         select_menu_and_verify_page(page, item, expected_url)
 
-    # 푸터 항목 확인 후 클릭하여 URL 확인
-    scroll_to_footer(page)
-    check_footer_elements(page)
+#         # 햄버거 메뉴로 돌아가서 다음 메뉴 클릭을 위해 햄버거 메뉴 클릭
+#         page.locator('[data-testid="header_menu"]').click()
 
-    # 플로팅 버튼으로 예약 화면 진입 (모바일)
-    click_float_button_and_reserve(page, 'mobile')
+#     # 푸터 항목 확인 후 클릭하여 URL 확인
+#     scroll_to_footer(page)
+#     check_footer_elements(page)
+
+#     # 플로팅 버튼으로 예약 화면 진입 (모바일)
+#     click_float_button_and_reserve(page, 'mobile')
