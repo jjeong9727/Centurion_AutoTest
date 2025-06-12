@@ -69,19 +69,19 @@ def generate_customer_name(prefix="자동화", count_file="data/daily_count.json
     with open(count_file, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-    # return customer_name #랜덤생성 Pending
-    return f"자동화테스트" 
+    return customer_name 
+    # return f"자동화테스트" 
 def generate_random_birth():
     start = datetime.strptime("1960-01-01", "%Y-%m-%d")
     end = datetime.strptime("2004-12-31", "%Y-%m-%d")
     return (start + timedelta(days=random.randint(0, (end - start).days))).strftime("%Y-%m-%d")
 def generate_random_phone():
-    # return f"010-{random.randint(1000,9999):04}-{random.randint(1000,9999):04}" #랜덤생성 Pending
-    return f"010-6275-4153"
+    return f"010-{random.randint(1000,9999):04}-{random.randint(1000,9999):04}"
+    # return f"010-6275-4153"
 def generate_random_email():
-    # prefix = ''.join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=8)) # 랜덤생성 Pending
-    # return f"{prefix}@test.com" # 랜덤생성 Pending
-    return f"jekwon@medisolveai.com"
+    prefix = ''.join(random.choices("abcdefghijklmnopqrstuvwxyz0123456789", k=8)) 
+    return f"{prefix}@test.com" 
+    # return f"jekwon@medisolveai.com"
 def generate_random_customer():
     return {
         "customer_name": generate_customer_name(),

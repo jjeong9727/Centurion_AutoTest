@@ -1,12 +1,10 @@
-# 홈페이지 계정 삭제 API 호출
-# env 파일에 API URL, 계정 정보 저장됨 
-import requests
-import os
-from dotenv import load_dotenv
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+import requests
 
-# 현재 파일(scripts/delete_account.py) 기준으로 tests/.env 경로 설정
-env_path = Path(__file__).resolve().parents[1] / "tests" / ".env"
+# 루트 위치에 있는 .env 파일 불러오기
+env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 # ✅ .env에서 API 주소와 이메일 목록 불러오기
 API_BASE_URL = os.getenv("API_BASE_URL")

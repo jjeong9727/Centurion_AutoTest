@@ -54,7 +54,7 @@ def click_float_button_and_reserve(page, device_type):
 @pytest.mark.playwright
 def test_logged_in_pc(page):
     # 로그인 상태로 메인 화면 진입
-    login_with_token(page)
+    login_with_token(page, account_type="kakao")
     page.goto(URLS["home_main"])
     page.wait_for_timeout(3000)
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
@@ -88,7 +88,7 @@ def test_logged_in_pc(page):
 @pytest.mark.playwright
 def test_logged_in_mobile(page):
     # 로그인 상태로 메인 화면 진입
-    login_with_token(page)
+    login_with_token(page, account_type="kakao")
     page.goto(URLS["home_main"])
     page.wait_for_timeout(3000)
     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인

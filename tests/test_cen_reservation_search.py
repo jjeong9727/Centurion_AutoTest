@@ -38,26 +38,40 @@ def test_search_and_reset_reservation_filters(page: Page):
     # 3. 검색 필드 입력
     if status:
         page.get_by_test_id("search_status").select_option(label=status)
+        page.wait_for_timeout(1000)
         page.locator("body").click()
+        page.wait_for_timeout(1000)
+
     page.fill('[data-testid="search_name"]', name)
+    page.wait_for_timeout(1000)
     page.click("body")
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="search_birth"]', birth)
+    page.wait_for_timeout(1000)
     page.click("body")
+    page.wait_for_timeout(1000)
     page.get_by_test_id("search_gender").select_option(label=gender)
     if phone:
         page.fill('[data-testid="search_phone"]', phone)
+        page.wait_for_timeout(1000)
         page.click("body")
+        page.wait_for_timeout(1000)
     if email:
         page.fill('[data-testid="search_email"]', email)
+        page.wait_for_timeout(1000)
         page.click("body")
+        page.wait_for_timeout(1000)
     page.fill('[data-testid="search_date"]', date)
+    page.wait_for_timeout(1000)
     page.click("body")
+    page.wait_for_timeout(3000)
 
     # 4. 검색 결과 확인 (1건으로 제한되도록 설계됨)
     expect(page.locator("table tbody tr")).to_have_count(1)
 
     # 5. 초기화 버튼 클릭
     page.click('[data-testid="btn_reset"]')
+    page.wait_for_timeout(1000)
 
     # 6. 입력 필드 초기화 상태 확인
     expect(page.locator('[data-testid="search_status"]')).to_have_value("")
@@ -99,8 +113,11 @@ def test_button_enable_by_status(page: Page):
         name = target["name"]
 
         page.get_by_test_id("search_status").select_option(label=status)
+        page.wait_for_timeout(1000)
         page.fill('[data-testid="search_name"]', name)
+        page.wait_for_timeout(1000)
         page.click("body")
+        page.wait_for_timeout(1000)
         row = page.locator("table tbody tr").first
 
         # 버튼 상태 확인

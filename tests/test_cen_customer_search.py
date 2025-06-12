@@ -10,12 +10,18 @@ from playwright.sync_api import Page, expect
 from helpers.customer_utils import cen_login
 
 CUSTOMER_FILE = "data/customers.json"
+# def load_customer(email: str = "jekwon@medisolveai.com"):
+def load_customer(phone: str = "01062754153"):
+    import json
 
-def load_random_customer():
     with open(CUSTOMER_FILE, "r", encoding="utf-8") as f:
         customers = json.load(f)
-    return random.choice(customers)
 
+    for cust in customers:
+        if cust.get("phone") == phone:
+            return cust
+
+    raise ValueError(f"⚠️ 전화번호 {phone}에 해당하는 고객 정보를 찾을 수 없습니다.")
 def test_search_field(page: Page):
     cen_login(page) #로그인 
 
@@ -24,7 +30,7 @@ def test_search_field(page: Page):
 
     # 초기 노출된 고객 리스트 수 저장
     initial_count = page.locator("table tbody tr").count()
-    cust = load_random_customer()
+    cust = load_customer()
 
     # 1. 고객명 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_name"]', cust["customer_name"])

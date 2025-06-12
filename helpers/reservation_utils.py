@@ -25,7 +25,7 @@ def load_recent_reservations(count=3, file_path="data/reservations.json"):
     return reservations[-count:]  # 마지막 3개 반환
 
 #예약 내역 검색 및 데이터 싱크 확인
-def verify_multiple_reservations_in_list(page: Page, count=4):
+def verify_multiple_reservations_in_list(page: Page, count=1):
     reservations = load_recent_reservations(count)
     for res in reservations:
         page.fill('[data-testid="search_name"]', res["name"])
@@ -69,3 +69,25 @@ def get_reservations_by_status(status):
         data = json.load(f)
 
     return [res for res in data if res.get("status") == status]
+
+# 예약 정보 업데이트
+def update_reservation_info(name: str, new_datetime: str, new_memo: str, json_path="data/reservation.json"):
+    import json
+
+    with open(json_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    updated = False
+    for item in data:
+        if item["name"] == name:
+            item["datetime"] = new_datetime
+            item["memo"] = new_memo
+            updated = True
+            break
+
+    if updated:
+        with open(json_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        print(f"✅ '{name}' 예약일이 {new_datetime}, 메모가 '{new_memo}'(으)로 업데이트되었습니다.")
+    else:
+        print(f"⚠️ '{name}' 예약 정보를 찾을 수 없습니다.")

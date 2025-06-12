@@ -1,15 +1,28 @@
 [
     {
-      "customer_name": "권정의",
-      "chart_id": "CHT001",
+      "name": "자동화한국인",
+      "chart_id": "",
       "birth": "1997-09-27",
       "gender": "여",
       "phone": "010-6275-4153",
-      "email": "jekwon@medisolveai.com",
+      "email": "",
       "nationality": "한국인",
-      "grade" : "VIP",
-      "amount": 150000,
-      "mileage": 3000,
-      "charged": 10000
+      "grade" : "자동화",
+      "amount": 0,
+      "mileage": 0,
+      "charged": 0
+    },
+    {
+      "name": "자동화외국인",
+      "chart_id": "",
+      "birth": "1997-09-27",
+      "gender": "여",
+      "phone": "",
+      "email": "jekwon@medisolveai.com",
+      "nationality": "외국인",
+      "grade" : "자동화",
+      "amount": 0,
+      "mileage": 0,
+      "charged": 0
     }
   ]

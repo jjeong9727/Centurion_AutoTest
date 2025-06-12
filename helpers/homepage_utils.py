@@ -2,6 +2,8 @@ from playwright.sync_api import Page
 from helpers.auth_helper import ensure_valid_token
 from config import URLS
 from datetime import datetime, timedelta
+import random
+import calendar
 
 # 고객명과 멤버십 잔액 확인
 def verify_membership_balance(page: Page, expected_customer_name: str, expected_balance: int):
@@ -52,31 +54,66 @@ def verify_popup_link(page, testid: str):
 
 
 # 예약 정보 생성 (날짜 선택 기준)
-def get_reservation_datetime():
+def get_reservation_datetime(page: Page):
     now = datetime.now()
-    if now.day > 20:
-        target_date = (now.replace(day=1) + timedelta(days=32)).replace(day=1)
-        use_next_month = True
-    else:
-        target_date = now + timedelta(days=1)
+
+    if now.day <= 20:
+        target_month = now.month
+        target_year = now.year
+        start_day = now.day + 1
         use_next_month = False
+    else:
+        # 다음 달로 이동
+        target_month = now.month + 1 if now.month < 12 else 1
+        target_year = now.year if now.month < 12 else now.year + 1
+        start_day = 1
+        use_next_month = True
+        page.click('[data-testid="btn_next"]')
+        page.wait_for_timeout(300)
+
+    # 말일 계산
+    last_day = calendar.monthrange(target_year, target_month)[1]
+
+    # 후보일 리스트 (활성화된 날짜만)
+    enabled_dates = []
+
+    for day in range(start_day, last_day + 1):
+        mmdd = f"{target_month:02}{day:02}"
+        testid = f"btn_day__{mmdd}"
+        locator = page.locator(f'[data-testid="{testid}"]')
+
+        try:
+            if locator.is_enabled():
+                enabled_dates.append((day, mmdd))
+        except:
+            continue  # 버튼이 존재하지 않거나 is_enabled 확인 실패 시 건너뜀
+
+    if not enabled_dates:
+        raise Exception("❌ 활성화된 예약 가능 날짜가 없습니다.")
+
+    selected_day, selected_mmdd = random.choice(enabled_dates)
+    page.click(f'[data-testid="btn_day_{selected_mmdd}"]')
 
     return {
-        "date": target_date.strftime("%Y-%m-%d"),
-        "day": target_date.day,
-        "month": target_date.month,
-        "use_next_month": use_next_month,
+        "date": f"{target_year}-{target_month:02}-{selected_day:02}",
+        "day": selected_day,
+        "month": target_month
     }
 # 예약 정보 생성 (시간 선택 기준)
 def get_available_time_button(page: Page):
     now = datetime.now()
     time_buttons = page.locator("[data-testid^='btn_time_']")
-    for i in range(time_buttons.count()):
+    count = time_buttons.count()
+    for i in range(count):
         btn = time_buttons.nth(i)
         if btn.is_enabled():
             time_value = btn.get_attribute("data-testid").split("_")[-1]
             hour, minute = int(time_value[:2]), int(time_value[2:])
             time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
             if time_obj > now:
-                return btn, f"{hour:02}:{minute:02}"
-    raise Exception("선택 가능한 미래 시간이 없습니다")
+                btn.click()  # ✅ 시간 선택 클릭
+                page.wait_for_timeout(300)
+                return f"{hour:02}:{minute:02}"
+
+    raise Exception("❌ 선택 가능한 미래 시간이 없습니다.")

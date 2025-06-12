@@ -49,10 +49,10 @@ Account = {
 ReservationInfo = {
     # 예약자 정보
     "booker": {
-        "name": "예약자테스트",
-        "birth": "1990-09-09",
+        "name": "권정의",
+        "birth": "1997-09-27",
         "gender": "여자",
-        "phone": "010-1234-5678",
+        "phone": "010-6275-4153",
     },
     # 방문자 정보
     "visitor": {

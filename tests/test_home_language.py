@@ -85,8 +85,10 @@ def check_language_and_switch(page: Page, screen_name: str, screen_data: dict):
 
     # 언어 전환 (한국어 → 영어)
     try:
-        page.get_by_test_id("btn_lang_en").click()
+        page.click('[data-testid="btn_language"]')
         page.wait_for_timeout(1000)
+        page.click('[data-testid="btn_language_en"]')
+        page.wait_for_timeout(2000)
         check_language_for_screen(page, screen_data, lang_code="en")
     except Exception as e:
         raise RuntimeError(f"❌ 언어 전환 또는 영어 텍스트 확인 실패 - {screen_name}: {str(e)}")

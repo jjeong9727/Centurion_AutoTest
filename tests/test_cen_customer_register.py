@@ -79,11 +79,13 @@ def test_register_customer(page: Page):
     expect(page.locator('[data-testid="btn_confirm]')).to_be_enabled()
     print("✅ 내국인 고객 추가 유효성 확인")
     
+    page.locator('[data-testid="btn_confirm"]').click()
+    expect(page.locator('[data-testid="toast_confirm"]')).to_be_visible(timeout=3000)
+    print(f"✅ 내국인 고객 등록 완료: {korean_customer['customer_name']}")
 
-# 고객 등록 자동화 범위 제외
-    # page.locator('[data-testid="btn_confirm"]').click()
-    # expect(page.locator('[data-testid="toast_confirm"]')).to_be_visible(timeout=3000)
-    # print(f"✅ 내국인 고객 등록 완료: {korean_customer['customer_name']}")
+    # 고객 정보 별도 저장 하지 않음 
+    # add_customer_to_json(korean_customer) 
+
 
     # ✅ 외국인 등록 시도 (중복 연락처/이메일 사용)
     page.goto(URLS["cen_cust_register"])
@@ -131,15 +133,15 @@ def test_register_customer(page: Page):
     expect(page.locator('[data-testid="toast_email"]')).to_be_visible(timeout=3000)
     print("✅ 외국인 이메일 유효성 오류 확인")
 
-    # 외국인 정보로 재입력 후 버튼 활성화 확인인
+    # 외국인 정보로 재입력 후 버튼 활성화 확인
     page.fill('[data-testid="input_phone"]', foreign_customer["phone"])
     page.fill('[data-testid="input_email"]', foreign_customer["email"])
     expect(page.locator('[data-testid="btn_confirm]')).to_be_enabled()
     print("✅ 외국인 고객 추가 유효성 확인")
 
-# 고객 등록 pending
-    # page.locator('[data-testid="btn_confirm"]').click()
-    # expect(page.locator('[data-testid="toast_confirm"]')).to_be_visible(timeout=3000)
-    # print(f"✅ 외국인 고객 등록 완료: {foreign_customer['customer_name']}")
+    page.locator('[data-testid="btn_confirm"]').click()
+    expect(page.locator('[data-testid="toast_confirm"]')).to_be_visible(timeout=3000)
+    print(f"✅ 외국인 고객 등록 완료: {foreign_customer['customer_name']}")
 
+    # 고객 정보 별도 저장 하지 않음 
     # add_customer_to_json(foreign_customer)

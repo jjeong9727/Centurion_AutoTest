@@ -22,42 +22,65 @@ def test_confirm_and_cancel_reservations(page: Page):
         cen_login(page) # 로그인
         # 상태 + 이름 검색
         page.goto(URLS["cen_reservation"])
+        page.wait_for_timeout(3000)
         page.get_by_test_id("search_status").select_option(label="대기")
+        page.wait_for_timeout(1000)
         page.fill('[data-testid="search_name"]', name)
+        page.wait_for_timeout(1000)
         page.locator("body").click() # 포커스 아웃을 위한 다른 영역 클릭 
+        page.wait_for_timeout(1000)
         row = page.locator("table tbody tr").first
 
         if flow == "cancel":
             row.locator('[data-testid="btn_cancel"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_no"]')
+            page.wait_for_timeout(1000)
             row.locator('[data-testid="btn_cancel"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_yes"]')
+            page.wait_for_timeout(1000)
             update_reservation_status(name, "취소")
 
         elif flow == "confirm":
             row.locator('[data-testid="btn_accept"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_no"]')
+            page.wait_for_timeout(1000)
             row.locator('[data-testid="btn_accept"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_yes"]')
+            page.wait_for_timeout(1000)
             update_reservation_status(name, "확정")
 
         elif flow == "confirm_then_cancel":
             row.locator('[data-testid="btn_accept"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_no"]')
+            page.wait_for_timeout(1000)
             row.locator('[data-testid="btn_accept"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_yes"]')
+            page.wait_for_timeout(1000)
             update_reservation_status(name, "확정")
 
             # 재검색 (상태가 이미 확정으로 변경됐기 때문에)
             page.get_by_test_id("search_status").select_option(label="확정")
+            page.wait_for_timeout(1000)
             page.fill('[data-testid="search_name"]', name)
+            page.wait_for_timeout(1000)
             page.locator("body").click()
+            page.wait_for_timeout(1000)
             row = page.locator("table tbody tr").first
 
             row.locator('[data-testid="btn_cancel"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_no"]')
+            page.wait_for_timeout(1000)
             row.locator('[data-testid="btn_cancel"]').click()
+            page.wait_for_timeout(1000)
             page.click('[data-testid="btn_yes"]')
+            page.wait_for_timeout(1000)
             update_reservation_status(name, "취소")
 
 # 일괄 확정을 위해 대기 상태 2개 이상 있어야 함
@@ -74,7 +97,9 @@ def test_bulk_confirm_and_cancel(page: Page):
 
     # 2. 예약 상태 '대기'로 검색
     page.get_by_test_id("search_status").select_option(label="대기")
+    page.wait_for_timeout(1000)
     page.click("body")
+    page.wait_for_timeout(1000)
 
     rows = page.locator("table tbody tr")
     selected = 0
@@ -83,13 +108,16 @@ def test_bulk_confirm_and_cancel(page: Page):
         name = row.locator("td").nth(2).inner_text().strip()  # 이름
         if name in [r["name"] for r in first_batch]:
             row.locator("td").first.click()  # 1열 클릭 (체크)
+            page.wait_for_timeout(1000)
             selected += 1
         if selected == 2:
             break
 
     # 3. 일괄 확정 버튼 클릭 + 확인
     page.click('[data-testid="btn_accept_bulk"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
 
     # 4. 상태 업데이트 확인
     for res in first_batch:
@@ -97,7 +125,9 @@ def test_bulk_confirm_and_cancel(page: Page):
 
     # 5. 다시 대기 상태 검색 → 나머지 2건 체크
     page.get_by_test_id("search_status").select_option(label="대기")
+    page.wait_for_timeout(1000)
     page.click("body")
+    page.wait_for_timeout(1000)
     
     rows = page.locator("table tbody tr")
     selected = 0
@@ -106,13 +136,16 @@ def test_bulk_confirm_and_cancel(page: Page):
         name = row.locator("td").nth(2).inner_text().strip()
         if name in [r["name"] for r in second_batch]:
             row.locator("td").first.click()
+            page.wait_for_timeout(1000)
             selected += 1
         if selected == 2:
             break
 
     # 6. 일괄 취소 버튼 클릭 + 확인
     page.click('[data-testid="btn_cancel_bulk"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
 
     # 7. 상태 업데이트 확인
     for res in second_batch:
