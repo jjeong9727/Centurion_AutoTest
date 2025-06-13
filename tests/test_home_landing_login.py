@@ -83,34 +83,34 @@ def test_logged_in_pc(page):
     click_float_button_and_reserve(page, 'pc')
 
 
-# @pytest.mark.playwright
-# def test_logged_in_mobile(page):
-#     # 로그인 상태로 메인 화면 진입
-#     login_with_token(page, account_type="kakao")
+@pytest.mark.playwright
+def test_logged_in_mobile(page):
+    # 로그인 상태로 메인 화면 진입
+    login_with_token(page, account_type="kakao")
 
-#     # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
-#     page.locator('[data-testid="header_menu"]').click()
-#     page.wait_for_timeout(2000)
+    # 햄버거 메뉴 클릭하여 전체 메뉴 항목 확인
+    page.locator('[data-testid="header_menu"]').click()
+    page.wait_for_timeout(2000)
 
-#     # 로그인 상태에서 보여야 하는 메뉴 항목과 상태 확인
-#     menu_items = [
-#         ('discover', URLS["home_discover"]),
-#         ('menu_removal', URLS["home_removal"]),
-#         ('menu_lifting', URLS["home_lifting"]),
-#         ('menu_privilege', URLS["home_privilege"]),
-#         ('menu_mypage', URLS["home_mypage_mo"]),
-#         ('menu_logout', URLS["home_main"]),
-#     ]
+    # 로그인 상태에서 보여야 하는 메뉴 항목과 상태 확인
+    menu_items = [
+        ('discover', URLS["home_discover"]),
+        ('menu_removal', URLS["home_removal"]),
+        ('menu_lifting', URLS["home_lifting"]),
+        ('menu_privilege', URLS["home_privilege"]),
+        ('menu_mypage', URLS["home_mypage_mo"]),
+        ('menu_logout', URLS["home_main"]),
+    ]
 
-#     for item, expected_url in menu_items:
-#         select_menu_and_verify_page(page, item, expected_url)
+    for item, expected_url in menu_items:
+        select_menu_and_verify_page(page, item, expected_url)
 
-#         # 햄버거 메뉴로 돌아가서 다음 메뉴 클릭을 위해 햄버거 메뉴 클릭
-#         page.locator('[data-testid="header_menu"]').click()
+        # 햄버거 메뉴로 돌아가서 다음 메뉴 클릭을 위해 햄버거 메뉴 클릭
+        page.locator('[data-testid="header_menu"]').click()
 
-#     # 푸터 항목 확인 후 클릭하여 URL 확인
-#     scroll_to_footer(page)
-#     check_footer_elements(page)
+    # 푸터 항목 확인 후 클릭하여 URL 확인
+    scroll_to_footer(page)
+    check_footer_elements(page)
 
-#     # 플로팅 버튼으로 예약 화면 진입 (모바일)
-#     click_float_button_and_reserve(page, 'mobile')
+    # 플로팅 버튼으로 예약 화면 진입 (모바일)
+    click_float_button_and_reserve(page, 'mobile')
