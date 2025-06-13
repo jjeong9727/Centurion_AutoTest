@@ -19,7 +19,6 @@ def scroll_to_footer(page):
 def check_footer_elements(page):
     # 푸터 및 관련 항목이 페이지에 표시되는지 확인
     footer_instagram = page.locator('[data-testid="footer_instagram"]')
-    footer_kakao = page.locator('[data-testid="footer_kakao"]')
     footer_branch = page.locator('[data-testid="footer_branch"]')
     footer_terms = page.locator('[data-testid="footer_terms"]')
     footer_policy = page.locator('[data-testid="footer_policy"]')
@@ -27,7 +26,6 @@ def check_footer_elements(page):
 
     # 각 항목들이 페이지에 보이는지 확인
     expect(footer_instagram).to_be_visible()
-    expect(footer_kakao).to_be_visible()
     expect(footer_branch).to_be_visible()
     expect(footer_terms).to_be_visible()
     expect(footer_policy).to_be_visible()

@@ -30,7 +30,7 @@ def update_customer_in_json(customer_name: str, updates: dict, file_path="data/c
 
     updated = False
     for customer in customers:
-        if customer["customer_name"] == customer_name:
+        if customer["name"] == customer_name:
             for key, value in updates.items():
                 if key in customer and key not in ["chart_id", "balance"]:
                     customer[key] = value
@@ -92,39 +92,13 @@ def generate_random_customer():
     }
 
 
-
-# 페이지네이션으로 등급 찾기
-def find_grade_row(page: Page):
-    while True:
-        rows = page.locator("table tbody tr")
-        row_count = rows.count()
-
-        for i in range(row_count):
-            row = rows.nth(i)
-            page.evaluate("(element) => element.scrollIntoView()", row)  # ✅ 스크롤
-            cell_text = row.locator("td").nth(1).inner_text()
-
-            if "자동화" in cell_text:
-                return row  # ✅ 자동화 등급 행 반환
-
-        # ✅ 다음 페이지 버튼이 활성화돼 있으면 클릭
-        next_button = page.locator('[data-testid="page_next"]')
-        if next_button.is_enabled():
-            next_button.click()
-            page.wait_for_timeout(500)  # 페이지 전환 대기
-        else:
-            break
-
-    return None  # 자동화 등급을 찾지 못한 경우
-
-
 # Centurion 로그인 동작
 def cen_login(page: Page):
     page.goto(URLS["cen_login"])
     page.wait_for_timeout(2000)
-    page.fill('[data-testid="input_id"]', Account(["testid"]))
+    page.fill('[data-testid="input_id"]', Account["testid"])
     page.wait_for_timeout(1000)
-    page.fill('[data-testid="input_pw"]', Account(["testpw"]))
+    page.fill('[data-testid="input_pw"]', Account["testpw"])
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_login"]')
     page.wait_for_timeout(2000)

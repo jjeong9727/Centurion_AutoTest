@@ -33,11 +33,18 @@ def test_search_field(page: Page):
     cust = load_customer()
 
     # 1. 고객명 검색 → 확인 → 초기화
-    page.fill('[data-testid="input_search_name"]', cust["customer_name"])
+    page.fill('[data-testid="input_search_name"]', cust["name"])
     page.wait_for_timeout(1000)
     page.click("body")
     page.wait_for_timeout(1000)
-    expect(page.locator("table tbody tr td").nth(1)).to_have_text(cust["customer_name"])
+
+    first_row = page.locator("table tbody tr").first
+    name_cell = first_row.locator("td").nth(1)
+
+    # ✅ 줄바꿈 기준 앞 텍스트만 비교
+    main_text = name_cell.inner_text().strip().split("\n")[0]
+    assert main_text == cust["name"], f"❌ 이름 불일치: '{main_text}' != '{cust['name']}'"
+
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_reset"]')
     page.wait_for_timeout(2000)
@@ -47,36 +54,60 @@ def test_search_field(page: Page):
     page.wait_for_timeout(1000)
     page.click("body")
     page.wait_for_timeout(1000)
-    expect(page.locator("table tbody tr td").nth(2)).to_have_text(cust["birth"])
+    first_row = page.locator("table tbody tr").first
+    birth_cell = first_row.locator("td").nth(2)
+    formatted_birth = f"{cust['birth'][:4]}.{cust['birth'][4:6]}.{cust['birth'][6:]}"
+    expect(birth_cell).to_have_text(formatted_birth)
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_reset"]')
     page.wait_for_timeout(2000)
-
     # 3. 성별 검색 → 확인 → 초기화
-    page.locator('[data-testid="drop_search_gender"]').select_option(label=cust["gender"])
+    # page.locator('[data-testid="drop_search_gender"]').click()
+    page.locator('[data-testid="undefined_trigger"]').first.click()
+    page.get_by_role("option", name=cust["gender"]).click()
     page.wait_for_timeout(1000)
     page.click("body")
     page.wait_for_timeout(1000)
-    expect(page.locator("table tbody tr td").nth(3)).to_have_text(cust["gender"])
+    first_row = page.locator("table tbody tr").first
+    gender_cell = first_row.locator("td").nth(3)
+
+    # ✅ 로그 출력 추가
+    actual_gender = gender_cell.inner_text().strip()
+    expected_gender = cust["gender"]
+    expect(gender_cell).to_have_text(cust["gender"])
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_reset"]')
     page.wait_for_timeout(2000)
-
+    
     # 4. 전화번호 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_phone"]', cust["phone"])
     page.wait_for_timeout(1000)
     page.click("body")
     page.wait_for_timeout(1000)
-    expect(page.locator("table tbody tr td").nth(4)).to_have_text(cust["phone"])
+
+    first_row = page.locator("table tbody tr").first
+    phone_cell = first_row.locator("td").nth(4)
+
+    # ✅ 하이픈 포맷 처리 (01012345678 → 010-1234-5678)
+    raw_phone = cust["phone"]
+    expected_phone = f"{raw_phone[:3]}-{raw_phone[3:7]}-{raw_phone[7:]}"
+    actual_phone = phone_cell.inner_text().strip()
+
+    assert actual_phone == expected_phone, f"❌ 전화번호 불일치: '{actual_phone}' != '{expected_phone}'"
+
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_reset"]')
     page.wait_for_timeout(2000)
 
     # 5. 국적 검색 → 확인 → 초기화
-    page.locator('[data-testid="drop_search_nation"]').select_option(label=cust["nation"])
+    # page.locator('[data-testid="drop_search_nation"]').click()
+    page.locator('[data-testid="undefined_trigger"]').last.click()
+    page.get_by_role("option", name=cust["nationality"]).click()
     page.click("body")
     page.wait_for_timeout(1000)
-    expect(page.locator("table tbody tr td").nth(6)).to_have_text(cust["nation"])
+    first_row = page.locator("table tbody tr").first
+    nation_cell = first_row.locator("td").nth(6)
+    expect(nation_cell).to_have_text(cust["nationality"])
     page.wait_for_timeout(2000)
 
     # 6. 최종적으로 고객 리스트 수 복원 확인

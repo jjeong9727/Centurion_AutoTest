@@ -29,7 +29,7 @@ URLS = {
     "cen_login" : f"{cen_base_url}/login",
     "cen_main" : f"{cen_base_url}/reservations/management",
     "cen_reservation" : f"{cen_base_url}/reservations/management",
-    "cen_grade" : f"{cen_base_url}",
+    "cen_grade" : f"{cen_base_url}/customers/memberships/grades",
 
 
 
@@ -40,7 +40,7 @@ URLS = {
 }
 
 Account = {
-    "testid" : "stg@medisolve.com",
+    "testid" : "stg@medisolveai.com",
     "testpw" : "12341234",
     "wrongpw" : "00000000"
 }
@@ -67,5 +67,29 @@ ReservationInfo = {
         "birth" : "2008-08-08",
         "gender": "남자",
         "phone" : "010-0123-4567",
+    }
+}
+
+# 세라미크 랜딩 확인용 매핑 
+MENU_META = {
+    "discover": {
+        "testid": "menu_discover",
+        "path": "discover"
+    },
+    "removal": {
+        "testid": "menu_removal",
+        "path": "removal/info"
+    },
+    "lifting": {
+        "testid": "menu_lifting",
+        "path": "lifting/info"
+    },
+    "privilege": {
+        "testid": "menu_privilege",
+        "path": "events/privilege"
+    },
+    "login": {
+        "testid": "menu_login",
+        "path": "login"
     }
 }

@@ -1,28 +1,54 @@
 [
-    {
-      "name": "자동화한국인",
-      "chart_id": "",
-      "birth": "1997-09-27",
-      "gender": "여",
-      "phone": "010-6275-4153",
-      "email": "",
-      "nationality": "한국인",
-      "grade" : "자동화",
-      "amount": 0,
-      "mileage": 0,
-      "charged": 0
-    },
-    {
-      "name": "자동화외국인",
-      "chart_id": "",
-      "birth": "1997-09-27",
-      "gender": "여",
-      "phone": "",
-      "email": "jekwon@medisolveai.com",
-      "nationality": "외국인",
-      "grade" : "자동화",
-      "amount": 0,
-      "mileage": 0,
-      "charged": 0
-    }
-  ]
+  {
+    "name": "자동화한국인",
+    "chart_id": "",
+    "birth": "19970927",
+    "gender": "여성",
+    "phone": "01062754153",
+    "email": "",
+    "nationality": "한국인",
+    "grade": "자동화",
+    "amount": 100,
+    "mileage": 100,
+    "charged": 352100
+  },
+  {
+    "name": "자동화외국인",
+    "chart_id": "",
+    "birth": "19970927",
+    "gender": "여성",
+    "phone": "",
+    "email": "jekwon@medisolveai.com",
+    "nationality": "외국인",
+    "grade": "자동화",
+    "amount": 0,
+    "mileage": 0,
+    "charged": 0
+  },
+  {
+    "name": "자동화한국인수정",
+    "chart_id": "",
+    "birth": "19760808",
+    "gender": "여성",
+    "phone": "01099998888",
+    "email": "",
+    "nationality": "한국인",
+    "grade": "등급 없음",
+    "amount": 0,
+    "mileage": 0,
+    "charged": 0
+  },
+  {
+    "name": "자동화외국인수정테스트",
+    "chart_id": "",
+    "birth": "19701125",
+    "gender": "남성",
+    "phone": "",
+    "email": "muko74c3@test.com",
+    "nationality": "외국인",
+    "grade": "등급 없음",
+    "amount": 0,
+    "mileage": 0,
+    "charged": 0
+  }
+]

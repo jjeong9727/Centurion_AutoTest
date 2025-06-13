@@ -17,20 +17,20 @@ def test_login_flow(page: Page):
     page.wait_for_timeout(500)
 
     # 3. 아이디만 입력 → 로그인 버튼 비활성화 확인
-    page.fill('[data-testid="input_id"]', Account(["testid"]))
+    page.fill('[data-testid="input_id"]', Account["testid"])
     page.wait_for_timeout(1000)
     expect(page.locator('[data-testid="btn_login"]')).to_be_disabled()
     page.wait_for_timeout(1000)
 
     # 4. 잘못된 비밀번호 입력 → 불일치 문구 노출 확인
-    page.fill('[data-testid="input_pw"]', Account(["wrongpw"]))
+    page.fill('[data-testid="input_pw"]', Account["wrongpw"])
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_login"]')
     page.wait_for_timeout(500)
     expect(page.locator('[data-testid="alert_mismatch"]')).to_be_visible()
 
     # 5. 올바른 비밀번호 입력 → 로그인 성공 및 메인 진입 확인
-    page.fill('[data-testid="input_pw"]', Account(["testpw"]))
+    page.fill('[data-testid="input_pw"]', Account["testpw"])
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_login"]')
     page.wait_for_timeout(2000)

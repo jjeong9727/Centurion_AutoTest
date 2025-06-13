@@ -15,10 +15,13 @@ import os
 from datetime import datetime
 import time
 from pathlib import Path
+from helpers.auth_helper import login_with_token
 
 DOWNLOAD_PATH = Path("downloads")  # 다운로드 경로
 
 def run_reservation(page: Page, visitor_info: dict | None = None):
+    page.goto(URLS["home_main"])
+    login_with_token(page)
     page.goto(URLS["home_reservation"])
     page.wait_for_timeout(2000)
 

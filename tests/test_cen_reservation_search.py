@@ -9,8 +9,9 @@ from playwright.sync_api import Page, expect
 from helpers.reservation_utils import get_reservations_by_status
 from config import URLS
 from helpers.customer_utils import cen_login
+from pathlib import Path
 
-RESERVATION_FILE = "data/reservations.json"
+RESERVATION_FILE = Path("data/reservation.json")
 
 def load_random_reservation():
     with open(RESERVATION_FILE, "r", encoding="utf-8") as f:

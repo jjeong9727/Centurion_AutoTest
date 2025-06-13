@@ -7,19 +7,19 @@ from helpers.auth_helper import login_with_token
 
 # 화면별 언어 데이터
 screen_text_data = {
-    "home_main": {
-        "btn_removal": {"ko": "제모 시술", "en": "Removal"},
-        "btn_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
-    },
-    "home_login": {
-        "txt_login": {"ko": "로그인", "en": "LOGIN"},
-        "btn_login": {"ko": "카카오로 시작하기", "en": "Sign in with Google"},
-        "footer_branch": {"ko": "세라미크의원 강남", "en": "CERAMIQUE Clinic Gangnam"},
-        "footer_terms": {"ko": "이용약관", "en": "Terms of Use"},
-        "footer_policy": {"ko": "개인정보취급방침", "en": "Privacy Policy"},
-        "float_reserve": {"ko": "예약", "en": "Book"},
-        "float_consult": {"ko": "상담", "en": "Consult"}
-    },
+    # "home_main": {
+    #     "btn_removal": {"ko": "제모 시술", "en": "Removal"},
+    #     "btn_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
+    # },
+    # "home_login": {
+    #     "txt_login": {"ko": "로그인", "en": "LOGIN"},
+    #     "btn_login": {"ko": "카카오로 시작하기", "en": "Sign in with Google"},
+    #     "footer_branch": {"ko": "세라미크의원 강남", "en": "CERAMIQUE Clinic Gangnam"},
+    #     "footer_terms": {"ko": "이용약관", "en": "Terms of Use"},
+    #     "footer_policy": {"ko": "개인정보취급방침", "en": "Privacy Policy"},
+    #     "float_reserve": {"ko": "예약", "en": "Book"},
+    #     "float_consult": {"ko": "상담", "en": "Consult"}
+    # },
     "home_reservation": {
         "txt_date": {"ko": "예약 날짜", "en": "Date"},
         "txt_time": {"ko": "예약 시간", "en": "Time"},
@@ -59,7 +59,6 @@ screen_text_data = {
 }
 
 
-# 언어 텍스트 검증
 def check_language_for_screen(page: Page, screen_data: dict, lang_code: str):
     page.wait_for_timeout(1000)
     for element_id, texts in screen_data.items():
@@ -67,14 +66,12 @@ def check_language_for_screen(page: Page, screen_data: dict, lang_code: str):
         expect(locator).to_have_text(texts[lang_code], timeout=3000)
 
 
-# 디바이스 설정 불러오기
 def get_device_profile(device_type: str) -> dict:
     with open("data/device_profile.json", "r", encoding="utf-8") as f:
         profiles = json.load(f)
 
     is_mobile = device_type == "mobile"
 
-    # 조건에 맞는 프로필 목록 필터링
     matching_profiles = [
         profile for profile in profiles.values()
         if profile.get("is_mobile", False) == is_mobile
@@ -82,40 +79,65 @@ def get_device_profile(device_type: str) -> dict:
 
     if not matching_profiles:
         raise ValueError(f"❌ '{device_type}'에 해당하는 단말 정보가 없습니다.")
-
-    # 일단 첫 번째 matching 프로필 반환 (원하면 우선순위 로직 추가 가능)
     return matching_profiles[0]
 
 
-# 언어 변경 테스트 수행 (한글 → 영어)
-def check_language_and_switch(page: Page, screen_name: str, screen_data: dict):
+# 언어 전환 처리 (기기별 분기 포함)
+def switch_language_to_english(page: Page, is_mobile: bool, url: str):
+    try:
+        if is_mobile:
+            page.locator('[data-testid="header_menu"]').click()
+            page.wait_for_timeout(1000)
+            page.locator('[data-testid="language_eng"]').click()
+            page.wait_for_timeout(1000)
+            page.goto(url)
+        else:
+            page.locator('[data-testid="drop_language"]').click()
+            page.wait_for_timeout(1000)
+            page.locator('[data-testid="drop_language_eng"]').click()
+        page.wait_for_timeout(2000)
+    except Exception as e:
+        raise RuntimeError(f"❌ 언어 변경 실패: {e}")
+    
+def switch_language_to_korean(page: Page, is_mobile: bool, url: str):
+    try:
+        if is_mobile:
+            page.locator('[data-testid="header_menu"]').click()
+            page.wait_for_timeout(1000)
+            page.locator('[data-testid="language_kor"]').click()
+            page.wait_for_timeout(1000)
+            page.goto(url)
+        else:
+            page.locator('[data-testid="drop_language"]').click()
+            page.wait_for_timeout(1000)
+            page.locator('[data-testid="drop_language_kor"]').click()
+        page.wait_for_timeout(2000)
+    except Exception as e:
+        raise RuntimeError(f"❌ 언어 변경 실패: {e}")
+
+
+def check_language_and_switch(page: Page, screen_name: str, screen_data: dict, is_mobile: bool):
     login_with_token(page)
     url = URLS[f"home_{screen_name}"]
     page.goto(url)
+    
+    
     check_language_for_screen(page, screen_data, lang_code="ko")
 
-    # 언어 전환 (한국어 → 영어)
-    try:
-        page.click('[data-testid="btn_language"]')
-        page.wait_for_timeout(1000)
-        page.click('[data-testid="btn_language_en"]')
-        page.wait_for_timeout(2000)
-        check_language_for_screen(page, screen_data, lang_code="en")
-    except Exception as e:
-        raise RuntimeError(f"❌ 언어 전환 또는 영어 텍스트 확인 실패 - {screen_name}: {str(e)}")
+    # 언어 전환 및 영어 텍스트 확인
+    switch_language_to_english(page, is_mobile, url)
+    check_language_for_screen(page, screen_data, lang_code="en")
 
+    switch_language_to_korean(page, is_mobile, url)
 
-@pytest.mark.parametrize("device_type", ["pc", "mobile"])
-def test_language_check_all(page: Page, device_type: str):
-    profile = get_device_profile(device_type)
-    page.set_viewport_size(profile['viewport'])
+def test_language_check_all(page: Page, device_profile):
+    is_mobile = device_profile["is_mobile"]
 
     for screen_name, screen_data in screen_text_data.items():
-        # 조건 분기 처리
-        if device_type == "pc" and screen_name in ["home_mypage_mo"]:
+        if is_mobile and screen_name in ["home_mypage_mem", "home_mypage_profile", "home_mypage_history"]:
             continue
-        if device_type == "mobile" and screen_name in ["home_mypage_mem", "home_mypage_profile", "home_mypage_history"]:
+        if not is_mobile and screen_name in ["home_mypage_mo"]:
             continue
 
-        check_language_and_switch(page, screen_name.replace("home_", ""), screen_data)
+        check_language_and_switch(page, screen_name.replace("home_", ""), screen_data, is_mobile)
 

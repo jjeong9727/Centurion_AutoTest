@@ -24,7 +24,7 @@ def test_membership_charge_and_deduct(page: Page):
     page.goto(URLS["cen_customer"])
     page.wait_for_timeout(2000)
 
-    # 메머식 충전
+    # 멤버십 충전
     page.click('[data-testid="btn_register_mem"]')
     page.wait_for_timeout(2000)
     expect(page.locator('[data-testid="btn_yes"]')).to_be_disabled()
@@ -46,14 +46,22 @@ def test_membership_charge_and_deduct(page: Page):
 
     charge_amount, charge_mileage = 50000, 300
     page.fill('[data-testid="input_amount_mem"]', str(charge_amount))
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="input_amount_mile"]', str(charge_mileage))
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="input_memo"]', "자동화 테스트 충전")
+    page.wait_for_timeout(1000)
 
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_nocharge"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_charge"]')
+    page.wait_for_timeout(500)
     expect(page.locator('[data-testid="toast_charge"]')).to_be_visible()
+    page.wait_for_timeout(1000)
 
     # 최종 계산
     expected_amount = customer.get("amount", 0) + charge_amount
@@ -62,27 +70,41 @@ def test_membership_charge_and_deduct(page: Page):
 
     # 차감 테스트 (limit 초과 → 실패 후 적절 금액으로 성공)
     page.click('[data-testid="btn_register_mem"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="type_deduct"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="drop_name_trigger"]')
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="drop_name_search"]', customer["name"])
+    page.wait_for_timeout(1000)
     page.locator('[data-testid="drop_name_item"]', has_text=customer["name"]).first.click()
+    page.wait_for_timeout(1000)
 
-    page.fill('[data-testid="input_amount_mem"]', str(expected_amount + 1000))
-    page.fill('[data-testid="input_amount_mile"]', str(expected_mileage + 1000))
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(500)
     expect(page.locator('[data-testid="toast_amount"]')).to_be_visible()
+    page.wait_for_timeout(1000)
 
     deducted_amount = expected_amount - 100
     deducted_mileage = expected_mileage - 100
     page.fill('[data-testid="input_amount_mem"]', str(deducted_amount))
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="input_amount_mile"]', str(deducted_mileage))
+    page.wait_for_timeout(1000)
     page.fill('[data-testid="input_memo"]', "자동화 테스트 차감")
-
+    page.wait_for_timeout(1000)
+    
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_nodeduct"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_yes"]')
+    page.wait_for_timeout(1000)
     page.click('[data-testid="btn_deduct"]')
+    page.wait_for_timeout(500)
     expect(page.locator('[data-testid="toast_deduct"]')).to_be_visible()
+    page.wait_for_timeout(1000)
+
 
     # 차감 후 계산
     balance_amount = expected_amount - deducted_amount
@@ -105,8 +127,12 @@ def test_membership_charge_and_deduct(page: Page):
     page.wait_for_timeout(3000)
 
     expected_display = f"{final_total:,} / {new_charged:,}"
-    displayed_text = page.locator('[data-testid="membership_status"]').inner_text()
+
+    balance_span = page.locator('[data-testid="mem_balance"]')
+    p_tag = balance_span.locator('xpath=./following-sibling::p')  # 같은 부모 내 형제 p 태그
+    displayed_text = p_tag.inner_text().strip()
 
     assert displayed_text == expected_display, \
-        f"❌ 마이페이지 메머식 계산 불일치: {displayed_text} != {expected_display}"
-    print(f"✅ 마이페이지 메머식 확인 완료: {displayed_text}")
+        f"❌ 마이페이지 멤버십 계산 불일치: {displayed_text} != {expected_display}"
+
+    print(f"✅ 마이페이지 멤버십 확인 완료: {displayed_text}")

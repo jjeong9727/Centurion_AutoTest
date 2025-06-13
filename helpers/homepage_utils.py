@@ -1,5 +1,5 @@
 from playwright.sync_api import Page
-from helpers.auth_helper import ensure_valid_token
+from helpers.auth_helper import login_with_token
 from config import URLS
 from datetime import datetime, timedelta
 import random
@@ -9,8 +9,9 @@ import calendar
 def verify_membership_balance(page: Page, expected_customer_name: str, expected_balance: int):
     # 1. 홈페이지 메인 진입
     page.goto(URLS["home_main"])
+    page.wait_for_timeout(1000)
     # 2. 로그인 토큰 주입
-    access_token = ensure_valid_token()
+    access_token = login_with_token(page,"kakao")
     page.context.add_cookies([{
         "name": "access_token",
         "value": access_token,
@@ -52,68 +53,91 @@ def verify_popup_link(page, testid: str):
     new_page.close()
     # 호출 시 verify_popup_link(page, testid)
 
-
-# 예약 정보 생성 (날짜 선택 기준)
+# 캘린더 날짜 선택 
 def get_reservation_datetime(page: Page):
     now = datetime.now()
 
     if now.day <= 20:
-        target_month = now.month
         target_year = now.year
+        target_month = now.month
         start_day = now.day + 1
-        use_next_month = False
     else:
-        # 다음 달로 이동
         target_month = now.month + 1 if now.month < 12 else 1
         target_year = now.year if now.month < 12 else now.year + 1
         start_day = 1
-        use_next_month = True
         page.click('[data-testid="btn_next"]')
         page.wait_for_timeout(300)
 
-    # 말일 계산
-    last_day = calendar.monthrange(target_year, target_month)[1]
+    candidate_days = list(range(start_day, 32))
+    random.shuffle(candidate_days)
 
-    # 후보일 리스트 (활성화된 날짜만)
-    enabled_dates = []
-
-    for day in range(start_day, last_day + 1):
+    for day in candidate_days:
         mmdd = f"{target_month:02}{day:02}"
-        testid = f"btn_day__{mmdd}"
-        locator = page.locator(f'[data-testid="{testid}"]')
+        testid = f"btn_day_{mmdd}"
+        span = page.locator(f'[data-testid="{testid}"]')
+        button = span.locator("xpath=ancestor::button[1]")
 
         try:
-            if locator.is_enabled():
-                enabled_dates.append((day, mmdd))
-        except:
-            continue  # 버튼이 존재하지 않거나 is_enabled 확인 실패 시 건너뜀
+            if button.get_attribute("disabled") is not None:
+                print(f"⛔ 비활성 날짜: {mmdd}")
+                continue
 
-    if not enabled_dates:
-        raise Exception("❌ 활성화된 예약 가능 날짜가 없습니다.")
+            span.click()
+            print(f"✅ 예약일 선택 성공: {mmdd}")
+            return {
+                "date": f"{target_year}-{target_month:02}-{day:02}",
+                "day": day,
+                "month": target_month
+            }
+        except Exception as e:
+            print(f"⚠️ 예외 발생({mmdd}): {e}")
+            continue
 
-    selected_day, selected_mmdd = random.choice(enabled_dates)
-    page.click(f'[data-testid="btn_day_{selected_mmdd}"]')
+    raise Exception("❌ 모든 날짜가 비활성화되어 예약이 불가능합니다.")
 
-    return {
-        "date": f"{target_year}-{target_month:02}-{selected_day:02}",
-        "day": selected_day,
-        "month": target_month
-    }
 # 예약 정보 생성 (시간 선택 기준)
 def get_available_time_button(page: Page):
     now = datetime.now()
+
     time_buttons = page.locator("[data-testid^='btn_time_']")
     count = time_buttons.count()
+
     for i in range(count):
         btn = time_buttons.nth(i)
-        if btn.is_enabled():
-            time_value = btn.get_attribute("data-testid").split("_")[-1]
-            hour, minute = int(time_value[:2]), int(time_value[2:])
-            time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
 
-            if time_obj > now:
-                btn.click()  # ✅ 시간 선택 클릭
-                page.wait_for_timeout(300)
-                return f"{hour:02}:{minute:02}"
+        # ✅ is_enabled() 대신 disabled 속성 체크
+        if btn.get_attribute("disabled") is not None:
+            continue
+
+        time_value = btn.get_attribute("data-testid").split("_")[-1]
+        hour, minute = int(time_value[:2]), int(time_value[2:])
+        time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+
+        if time_obj > now:
+            btn.click()
+            page.wait_for_timeout(1000)
+            return f"{hour:02}:{minute:02}"
 
     raise Exception("❌ 선택 가능한 미래 시간이 없습니다.")
+
+
+# 언어변경 분기 
+def switch_language_to_english(page: Page, is_mobile: bool):
+    if is_mobile:
+        # 1. 모바일 메뉴 오픈
+        page.locator('[data-testid="header_menu"]').click()
+        page.wait_for_timeout(2000)
+
+        # 2. 영어 선택
+        page.locator('[data-testid="language_eng"]').click()
+        page.wait_for_timeout(1000)
+
+        # 3. 새로고침
+        page.locator('[data-testid="menu_discover"]').click()
+        page.wait_for_timeout(1000)
+    else:
+        # PC에서는 직접 언어 버튼 클릭
+        page.locator('[data-testid="drop_language"]').click()
+        page.wait_for_timeout(1000)
+        page.locator('[data-testid="drop_language_eng"]').click()
+        page.wait_for_timeout(1000)

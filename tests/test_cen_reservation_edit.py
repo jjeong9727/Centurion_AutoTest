@@ -86,6 +86,7 @@ def test_editable_columns_by_status(page: Page):
 
         cen_login(page)
         page.goto(URLS["cen_reservation"])
+        page.wait_for_timeout(1000)
         page.get_by_test_id("search_status").select_option(label=status)
         page.fill('[data-testid="search_name"]', name)
         page.click("body")
