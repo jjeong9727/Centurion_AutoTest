@@ -3,6 +3,7 @@ import pytest
 from pathlib import Path
 from typing import Generator
 from playwright.sync_api import sync_playwright, Page, Browser, BrowserContext
+from pathlib import Path
 
 # 상대경로 상위 디렉토리 추가
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -19,7 +20,7 @@ def browser() -> Generator[Browser, None, None]:
         yield browser
         browser.close()
 
-@pytest.fixture(params=["Windows Chrome", "Galaxy S24"])
+@pytest.fixture(params=list(DEVICE_PROFILES.keys()))
 def device_profile(request):
     return DEVICE_PROFILES[request.param]
 
@@ -30,7 +31,8 @@ def context(browser: Browser, device_profile) -> Generator[BrowserContext, None,
         device_scale_factor=device_profile["device_scale_factor"],
         is_mobile=device_profile["is_mobile"],
         has_touch=device_profile["has_touch"],
-        user_agent=device_profile["user_agent"]
+        user_agent=device_profile["user_agent"],
+        permissions=["microphone"]
     )
     yield context
     context.close()
@@ -40,3 +42,13 @@ def page(context: BrowserContext) -> Generator[Page, None, None]:
     page = context.new_page()
     yield page
     page.close()
+
+
+@pytest.fixture(scope="session")
+def launch_options():
+    return {
+        "args": [
+            "--use-fake-ui-for-media-stream",     # 🎤 마이크 권한 팝업 없이 자동 승인
+            "--use-fake-device-for-media-stream", # 🎙️ 가상 마이크 장치로 대체
+        ]
+    }

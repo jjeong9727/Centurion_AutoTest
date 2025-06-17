@@ -30,6 +30,7 @@ URLS = {
     "cen_main" : f"{cen_base_url}/reservations/management",
     "cen_reservation" : f"{cen_base_url}/reservations/management",
     "cen_grade" : f"{cen_base_url}/customers/memberships/grades",
+    "cen_record" : f"{cen_base_url}/recordings/management",
 
 
 

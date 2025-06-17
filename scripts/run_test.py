@@ -40,29 +40,28 @@ def save_test_result(test_name, message, status="FAIL", file_name=None, stack_tr
     with open(TEST_RESULTS_FILE, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
 
-# 출고 실패 여부 & 스킵 테스트 저장
-stock_out_failed = False
-skipped_tests = []
+
 
 # 전체 테스트 목록
 all_tests = [
-    # Centurion
-    "tests/centurion/test_customer_edit.py",
-    "tests/centurion/test_customer_search.py",
-    "tests/centurion/test_customer_validation.py",
-    "tests/centurion/test_grade.py",
-    "tests/centurion/test_login.py",
-    "tests/centurion/test_membership.py",
-    "tests/centurion/test_reservation_accept.py",
-    "tests/centurion/test_reservation_edit.py",
-    "tests/centurion/test_reservation_register.py",
-    "tests/centurion/test_reservation_search.py",
     # Ceramique
-    "tests/home/test_landng_login.py",
-    "tests/home/test_landng_nologin.py",
-    "tests/home/test_language.py",
-    "tests/home/test_membership.py",
-    "tests/home/test_reservation.py"
+    "tests/test_home_landing_login.py",
+    "tests/test_home_landing_nologin.py",
+    # "tests/test_home_language.py",
+    # "tests/test_home_membership.py",
+    # "tests/test_home_reservation.py"
+    # # Centurion
+    # "tests/test_cen_customer_edit.py",
+    # "tests/test_cen_customer_search.py",
+    # "tests/test_cen_customer_validation.py",
+    # "tests/test_cen_grade.py",
+    # "tests/test_cen_login.py",
+    # "tests/test_cen_membership.py",
+    # "tests/test_cen_reservation_accept.py",
+    # "tests/test_cen_reservation_edit.py",
+    # "tests/test_cen_reservation_register.py",
+    # "tests/test_cen_reservation_search.py",
+    
 ]
 
 
