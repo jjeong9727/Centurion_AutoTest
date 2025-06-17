@@ -1,6 +1,6 @@
 import pytest
 from playwright.sync_api import expect
-from config import URLS, MENU_META
+from config import URLS, MENU_META_nologin
 from helpers.homepage_utils import switch_language_to_english
 
 def go_to_home_page(page, url):
@@ -27,8 +27,8 @@ def select_menu_and_verify_page(page, menu_key, device_profile):
     lang = "ko"
     prefix = f"/{lang}" + ("/m" if is_mobile else "")
 
-    meta = MENU_META[menu_key]
-    expected_url = f"{URLS['home_main']}{prefix}/{meta['path']}"
+    meta = MENU_META_nologin[menu_key]
+    expected_url = f"{URLS['home_main']}{prefix}{meta['path']}"
 
     locator = page.locator(f'[data-testid="{meta["testid"]}"]')
     locator.wait_for(timeout=3000)
@@ -41,6 +41,7 @@ def select_menu_and_verify_page(page, menu_key, device_profile):
 
 def click_float_button(page, is_mobile: bool):
     # 언어를 영어로 전환
+    page.goto(URLS["home_main"])
     switch_language_to_english(page, is_mobile)
 
     # 예약 버튼 클릭 시 로그인 화면으로 이동
@@ -94,7 +95,7 @@ def test_non_logged_in(page, device_profile):
     check_menu_visibility(page)
 
     # 메뉴 테스트
-    for key in MENU_META:
+    for key in MENU_META_nologin:
         select_menu_and_verify_page(page, key, device_profile)
         scroll_to_footer(page)
         check_footer_elements(page)

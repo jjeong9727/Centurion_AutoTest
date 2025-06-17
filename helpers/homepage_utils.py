@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 from helpers.auth_helper import login_with_token
 from config import URLS
-from datetime import datetime, timedelta
+from datetime import datetime
 import random
 import calendar
 
@@ -82,7 +82,7 @@ def get_reservation_datetime(page: Page):
                 print(f"⛔ 비활성 날짜: {mmdd}")
                 continue
 
-            span.click()
+            button.click(force=True)
             print(f"✅ 예약일 선택 성공: {mmdd}")
             return {
                 "date": f"{target_year}-{target_month:02}-{day:02}",
@@ -97,28 +97,30 @@ def get_reservation_datetime(page: Page):
 
 # 예약 정보 생성 (시간 선택 기준)
 def get_available_time_button(page: Page):
-    now = datetime.now()
-
     time_buttons = page.locator("[data-testid^='btn_time_']")
     count = time_buttons.count()
+    print(f"⏱️ 전체 시간 버튼 개수: {count}")
 
+    enabled_buttons = []
     for i in range(count):
         btn = time_buttons.nth(i)
+        if btn.get_attribute("disabled") is None:
+            enabled_buttons.append(btn)
 
-        # ✅ is_enabled() 대신 disabled 속성 체크
-        if btn.get_attribute("disabled") is not None:
-            continue
+    if not enabled_buttons:
+        raise Exception("❌ 활성화된 시간 버튼이 없습니다.")
 
-        time_value = btn.get_attribute("data-testid").split("_")[-1]
-        hour, minute = int(time_value[:2]), int(time_value[2:])
-        time_obj = now.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    selected_btn = random.choice(enabled_buttons)
+    testid = selected_btn.get_attribute("data-testid")
+    time_value = testid.split("_")[-1]
+    hour, minute = int(time_value[:2]), int(time_value[2:])
 
-        if time_obj > now:
-            btn.click()
-            page.wait_for_timeout(1000)
-            return f"{hour:02}:{minute:02}"
+    selected_btn.click()
+    page.wait_for_timeout(1000)
 
-    raise Exception("❌ 선택 가능한 미래 시간이 없습니다.")
+    print(f"✅ 랜덤 선택된 시간: {hour:02}:{minute:02}")
+    return f"{hour:02}:{minute:02}"
+
 
 
 # 언어변경 분기 

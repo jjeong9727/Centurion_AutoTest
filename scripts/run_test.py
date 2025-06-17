@@ -47,9 +47,8 @@ all_tests = [
     # Ceramique
     "tests/test_home_landing_login.py",
     "tests/test_home_landing_nologin.py",
-    # "tests/test_home_language.py",
-    # "tests/test_home_membership.py",
-    # "tests/test_home_reservation.py"
+    "tests/test_home_language.py",
+    "tests/test_home_reservation.py",
     # # Centurion
     # "tests/test_cen_customer_edit.py",
     # "tests/test_cen_customer_search.py",
@@ -61,6 +60,7 @@ all_tests = [
     # "tests/test_cen_reservation_edit.py",
     # "tests/test_cen_reservation_register.py",
     # "tests/test_cen_reservation_search.py",
+    "tests/test_cen_record.py"
     
 ]
 
@@ -121,4 +121,5 @@ for test_file in all_tests:
 print("\n🎯 모든 테스트 완료")
 
 print("\n📤 슬랙 메시지 전송 중...")
+subprocess.run(["python", "scripts/parse.py"])
 subprocess.run(["python", "scripts/send_slack.py"])

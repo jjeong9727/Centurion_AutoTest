@@ -64,7 +64,7 @@ def build_slack_message(test_results):
 
     total_time = get_total_duration_from_results(test_results)
 
-    slack_message = f":package: *자동화 테스트 결과* ({seoul_time})\n"
+    slack_message = f":mega: *자동화 테스트 결과* ({seoul_time})\n"
     slack_message += f"총 수행 테스트 파일 수: {len(test_results)} | 성공: {success_count} | 실패: {fail_count} \n"
     slack_message += f":stopwatch: 전체 수행 시간: {total_time}\n\n"
     slack_message += "\n".join(detail_lines)

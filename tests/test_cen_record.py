@@ -14,7 +14,7 @@ ALLOWED_EXTENSIONS = [".webm"]  # 결정된 확장자
 @pytest.mark.skip_browser("webkit")
 def test_recording_flow_with_cancel(page: Page):
    
-    try:
+    # try:
         # ✅ 로그인 및 URL 진입
         cen_login(page)
         page.goto(URLS["cen_record"])
@@ -82,28 +82,28 @@ def test_recording_flow_with_cancel(page: Page):
         assert download_btn_after_cancel.is_disabled(), "❌ 취소 후 다운로드 버튼이 활성 상태입니다."
         print("🚫 취소 후 다운로드 버튼 비활성화 상태 확인")
 
-        # ✅ 성공 시 Slack 알림 전송
-        send_custom_slack_message(
-            pass_items=[
-                "녹취 진행 및 취소, 종료 확인",
-                "녹취 파일 다운로드 및 파일 형식 확인"
-            ],
-            fail_items=[]
-        )
+    #     # ✅ 성공 시 Slack 알림 전송
+    #     send_custom_slack_message(
+    #         pass_items=[
+    #             "녹취 진행 및 취소, 종료 확인",
+    #             "녹취 파일 다운로드 및 파일 형식 확인"
+    #         ],
+    #         fail_items=[]
+    #     )
 
-    except AssertionError as e:
-        # ❌ 실패 시 Slack 알림 전송
-        send_custom_slack_message(
-            pass_items=[],
-            fail_items=["녹취 자동화 테스트 실패"],
-            fail_reason=str(e)
-        )
-        raise
-    except Exception as e:
-        # ❌ 기타 예외도 Slack 알림
-        send_custom_slack_message(
-            pass_items=[],
-            fail_items=["녹취 자동화 테스트 오류"],
-            fail_reason=str(e)
-        )
-        raise
+    # except AssertionError as e:
+    #     # ❌ 실패 시 Slack 알림 전송
+    #     send_custom_slack_message(
+    #         pass_items=[],
+    #         fail_items=["녹취 자동화 테스트 실패"],
+    #         fail_reason=str(e)
+    #     )
+    #     raise
+    # except Exception as e:
+    #     # ❌ 기타 예외도 Slack 알림
+    #     send_custom_slack_message(
+    #         pass_items=[],
+    #         fail_items=["녹취 자동화 테스트 오류"],
+    #         fail_reason=str(e)
+    #     )
+    #     raise

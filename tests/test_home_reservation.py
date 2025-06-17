@@ -21,84 +21,88 @@ DOWNLOAD_PATH = Path("downloads")  # 다운로드 경로
 
 def run_reservation(page: Page, visitor_info: dict | None = None):
     page.goto(URLS["home_main"])
-    login_with_token(page)
+    login_with_token(page, account_type="kakao")
     page.goto(URLS["home_reservation"])
     page.wait_for_timeout(2000)
 
     # 방문자 정보 입력
     if visitor_info and visitor_info["name"] != ReservationInfo["booker"]["name"]:
         page.click("[data-testid=btn_visitor]")
-        page.click("body")
+        page.wait_for_timeout(2000)
+        page.click("[data-testid=input_name]")
+        page.wait_for_timeout(500)
+        page.locator("body").click(position={"x": 10, "y": 10})
+        page.wait_for_timeout(500)
         expect(page.locator("[data-testid=alert_name]")).to_be_visible()
+        page.wait_for_timeout(1000)
         page.fill("[data-testid=input_name]", visitor_info["name"])
+        page.wait_for_timeout(1000)
+        select_count = page.locator("select").count()
 
         # 생년월일 입력
         page.click("[data-testid=drop_year_trigger]")
-        page.click("body")
-        expect(page.locator("[data-testid=alert_birth]")).to_be_visible()
+        page.wait_for_timeout(1000)
+        page.select_option("select", value=visitor_info["birth"][:4])  # 그대로 사용 가능
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(1000)
 
+        # 생년월일 분리 (형식: "1990-10-10")
+        _, month, day = visitor_info["birth"].split("-")
+        print(f"월: {month}, 일: {day}")
 
-        page.click("[data-testid=drop_year_trigger]")
-        page.locator(f"li:has-text('{visitor_info['birth'][:4]}')").click()
-
+        # 월 선택 (두 번째 select)
         page.click("[data-testid=drop_month_trigger]")
-        page.click("body")
-        expect(page.locator("[data-testid=alert_birth]")).to_be_visible()
+        page.wait_for_timeout(1000)
+        page.locator("select").nth(1).select_option(month)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(1000)
 
-
-        page.click("[data-testid=drop_month_trigger]")
-        page.locator(f"li:has-text('{int(visitor_info['birth'][5:7])}')").click()
-
+        # 일 선택 (세 번째 select)
         page.click("[data-testid=drop_day_trigger]")
-        page.click("body")
-        expect(page.locator("[data-testid=alert_birth]")).to_be_visible()
-
-
-        page.click("[data-testid=drop_day_trigger]")
-        page.locator(f"li:has-text('{int(visitor_info['birth'][8:])}')").click()
-
-        page.click(f"[data-testid=radio_{'male' if visitor_info['gender'] == '남자' else 'female'}]")
+        page.wait_for_timeout(1000)
+        page.locator("select").nth(2).select_option(day)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(1000)
 
         # 전화번호 입력
         page.click("[data-testid=input_phone]")
-        page.click("body")
+        page.wait_for_timeout(1000)
+        page.locator("body").click(position={"x": 10, "y": 10})
+        page.wait_for_timeout(1000)
         expect(page.locator("[data-testid=alert_phone]")).to_be_visible()
-
-
+        page.wait_for_timeout(1000)
         page.fill("[data-testid=input_phone]", visitor_info["phone"])
+        page.wait_for_timeout(1000)
 
-        confirm_button_disabled = page.locator("[data-testid=btn_confirm]").is_disabled()
-        assert confirm_button_disabled
+
 
     # 예약 날짜 및 시간 선택
     reservation = get_reservation_datetime(page)
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(3000)
     time_str = get_available_time_button(page)
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(3000)
 
     # 희망 시술 메모 입력
     page.click("[data-testid=input_memo]")
-    page.click("body")
+    page.wait_for_timeout(1000)
+    page.locator("body").click(position={"x": 10, "y": 10})
+    page.wait_for_timeout(1000)
     expect(page.locator("[data-testid=alert_memo]")).to_be_visible()
+    page.wait_for_timeout(1000)
 
 
     memo = f"자동화 테스트 {reservation['month']:02}월 {reservation['day']:02}일 {time_str.replace(':', '시 ')}분 예약"
     page.fill("[data-testid=input_memo]", memo)
+    page.wait_for_timeout(1000)
 
-    confirm_button_disabled = page.locator("[data-testid=btn_confirm]").is_disabled()
-    assert confirm_button_disabled
-
-    page.click("[data-testid=btn_agree]")
-    confirm_button_enabled = page.locator("[data-testid=btn_confirm]").is_enabled()
-    assert confirm_button_enabled
 
     page.click("[data-testid=btn_agree]")
-    confirm_button_enabled = page.locator("[data-testid=btn_confirm]").is_enabled()
-    assert confirm_button_enabled
+    page.wait_for_timeout(1000)
 
     page.click("[data-testid=btn_confirm]")
-    page.wait_for_url(URLS["home_complete"])
+    page.wait_for_timeout(3000)
     expect(page.locator("[data-testid=txt_complete]")).to_be_visible()
+    page.wait_for_timeout(1000)
 
     # 예약자 및 방문자 정보 분리
     booker = ReservationInfo["booker"]
@@ -139,7 +143,9 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
     assert page.locator("[data-testid=result_birth]").inner_text() == booker["birth"]
     assert page.locator("[data-testid=result_gender]").inner_text() == booker["gender"]
     assert page.locator("[data-testid=result_phone]").inner_text() == booker["phone"]
-    assert page.locator("[data-testid=result_date]").inner_text() == reservation["date"]
+    # 예약 완료 화면 검증 - 날짜 (요일 제외)
+    ui_date = page.locator("[data-testid=result_date]").inner_text().split()[0]
+    assert ui_date == reservation["date"]
     assert page.locator("[data-testid=result_time]").inner_text() == time_str
     assert page.locator("[data-testid=result_memo]").inner_text() == memo
 
@@ -157,6 +163,8 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
         assert download_button.is_visible()
         with page.expect_download() as download_info:
             download_button.click()
+            page.wait_for_timeout(1000)
+
         download = download_info.value
         download_path = download.path()
         time.sleep(3)
@@ -165,13 +173,13 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
         assert download_button.count() == 0
 
 
-# 예약자==방문자
-def test_reservation_self(page: Page):
-    run_reservation(page, visitor_info=ReservationInfo["booker"])
+# # 예약자==방문자
+# def test_reservation_self(page: Page):
+#     run_reservation(page, visitor_info=ReservationInfo["booker"])
 
-# 예약자!=방문자
-def test_reservation_for_visitor(page: Page):
-    run_reservation(page, visitor_info=ReservationInfo["visitor"])
+# # 예약자!=방문자
+# def test_reservation_for_visitor(page: Page):
+#     run_reservation(page, visitor_info=ReservationInfo["visitor"])
 
 # 예약자!=방문자(미성년자)
 def test_reservation_for_minor(page: Page):

@@ -1,0 +1,16 @@
+[
+  {
+    "name": "[자동화][예약관리] test_home_reservation 테스트 실패",
+    "file": "tests/test_home_reservation.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": ""
+  },
+  {
+    "name": "[자동화][기타] test_cen_record 테스트 실패",
+    "file": "tests/test_cen_record.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": ""
+  }
+]

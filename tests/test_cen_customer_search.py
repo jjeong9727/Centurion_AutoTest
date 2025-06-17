@@ -62,8 +62,7 @@ def test_search_field(page: Page):
     page.click('[data-testid="btn_reset"]')
     page.wait_for_timeout(2000)
     # 3. 성별 검색 → 확인 → 초기화
-    # page.locator('[data-testid="drop_search_gender"]').click()
-    page.locator('[data-testid="undefined_trigger"]').first.click()
+    page.locator('[data-testid="drop_search_gender_trigger"]').click()
     page.get_by_role("option", name=cust["gender"]).click()
     page.wait_for_timeout(1000)
     page.click("body")
@@ -100,8 +99,7 @@ def test_search_field(page: Page):
     page.wait_for_timeout(2000)
 
     # 5. 국적 검색 → 확인 → 초기화
-    # page.locator('[data-testid="drop_search_nation"]').click()
-    page.locator('[data-testid="undefined_trigger"]').last.click()
+    page.locator('[data-testid="drop_search_nation_trigger"]').last.click()
     page.get_by_role("option", name=cust["nationality"]).click()
     page.click("body")
     page.wait_for_timeout(1000)

@@ -50,47 +50,73 @@ Account = {
 ReservationInfo = {
     # 예약자 정보
     "booker": {
-        "name": "권정의",
+        "name": "자동화한국인",
         "birth": "1997-09-27",
-        "gender": "여자",
+        "gender": "여성",
         "phone": "010-6275-4153",
     },
     # 방문자 정보
     "visitor": {
         "name": "방문자테스트",
         "birth": "1990-10-10",
-        "gender": "남자",
+        "gender": "여성",
         "phone": "010-9876-5432",
     },
     # 미성년자 정보
     "minor":{
         "name":"미성년자테스트",
         "birth" : "2008-08-08",
-        "gender": "남자",
+        "gender": "여성",
         "phone" : "010-0123-4567",
     }
 }
 
 # 세라미크 랜딩 확인용 매핑 
-MENU_META = {
+MENU_META_nologin = {
     "discover": {
         "testid": "menu_discover",
-        "path": "discover"
+        "path": "/discover"
     },
     "removal": {
         "testid": "menu_removal",
-        "path": "removal/info"
+        "path": "/removal/info"
     },
     "lifting": {
         "testid": "menu_lifting",
-        "path": "lifting/info"
+        "path": "/lifting/info"
     },
     "privilege": {
         "testid": "menu_privilege",
-        "path": "events/privilege"
+        "path": "/events/privilege"
     },
     "login": {
         "testid": "menu_login",
-        "path": "login"
+        "path": "/login"
+    }
+}
+MENU_META_login = {
+    "discover": {
+        "testid": "menu_discover",
+        "path": "/discover"
+    },
+    "removal": {
+        "testid": "menu_removal",
+        "path": "/removal/info"
+    },
+    "lifting": {
+        "testid": "menu_lifting",
+        "path": "/lifting/info"
+    },
+    "privilege": {
+        "testid": "menu_privilege",
+        "path": "/events/privilege"
+    },
+    "mypage": {
+        "testid": "menu_mypage",
+        "path": "/my-page"
+    },
+    "logout":{
+        "testid" : "menu_logout",
+        "path" : ""
     }
 }

@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 
-def login_with_token(page, account_type="google"):
+def login_with_token(page, account_type="kakao"):
     from dotenv import load_dotenv
     import os
 

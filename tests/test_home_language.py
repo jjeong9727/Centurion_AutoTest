@@ -7,19 +7,6 @@ from helpers.auth_helper import login_with_token
 
 # 화면별 언어 데이터
 screen_text_data = {
-    # "home_main": {
-    #     "btn_removal": {"ko": "제모 시술", "en": "Removal"},
-    #     "btn_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
-    # },
-    # "home_login": {
-    #     "txt_login": {"ko": "로그인", "en": "LOGIN"},
-    #     "btn_login": {"ko": "카카오로 시작하기", "en": "Sign in with Google"},
-    #     "footer_branch": {"ko": "세라미크의원 강남", "en": "CERAMIQUE Clinic Gangnam"},
-    #     "footer_terms": {"ko": "이용약관", "en": "Terms of Use"},
-    #     "footer_policy": {"ko": "개인정보취급방침", "en": "Privacy Policy"},
-    #     "float_reserve": {"ko": "예약", "en": "Book"},
-    #     "float_consult": {"ko": "상담", "en": "Consult"}
-    # },
     "home_reservation": {
         "txt_date": {"ko": "예약 날짜", "en": "Date"},
         "txt_time": {"ko": "예약 시간", "en": "Time"},
@@ -27,10 +14,10 @@ screen_text_data = {
         "btn_confirm": {"ko": "예약하기", "en": "Reservation"}
     },
     "home_privacy": {
-        "txt_privacy": {"ko": "개인정보취급방침", "en": "Privacy Policy"}
+        "txt_terms": {"ko": "개인정보 취급방침", "en": "Privacy Policy"}
     },
     "home_terms": {
-        "txt_terms": {"ko": "이용약관", "en": "Terms of Use"}
+        "txt_policy": {"ko": "사이트 이용약관", "en": "Terms of Use"}
     },
     "home_removal": {
         "txt_removal": {"ko": "제모 시술", "en": "Hair Removal"}
@@ -39,15 +26,15 @@ screen_text_data = {
         "txt_lifting": {"ko": "리프팅 시술", "en": "Lifting"}
     },
     "home_mypage_mem": {
-        "txt_lifting": {"ko": "멤버십 조회", "en": "Membership"},
+        "txt_membership": {"ko": "멤버십 조회", "en": "Membership"},
         "txt_mypage": {"ko": "마이페이지", "en": "My Page"},
     },
     "home_mypage_profile": {
-        "txt_lifting": {"ko": "회원정보수정", "en": "Edit profile"},
+        "txt_profile": {"ko": "회원정보수정", "en": "Edit profile"},
         "txt_mypage": {"ko": "마이페이지", "en": "My Page"},
     },
     "home_mypage_history": {
-        "txt_lifting": {"ko": "나의 예약 정보", "en": "My reservation"},
+        "txt_history": {"ko": "예약 내역 확인", "en": "Reservation History"},
         "txt_mypage": {"ko": "마이페이지", "en": "My Page"}
     },
     "home_mypage_mo": {
