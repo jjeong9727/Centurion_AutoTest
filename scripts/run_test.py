@@ -69,6 +69,9 @@ all_tests = [
     "tests/test_cen_record.py"
 ]
 
+multi_device_tests = set(all_tests[:3])  # 상위 3개만
+pc_only_tests = set(all_tests[3:])
+
 # 테스트 실행
 for device in devices:
     os.environ["TEST_DEVICE"] = device
