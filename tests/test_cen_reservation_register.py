@@ -52,7 +52,7 @@ def register_reservation(page: Page):
     page.click('[data-testid="input_date"]')
     page.wait_for_timeout(1000)
     reservation = get_reservation_datetime(page)
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(3000)
     raw_date = reservation["date"]  # "YYYY-MM-DD"
     date = raw_date.replace("-", ".")  # "YYYY.MM.DD"
 

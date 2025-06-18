@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SLACK_WEBHOOK_URL = os.getenv("SLACK_WEBHOOK_URL")
-RESULT_FILE = "test_results.json"
+RESULT_FILE = "scripts/summary_.json"
 
 # 시간 포맷 (KST)
 KST = timezone(timedelta(hours=9))
@@ -46,27 +46,26 @@ def build_slack_message(test_results):
     detail_lines = []
 
     for idx, result in enumerate(test_results, 1):
-        test_name = result.get("test_name")
         status = result.get("status")
         message = result.get("message", "")
 
-        korean_name = test_file_to_korean.get(test_name, test_name)
+        korean_name = result.get("name", result.get("test_name"))
 
         if status == "PASS":
             success_count += 1
-            detail_lines.append(f"{idx}. [PASS] {korean_name}")
+            detail_lines.append(f"{idx}. ✅[PASS] {korean_name}")
         elif status == "FAIL":
             fail_count += 1
-            detail_lines.append(f"{idx}. [FAIL] {korean_name}\n   {message}")
+            detail_lines.append(f"{idx}. ❌[FAIL] {korean_name}\n   {message}")
         elif status == "SKIP":
             skip_count += 1
             detail_lines.append(f"{idx}. [SKIP] {korean_name}")
 
     total_time = get_total_duration_from_results(test_results)
 
-    slack_message = f":mega: *자동화 테스트 결과* ({seoul_time})\n"
-    slack_message += f"총 수행 테스트 파일 수: {len(test_results)} | 성공: {success_count} | 실패: {fail_count} \n"
-    slack_message += f":stopwatch: 전체 수행 시간: {total_time}\n\n"
+    slack_message = f":mega: *세라미크 자동화 테스트 결과* ({seoul_time})\n"
+    slack_message += f"총 수행 테스트 파일 수: {len(test_results)} | 성공: {success_count} | 실패: {fail_count} \n\n"
+    # slack_message += f":stopwatch: 전체 수행 시간: {total_time}\n\n"
     slack_message += "\n".join(detail_lines)
 
     return slack_message

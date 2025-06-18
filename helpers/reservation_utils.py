@@ -3,8 +3,9 @@ import os
 from datetime import datetime
 import random
 from playwright.sync_api import Page, expect
+from pathlib import Path
 
-RESERVATION_FILE = "data/reservations.json"
+RESERVATION_FILE = Path("data/reservation.json")  # ← 문자열 대신 Path 객체로 정의
 # 예약 추가 후 json 파일에 내역 생성
 def save_reservation_to_json(reservation: dict, file_path=RESERVATION_FILE):
     data = []
@@ -61,17 +62,17 @@ def update_reservation_status(name, new_status):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 # 예약 상태에 해당하는 내역 불러오기
-def get_reservations_by_status(status):
+def get_reservations_by_status(status=str):
     if not RESERVATION_FILE.exists():
         return []
 
     with open(RESERVATION_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+        reservations = json.load(f)
 
-    return [res for res in data if res.get("status") == status]
+    return [r for r in reservations if r.get("status") == status]
 
 # 예약 정보 업데이트
-def update_reservation_info(name: str, new_datetime: str, new_memo: str, json_path="data/reservation.json"):
+def update_reservation_info(name: str, new_date: str,new_time: str, new_memo: str, json_path="data/reservation.json"):
     import json
 
     with open(json_path, "r", encoding="utf-8") as f:
@@ -80,7 +81,8 @@ def update_reservation_info(name: str, new_datetime: str, new_memo: str, json_pa
     updated = False
     for item in data:
         if item["name"] == name:
-            item["datetime"] = new_datetime
+            item["date"] = new_date
+            item["time"] = new_time
             item["memo"] = new_memo
             updated = True
             break
@@ -88,6 +90,6 @@ def update_reservation_info(name: str, new_datetime: str, new_memo: str, json_pa
     if updated:
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
-        print(f"✅ '{name}' 예약일이 {new_datetime}, 메모가 '{new_memo}'(으)로 업데이트되었습니다.")
+        print(f"✅ '{name}' 예약일이 {new_date}{new_time} 메모가 '{new_memo}'(으)로 업데이트되었습니다.")
     else:
         print(f"⚠️ '{name}' 예약 정보를 찾을 수 없습니다.")

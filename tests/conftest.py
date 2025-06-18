@@ -3,9 +3,8 @@ import pytest
 from pathlib import Path
 from typing import Generator
 from playwright.sync_api import sync_playwright, Page, Browser, BrowserContext
-from pathlib import Path
 
-# 상대경로 상위 디렉토리 추가
+# 상위 디렉토리 경로 추가
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # 디바이스 설정 로드
@@ -20,9 +19,12 @@ def browser() -> Generator[Browser, None, None]:
         yield browser
         browser.close()
 
-@pytest.fixture(params=list(DEVICE_PROFILES.keys()))
-def device_profile(request):
-    return DEVICE_PROFILES[request.param]
+@pytest.fixture
+def device_profile():
+    test_device = os.getenv("TEST_DEVICE")
+    if not test_device or test_device not in DEVICE_PROFILES:
+        raise ValueError(f"❌ 환경 변수 TEST_DEVICE가 설정되지 않았거나 유효하지 않습니다: {test_device}")
+    return DEVICE_PROFILES[test_device]
 
 @pytest.fixture
 def context(browser: Browser, device_profile) -> Generator[BrowserContext, None, None]:
@@ -42,7 +44,6 @@ def page(context: BrowserContext) -> Generator[Page, None, None]:
     page = context.new_page()
     yield page
     page.close()
-
 
 @pytest.fixture(scope="session")
 def launch_options():

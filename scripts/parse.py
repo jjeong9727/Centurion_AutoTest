@@ -5,25 +5,24 @@ import re
 # 테스트 이름 한글 매핑
 full_name_mapping = {
     # centurion
-    "test_customer_edit": "고객 정보 수정 확인",
-    "test_customer_search": "고객 검색 기능 확인",
-    "test_customer_validation": "고객 입력값 유효성 검사",
-    "test_grade": "등급 관리 기능 확인",
-    "test_login": "센트리온 로그인 확인",
-    "test_membership": "멤버십 충전/차감 확인",
-    "test_reservation_accept": "예약 확정/취소 확인",
-    "test_reservation_edit": "예약 정보 수정 확인",
-    "test_reservation_register": "예약 추가 확인",
-    "test_reservation_search": "예약 검색 확인",
+    "test_cen_customer_edit": "Centurion 고객 정보 수정 확인",
+    "test_cen_customer_search": "Centurion 고객 검색 기능 확인",
+    "test_cen_customer_register": "Centurion 고객 등록 확인",
+    "test_cen_grade": "Centurion 등급 관리 기능 확인",
+    "test_cen_login": "Centurion 로그인 유효성 확인",
+    "test_cen_membership": "Centurion 멤버십 충전/차감 확인",
+    "test_cen_reservation_accept": "Centurion 예약 확정/취소 확인",
+    "test_cen_reservation_edit": "Centurion 예약 정보 수정 확인",
+    "test_cen_reservation_register": "Centurion 예약 추가 확인",
+    "test_cen_reservation_search": "Centurion 예약 검색 확인",
+    "test_cen_record": "Centurion 녹취 확인",
 
     # home
-    "test_landng_login": "홈페이지 로그인 진입 확인",
-    "test_landng_nologin": "홈페이지 비로그인 진입 시도 확인",
-    "test_language": "홈페이지 다국어 UI 확인",
-    "test_membership": "홈페이지 멤버십 안내 확인",
-    "test_reservation": "홈페이지 예약 신청 확인",
+    "test_home_landing_login": "로그인 진입 확인",
+    "test_home_landing_nologin": "비로그인 진입 시도 확인",
+    "test_home_language": "다국어 확인",
+    "test_home_reservation": "예약 신청 확인"
 }
-
 category_prefix = {
     "login": "로그인",
     "language": "다국어",
@@ -32,6 +31,7 @@ category_prefix = {
     "grade": "멤버십 등급관리",
     "reservation": "예약관리",
     "landng": "홈페이지 진입 확인",
+    "record" : "녹취"
 }
 
 # 예쁜 이름
@@ -40,7 +40,7 @@ def prettify_name(raw_name):
     match = re.match(r"test_(?:centurion|home)?_?([a-z]+)", raw_name)
     category_key = match.group(1) if match else "etc"
     category = category_prefix.get(category_key, "기타")
-    return f"[자동화][{category}] {readable} 테스트 실패"
+    return f"[자동화] {readable} 테스트"
 
 # stack 요약 생성
 def summarize_stack(stack):

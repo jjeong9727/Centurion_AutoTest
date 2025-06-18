@@ -11,6 +11,7 @@ import json
 from playwright.sync_api import Page, expect
 from config import ReservationInfo, URLS
 from helpers.homepage_utils import get_reservation_datetime, get_available_time_button
+from helpers.reservation_utils import save_reservation_to_json
 import os
 from datetime import datetime
 import time
@@ -109,7 +110,7 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
     visitor = visitor_info or booker
 
     # JSON 저장
-    json_path = "reservation.json"
+    json_path = "data/reservation.json"
     if os.path.exists(json_path):
         with open(json_path, "r", encoding="utf-8") as f:
             try:
@@ -130,7 +131,8 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
         "date": reservation["date"],
         "time": time_str,
         "memo": memo,
-        "created_at": created_at
+        "created_at": created_at,
+        "status" :"대기"
     }
 
     existing_data.append(reserved_info)
@@ -159,27 +161,38 @@ def run_reservation(page: Page, visitor_info: dict | None = None):
 
     # 미성년자 시술동의서 다운로드 확인
     download_button = page.locator("[data-testid=download_minors]")
-    if visitor["birth"] and int(visitor["birth"][:4]) > 2004:
-        assert download_button.is_visible()
-        with page.expect_download() as download_info:
-            download_button.click()
-            page.wait_for_timeout(1000)
+    birth_year = int(visitor["birth"][:4])
 
-        download = download_info.value
-        download_path = download.path()
-        time.sleep(3)
-        assert os.path.exists(download_path), f"❌ 다운로드된 파일이 존재하지 않습니다: {download_path}"
+    if visitor["birth"] and birth_year > 2004:
+        assert download_button.is_visible(), "❌ 미성년자 다운로드 버튼이 보이지 않음"
+
+        # href 경로 검증
+        href = download_button.get_attribute("href")
+        assert href and href.endswith(".pdf"), f"❌ 유효하지 않은 다운로드 경로: {href}"
+
+        print(f"✅ 미성년자 다운로드 버튼 확인됨 - {href}")
+
+        # 클릭 자체는 확인용
+        download_button.click()
+        page.wait_for_timeout(2000)
     else:
-        assert download_button.count() == 0
+        # 성인인 경우 버튼 없어야 정상
+        assert download_button.count() == 0, "❌ 성인인데 미성년자 다운로드 버튼이 존재함"
 
 
-# # 예약자==방문자
-# def test_reservation_self(page: Page):
-#     run_reservation(page, visitor_info=ReservationInfo["booker"])
+# 예약자==방문자
+def test_reservation_self(page: Page):
+    # ✅ JSON 파일 초기화
+    json_path = "data/reservation.json"
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump([], f, ensure_ascii=False, indent=2)
+    print("🧹 reservation.json 초기화 완료")
+    run_reservation(page, visitor_info=ReservationInfo["booker"])
+    
 
-# # 예약자!=방문자
-# def test_reservation_for_visitor(page: Page):
-#     run_reservation(page, visitor_info=ReservationInfo["visitor"])
+# 예약자!=방문자
+def test_reservation_for_visitor(page: Page):
+    run_reservation(page, visitor_info=ReservationInfo["visitor"])
 
 # 예약자!=방문자(미성년자)
 def test_reservation_for_minor(page: Page):

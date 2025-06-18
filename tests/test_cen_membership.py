@@ -14,7 +14,15 @@ CUSTOMER_FILE = "data/customers.json"
 
 def load_one_customer():
     with open(CUSTOMER_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)[0]
+        customers = json.load(f)
+    
+    # 우선순위: 이름이 "자동화한국인" 또는 "자동화외국인"인 고객
+    for customer in customers:
+        if customer["name"] in ["자동화한국인", "자동화외국인"]:
+            return customer
+    
+    # 해당 조건 없으면 첫 번째 고객 반환
+    return customers[0] if customers else None
 
 def test_membership_charge_and_deduct(page: Page):
     customer = load_one_customer()
@@ -121,18 +129,18 @@ def test_membership_charge_and_deduct(page: Page):
 
     # 국적에 따라 로그인 방식 분기
     account_type = "kakao" if customer.get("nationality") == "한국인" else "google"
+    page.goto(URLS["home_main"])
     login_with_token(page, account_type=account_type)
 
     page.goto(URLS["home_mypage_mem"])
     page.wait_for_timeout(3000)
 
+    raw_text = page.locator('[data-testid="mem_balance"]').inner_text().strip()
+    normalized = " ".join(raw_text.split())  # 공백 및 \n 제거 후 정렬
+
     expected_display = f"{final_total:,} / {new_charged:,}"
 
-    balance_span = page.locator('[data-testid="mem_balance"]')
-    p_tag = balance_span.locator('xpath=./following-sibling::p')  # 같은 부모 내 형제 p 태그
-    displayed_text = p_tag.inner_text().strip()
+    assert normalized == expected_display, f"❌ 마일리지 표시 불일치: '{normalized}' ≠ '{expected_display}'"
 
-    assert displayed_text == expected_display, \
-        f"❌ 마이페이지 멤버십 계산 불일치: {displayed_text} != {expected_display}"
 
-    print(f"✅ 마이페이지 멤버십 확인 완료: {displayed_text}")
+    print(f"✅ 마이페이지 멤버십 확인 완료")

@@ -95,6 +95,7 @@ def test_membership_register_and_toggle(page: Page):
             page.click('[data-testid="btn_confirm"]')
             page.wait_for_timeout(500)
             expect(page.locator('[data-testid="toast_using"]')).to_be_visible()
+            page.wait_for_timeout(1000)
             toggle_found = True
             break
 

@@ -3,18 +3,150 @@
     "test_name": "test_home_landing_login",
     "status": "PASS",
     "message": "테스트 성공",
-    "timestamp": "2025-06-17 19:41:39",
+    "timestamp": "2025-06-18 15:46:15",
     "file": "tests/test_home_landing_login.py",
     "stack": "",
-    "duration": "54.00초"
+    "duration": "55.47초",
+    "device": "Windows Chrome"
   },
   {
     "test_name": "test_home_landing_nologin",
-    "status": "FAIL",
-    "message": "..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:528: TargetClosedError",
-    "timestamp": "2025-06-17 19:42:20",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:46:59",
     "file": "tests/test_home_landing_nologin.py",
-    "stack": "============================= test session starts =============================\nplatform win32 -- Python 3.13.2, pytest-8.3.5, pluggy-1.5.0\nrootdir: C:\\Users\\kjeon\\OneDrive\\Desktop\\QA\\Home\nplugins: base-url-2.1.0, html-4.1.1, json-0.4.0, json-report-1.5.0, metadata-3.1.1, ordering-0.6, playwright-0.7.0\ncollected 1 item\n\ntests\\test_home_landing_nologin.py F                                     [100%]\n\n================================== FAILURES ===================================\n_____________________ test_non_logged_in[Windows Chrome] ______________________\n\npage = <Page url='https://stg.ceramiqueclinic.com/en'>\ndevice_profile = {'device_scale_factor': 1, 'has_touch': False, 'is_mobile': False, 'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36', ...}\n\n    def test_non_logged_in(page, device_profile):\n        is_mobile = device_profile[\"is_mobile\"]\n    \n        # 메인 페이지 진입\n        go_to_home_page(page, URLS[\"home_main\"])\n        page.wait_for_timeout(2000)\n    \n        # 메뉴 열기\n        page.locator('[data-testid=\"header_menu\"]').click()\n        page.wait_for_timeout(2000)\n        check_menu_visibility(page)\n    \n        # 메뉴 테스트\n        for key in MENU_META_nologin:\n            select_menu_and_verify_page(page, key, device_profile)\n            scroll_to_footer(page)\n            check_footer_elements(page)\n            # 화면 맨 위로 올리고 다음 메뉴를 위해 다시 메뉴 열기\n            page.evaluate(\"window.scrollTo(0, 0);\")\n            page.wait_for_timeout(500)\n            page.locator('[data-testid=\"header_menu\"]').click()\n            page.wait_for_timeout(2000)\n    \n>       click_float_button(page, is_mobile)\n\ntests\\test_home_landing_nologin.py:108: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\ntests\\test_home_landing_nologin.py:71: in click_float_button\n    page.wait_for_timeout(1000)\n..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\sync_api\\_generated.py:11490: in wait_for_timeout\n    self._sync(self._impl_obj.wait_for_timeout(timeout=timeout))\n..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_page.py:1073: in wait_for_timeout\n    await self._main_frame.wait_for_timeout(timeout)\n..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_frame.py:756: in wait_for_timeout\n    await self._channel.send(\"waitForTimeout\", locals_to_params(locals()))\n..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:61: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = <playwright._impl._connection.Connection object at 0x0000027C598686E0>\ncb = <function Channel.send.<locals>.<lambda> at 0x0000027C59809D00>\nis_internal = False\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False\n    ) -> Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(task, \"__pw_stack__\", inspect.stack())\n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n>           raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nE           playwright._impl._errors.TargetClosedError: Page.wait_for_timeout: Target page, context or browser has been closed\n\n..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:528: TargetClosedError\n--------------------------------- JSON report ---------------------------------\nreport saved to: .report.json\n=========================== short test summary info ===========================\nFAILED tests/test_home_landing_nologin.py::test_non_logged_in[Windows Chrome]\n============================= 1 failed in 39.98s ==============================\n",
-    "duration": "40.79초"
+    "stack": "",
+    "duration": "44.23초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_home_language",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:48:50",
+    "file": "tests/test_home_language.py",
+    "stack": "",
+    "duration": "110.73초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_home_reservation",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:50:42",
+    "file": "tests/test_home_reservation.py",
+    "stack": "",
+    "duration": "112.21초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_login",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:51:00",
+    "file": "tests/test_cen_login.py",
+    "stack": "",
+    "duration": "18.06초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_register",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:51:50",
+    "file": "tests/test_cen_customer_register.py",
+    "stack": "",
+    "duration": "50.30초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_edit",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:53:50",
+    "file": "tests/test_cen_customer_edit.py",
+    "stack": "",
+    "duration": "119.99초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_search",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:54:30",
+    "file": "tests/test_cen_customer_search.py",
+    "stack": "",
+    "duration": "39.78초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_grade",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:55:07",
+    "file": "tests/test_cen_grade.py",
+    "stack": "",
+    "duration": "36.54초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_membership",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:56:00",
+    "file": "tests/test_cen_membership.py",
+    "stack": "",
+    "duration": "53.41초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_accept",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:57:04",
+    "file": "tests/test_cen_reservation_accept.py",
+    "stack": "",
+    "duration": "63.65초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_edit",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:57:42",
+    "file": "tests/test_cen_reservation_edit.py",
+    "stack": "",
+    "duration": "38.55초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_search",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:58:07",
+    "file": "tests/test_cen_reservation_search.py",
+    "stack": "",
+    "duration": "24.74초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_register",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:58:34",
+    "file": "tests/test_cen_reservation_register.py",
+    "stack": "",
+    "duration": "26.36초",
+    "device": "Windows Chrome"
+  },
+  {
+    "test_name": "test_cen_record",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-18 15:59:25",
+    "file": "tests/test_cen_record.py",
+    "stack": "",
+    "duration": "50.99초",
+    "device": "Windows Chrome"
   }
 ]

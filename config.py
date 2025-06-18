@@ -1,5 +1,6 @@
-home_base_url = "https://stg.ceramiqueclinic.com" #홈페이지 도메인
+home_base_url = "https://stg.ceramiqueclinic.com" # STG 홈페이지 도메인
 cen_base_url = "https://stg.centurion.ai.kr" #centurion 도메인
+# home_base_url = "https://www.gangnam.ceramiqueclinic.com/"  #세라미크 홈페이지 도메인
 
 URLS = {
     # ==============HOME==============

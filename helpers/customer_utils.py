@@ -46,31 +46,8 @@ def update_customer_in_json(customer_name: str, updates: dict, file_path="data/c
 
 
 # 고객 등록 데이터 랜덤 생성 
-def generate_customer_name(prefix="자동화", count_file="data/daily_count.json"):
-    today = datetime.now().strftime("%m%d")  # 예: "0522"
-
-    # 기존 카운트 파일 로드 또는 초기화
-    if os.path.exists(count_file):
-        with open(count_file, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    else:
-        data = {}
-
-    # 날짜별 카운트 증가
-    if today not in data:
-        data[today] = 1
-    else:
-        data[today] += 1
-
-    count = data[today]
-    customer_name = f"{prefix}-{today}.{count}"
-
-    # 카운트 저장
-    with open(count_file, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-
-    return customer_name 
-    # return f"자동화테스트" 
+def generate_customer_name(prefix="자동화"):
+    return f"자동화.테-스트" 
 def generate_random_birth():
     start = datetime.strptime("1960-01-01", "%Y-%m-%d")
     end = datetime.strptime("2004-12-31", "%Y-%m-%d")
