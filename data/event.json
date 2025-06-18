@@ -1,0 +1,11 @@
+[
+  {
+    "group_name": "그룹1",
+    "event_name": "이벤트 한글",
+    "event_period": "2025.06.01-2025.06.30",
+    "display_period": "2025.06.01-2025.06.30",
+    "event_visibile": "yes",
+    "event_description": "이벤트 상세 설명 구구절절 텍스트 줄바꿈도 있어요 \n 여러개도 되나요 \n\n\n 어떻게 나올지 궁금하네요",
+    "popup_usage": "yes" 
+  }
+]
