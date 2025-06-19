@@ -42,6 +42,10 @@ def select_menu_and_verify_page(page, menu_key, device_profile):
 def click_float_button(page, is_mobile: bool):
     # 언어를 영어로 전환
     page.goto(URLS["home_main"])
+    page.wait_for_timeout(2000)
+    page.context.clear_cookies()  # 쿠키 초기화
+    page.evaluate("localStorage.clear(); sessionStorage.clear();")  # 스토리지 초기화
+    page.wait_for_timeout(2000)
     switch_language_to_english(page, is_mobile)
 
     # 예약 버튼 클릭 시 로그인 화면으로 이동
@@ -49,11 +53,11 @@ def click_float_button(page, is_mobile: bool):
         page.locator('[data-testid="btn_float"]').click()
         page.wait_for_timeout(1000)
         page.locator('[data-testid="float_reserve"]').click()
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
 
     else:
         page.locator('[data-testid="float_reserve"]').click()
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
 
 
     page.wait_for_load_state("load")
@@ -63,7 +67,7 @@ def click_float_button(page, is_mobile: bool):
     page.goto(URLS["home_discover"])
     page.wait_for_timeout(1000)
     page.locator('[data-testid="btn_reservation"]').first.click()
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(5000)
     assert "/login" in page.url, f"❌ 로그인 페이지 아님: {page.url}"
 
     # 상담 버튼도 확인 (PC는 바로 노출, 모바일은 float 다시 눌러야 함)
@@ -79,7 +83,7 @@ def click_float_button(page, is_mobile: bool):
             page.locator('[data-testid="float_consult"]').click()
 
     new_page = popup_info.value
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(5000)
     assert "api.whatsapp.com/send" in new_page.url, f"❌ 상담 URL 이동 실패: {new_page.url}"
 
 def test_non_logged_in(page, device_profile):

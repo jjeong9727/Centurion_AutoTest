@@ -2,6 +2,10 @@ import json
 from typing import Dict, Any
 from playwright.sync_api import Page
 from datetime import datetime, timedelta
+from playwright.sync_api import Page, expect
+from datetime import datetime
+from typing import Dict
+from config import URLS
 
 EVENT_FILE_PATH = "data/event.json"
 
@@ -86,9 +90,83 @@ def set_visible_events_to_hidden(page: Page):
         page.wait_for_timeout(1500)
         page_index += 1
 
-def select_calendar_date(page: Page, testid: str, date: datetime):
-    """날짜 캘린더 열고 날짜 선택"""
+# 이벤트 날짜 선택 
+def select_calendar_date(page: Page, testid: str, target_date: datetime):
     page.click(f'[data-testid="{testid}"]')
-    mmdd = date.strftime("%m%d")
-    page.click(f'[data-testid="btn_day_{mmdd}"]')
-    page.wait_for_timeout(300)
+    page.wait_for_timeout(1000)
+
+    # 현재 달과 목표 달이 다르면 달 이동 (예: 다음달 버튼 클릭)
+    current = datetime.today()
+    if current.month != target_date.month:
+        page.click('[data-testid="btn_next"]')
+        page.wait_for_timeout(1000)
+
+    day_str = target_date.strftime("%m%d")  # 예: 06월 19일 → 0619
+    page.click(f'[data-testid="btn_day_{day_str}"]')
+    page.wait_for_timeout(1000)
+
+def get_popup_url(is_mobile: bool, is_english: bool) -> str:
+    base_url = URLS["home_main"]
+    lang = "en" if is_english else "ko"
+    path = f"/{lang}/m/removal" if is_mobile else f"/{lang}/removal"
+    return base_url + path
+
+# ✅ 이벤트 홈페이지 노출 확인 함수
+def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool, is_english: bool):
+    # ✅ 팝업 확인
+    popup_url = get_popup_url(is_mobile, is_english)
+    page.goto(popup_url)
+    page.wait_for_timeout(1000)
+
+    popup_locator = page.locator('[data-testid="event_popup"]')
+    popup_visible = popup_locator.is_visible()
+    expected_popup = event["popup_usage"] == "yes"
+    assert popup_visible == expected_popup, (
+        f"❌ 팝업 노출 여부 오류: {popup_visible} (예상: {expected_popup})"
+    )
+
+    # ✅ 팝업 클릭 시 이동할 URL 확인 (노출 시에만 실행)
+    if popup_visible:
+        with page.expect_popup() as popup_info:
+            popup_locator.click()
+
+        new_page = popup_info.value
+        new_page.wait_for_load_state()
+
+        expected_url = URLS["home_event"] if event["popup_url"] == "event" else URLS["footer_instagram"]
+        actual_url = new_page.url
+
+        assert actual_url.startswith(expected_url), (
+            f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {expected_url})"
+        )
+        print(f"✅ 팝업 URL 이동 확인 완료: {actual_url}")
+
+
+    # ✅ 이벤트 리스트 화면으로 이동 
+    page.goto(URLS["home_event"])
+    page.wait_for_timeout(1000)
+
+    # ✅ 이벤트 노출 여부 확인
+    visible_on_list = False
+    items = page.locator('[data-testid="txt_event_title"]')
+    count = items.count()
+
+    for i in range(count):
+        title = items.nth(i).inner_text().strip()
+        if title == event["event_name"]:
+            period = page.locator('[data-testid="txt_event_period"]').nth(i).inner_text().strip()
+            if period == event["event_period"]:
+                visible_on_list = True
+                # ✅ 상세 보기 진입
+                page.locator('[data-testid="btn_event"]').nth(i).click()
+                page.wait_for_timeout(1000)
+                break
+
+    assert visible_on_list, f"❌ 리스트에 '{event['event_name']}' 노출되지 않음"
+
+    # ✅ 상세 정보 확인
+    expect(page.locator('[data-testid="txt_title"]')).to_contain_text("세라미크 이벤트")
+    expect(page.locator('[data-testid="txt_event_title"]')).to_have_text(event["event_name"])
+    expect(page.locator('[data-testid="txt_event_description"]')).not_to_be_empty()
+
+    print(f"✅ '{event['event_name']}' 노출 확인 완료")

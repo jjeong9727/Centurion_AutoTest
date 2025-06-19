@@ -20,7 +20,7 @@ URLS = {
     "home_reservation" : f"{home_base_url}/reservation",
     "home_complete" : f"{home_base_url}/complete",
     "home_mypage_profile": f"{home_base_url}/my-page/profile/edit",
-
+    "home_event" : f"{home_base_url}/",
 
 
 

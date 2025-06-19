@@ -72,7 +72,7 @@ def generate_random_customer():
 # Centurion 로그인 동작
 def cen_login(page: Page):
     page.goto(URLS["cen_login"])
-    page.wait_for_timeout(2000)
+    page.wait_for_timeout(5000)
     page.fill('[data-testid="input_id"]', Account["testid"])
     page.wait_for_timeout(1000)
     page.fill('[data-testid="input_pw"]', Account["testpw"])

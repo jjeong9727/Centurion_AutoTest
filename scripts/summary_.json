@@ -1,14 +1,14 @@
 [
   {
-    "name": "[자동화] 로그인 진입 확인 테스트",
-    "file": "tests/test_home_landing_login.py",
+    "name": "[자동화] 비로그인 진입 시도 확인 테스트",
+    "file": "tests/test_home_landing_nologin.py",
     "status": "PASS",
     "message": "테스트 성공",
     "stack_summary": ""
   },
   {
-    "name": "[자동화] 비로그인 진입 시도 확인 테스트",
-    "file": "tests/test_home_landing_nologin.py",
+    "name": "[자동화] 로그인 진입 확인 테스트",
+    "file": "tests/test_home_landing_login.py",
     "status": "PASS",
     "message": "테스트 성공",
     "stack_summary": ""

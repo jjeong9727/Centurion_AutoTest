@@ -1,11 +1,38 @@
 [
   {
-    "group_name": "그룹1",
-    "event_name": "이벤트 한글",
-    "event_period": "2025.06.01-2025.06.30",
-    "display_period": "2025.06.01-2025.06.30",
-    "event_visibile": "yes",
-    "event_description": "이벤트 상세 설명 구구절절 텍스트 줄바꿈도 있어요 \n 여러개도 되나요 \n\n\n 어떻게 나올지 궁금하네요",
-    "popup_usage": "yes" 
+    "group_name": "자동화이벤트_0619_0943",
+    "event_name": "이벤트_PC_한국어_0619_0943",
+    "event_period": "상시 진행중",
+    "display_period": "2025.06.19-2025.06.21",
+    "event_visible": "yes",
+    "event_description": "피부과 여름 이벤트입니다. 시술별 할인과 사은품이 포함되어 있습니다.\n자세한 내용은 방문 상담 시 안내해 드립니다.\n이벤트는 조기 종료될 수 있습니다.",
+    "popup_usage": "yes"
+  },
+  {
+    "group_name": "자동화이벤트_0619_0943",
+    "event_name": "이벤트_모바일_한국어_0619_0943",
+    "event_period": "-2025.07.19",
+    "display_period": "2025.06.19-2025.06.21",
+    "event_visible": "yes",
+    "event_description": "피부과 여름 이벤트입니다. 시술별 할인과 사은품이 포함되어 있습니다.\n자세한 내용은 방문 상담 시 안내해 드립니다.\n이벤트는 조기 종료될 수 있습니다.",
+    "popup_usage": "yes"
+  },
+  {
+    "group_name": "자동화이벤트_0619_0943",
+    "event_name": "이벤트_PC_영어_0619_0943",
+    "event_period": "2025.06.19-미정",
+    "display_period": "2025.06.19-2025.06.21",
+    "event_visible": "yes",
+    "event_description": "피부과 여름 이벤트입니다. 시술별 할인과 사은품이 포함되어 있습니다.\n자세한 내용은 방문 상담 시 안내해 드립니다.\n이벤트는 조기 종료될 수 있습니다.",
+    "popup_usage": "no"
+  },
+  {
+    "group_name": "자동화이벤트_0619_0943",
+    "event_name": "이벤트_모바일_영어_0619_0943",
+    "event_period": "2025.06.19-2025.07.19",
+    "display_period": "2025.06.19-2025.06.21",
+    "event_visible": "yes",
+    "event_description": "피부과 여름 이벤트입니다. 시술별 할인과 사은품이 포함되어 있습니다.\n자세한 내용은 방문 상담 시 안내해 드립니다.\n이벤트는 조기 종료될 수 있습니다.",
+    "popup_usage": "no"
   }
 ]

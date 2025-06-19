@@ -51,8 +51,8 @@ def save_test_result(test_name, message, status="FAIL", file_name=None, stack_tr
 # 전체 테스트 목록
 all_tests = [
     # Ceramique
-    "tests/test_home_landing_login.py",
     "tests/test_home_landing_nologin.py",
+    "tests/test_home_landing_login.py",
     "tests/test_home_language.py",
     "tests/test_home_reservation.py",
     # Centurion
@@ -76,7 +76,12 @@ pc_only_tests = set(all_tests[3:])
 for device in devices:
     os.environ["TEST_DEVICE"] = device
     print(f"\n🌐 디바이스: {device} 테스트 시작")
+
     for test_file in all_tests:
+        # 디바이스 조건: 상위 3개는 모든 디바이스에서, 나머지는 PC에서만
+        if test_file in pc_only_tests and "Windows" not in device:
+            continue  # PC 전용 테스트는 비-Windows 환경에서 제외
+
         test_name = os.path.splitext(os.path.basename(test_file))[0]
         print(f"\n🚀 {test_file} 테스트 실행 중...")
 
@@ -121,6 +126,7 @@ for device in devices:
                 duration=f"{duration:.2f}초",
                 device=device
             )
+
 
 print("\n🎯 모든 테스트 완료")
 print("\n📤 슬랙 메시지 전송 중...")
