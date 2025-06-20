@@ -30,7 +30,7 @@ category_prefix = {
     "customer": "고객관리",
     "grade": "멤버십 등급관리",
     "reservation": "예약관리",
-    "landng": "홈페이지 진입 확인",
+    "landng": "홈페이지 진입",
     "record" : "녹취"
 }
 
@@ -40,8 +40,9 @@ def prettify_name(raw_name):
     match = re.match(r"test_(?:centurion|home)?_?([a-z]+)", raw_name)
     category_key = match.group(1) if match else "etc"
     category = category_prefix.get(category_key, "기타")
-    return f"[자동화] {readable} 테스트"
-
+    return f"{readable} 테스트"
+def normalize_summary(name):
+    return re.sub(r"\s+", " ", name.strip())
 # stack 요약 생성
 def summarize_stack(stack):
     if not stack:
@@ -52,11 +53,43 @@ def summarize_stack(stack):
     last_line = lines[-1] if lines else ""
     return f"{last_file_line.strip()} → {last_line.strip()}"
 
-def extract_results(input_path="test_results.json", output_path="scripts/summary_.json"):
+def generate_jira_payload(result_item):
+    # 프로젝트 키 결정
+    file_name = result_item['file']
+    if "test_cen_" in file_name:
+        project_key = "CEN"
+    elif "test_home_" in file_name:
+        project_key = "HOME"
+    else:
+        project_key = "TEST"  # 기본값
+
+    # 써머리는 한글 매핑된 이름을 사용
+    raw_summary = normalize_summary(result_item["name"])
+    summary = f"[자동화] {raw_summary}"
+
+    return {
+        "summary": summary,
+        "description": (
+            f"에러 메시지: {result_item['message']}\n\n"
+            f"파일: {result_item['file']}\n"
+            f"테스트 이름: {result_item['name']}\n\n"
+            f"스택 요약:\n{result_item['stack_summary']}"
+        ),
+        "project": project_key,
+        "issuetype": "Bug",
+        "priority": "Medium",
+        "labels": ["auto-test", "fail"],
+        "file": result_item.get("file", "")
+    }
+
+
+def extract_results(input_path="test_results.json", output_path="scripts/summary_.json", jira_output_path="scripts/jira_issues.json"):
     with open(input_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
     result = []
+    jira_issues = []
+
     for item in data:
         test_name = item.get("test_name", "")
         status = item.get("status", "")
@@ -64,27 +97,32 @@ def extract_results(input_path="test_results.json", output_path="scripts/summary
         stack = item.get("stack", "")
 
         if status == "FAIL":
-            # 에러 메시지 첫 줄
             first_line = message.strip().splitlines()[0] if isinstance(message, str) else message
             stack_summary = summarize_stack(stack)
         else:
             first_line = "테스트 성공"
             stack_summary = ""
 
-        result.append({
+        entry = {
             "name": prettify_name(test_name),
             "file": item.get("file", ""),
             "status": status,
             "message": first_line,
             "stack_summary": stack_summary
-        })
+        }
+        result.append(entry)
+
+        if status == "FAIL":
+            jira_issues.append(generate_jira_payload(entry))
 
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2, ensure_ascii=False)
 
+    with open(jira_output_path, "w", encoding="utf-8") as f:
+        json.dump(jira_issues, f, indent=2, ensure_ascii=False)
+
     print(f"✅ summary_.json 저장 완료 ({len(result)}건)")
-
-
+    print(f"🐞 Jira 이슈용 payload 저장 완료 ({len(jira_issues)}건)")
 
 
 if __name__ == "__main__":

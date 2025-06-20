@@ -27,19 +27,38 @@ def test_edit_event(page: Page):
         page.goto(URLS["cen_event"])
         page.wait_for_timeout(1000)
 
-        # ✅ 그룹명 검색 후 진입
+        # ✅ 그룹명 검색 후 수정 화면 진입
         page.fill('[data-testid="search_group"]', event["group_name"])
-        page.click("body")
+        page.locator("body").click(position={"x": 10, "y": 10})
         page.wait_for_timeout(1000)
 
         row = page.locator("table tbody tr").first
-        row.locator("td").last.locator('[data-testid="btn_edit"]').click()
+        row.locator("td").last.click()
+        page.wait_for_timeout(1000)
+        page.locator('[data-testid="btn_review"]').click()  # 상세 진입
+        page.wait_for_timeout(1000)
+
+        # ✅ 유형 선택 - 브라우저/언어
+        is_mobile = "모바일" in event["event_name"]
+        is_english = "영어" in event["event_name"]
+
+        if is_mobile:
+            page.click('[data-testid="drop_browser"]')
+            page.wait_for_timeout(1000)
+            page.click('text="모바일"')
+        if is_english:
+            page.click('[data-testid="drop_language"]')
+            page.wait_for_timeout(1000)
+            page.click('text="영어"')
+        page.wait_for_timeout(1000)
+
+        page.locator('[data-testid="btn_edit"]').click()  # 수정 모드 변경
         page.wait_for_timeout(1000)
 
         # ✅ 이벤트 노출명 + 그룹명 수정
         new_event_name = f"수정_{event['event_name']}"
         new_group_name = f"수정_{event['group_name']}"
-        page.fill('[data-testid="input_eveent"]', new_event_name)
+        page.fill('[data-testid="input_event"]', new_event_name)
         page.wait_for_timeout(1000)
 
         # ✅ 그룹 수정 (드롭다운)
@@ -58,9 +77,9 @@ def test_edit_event(page: Page):
 
         # ✅ 상세 이미지 하나만 랜덤으로 edit.jpg로 교체
         random_idx = random.randint(1, 6)
-        page.set_input_files(f'[data-testid="upload_image_{random_idx}"]', img.edit_detail)
+        page.set_input_files(f'[data-testid="upload_image_{random_idx}"]', img.edit_img) # 이미지 중복 등록 가능 확인 
         page.wait_for_timeout(1000)
-        expect(page.locator(f'[data-testid="txt_image_{random_idx}"]')).to_have_text("img_detail_edit.jpg")
+        expect(page.locator(f'[data-testid="txt_image_{random_idx}"]')).to_have_text("img_event_edit.jpg")
         page.wait_for_timeout(1000)
 
         # ✅ 이벤트 노출 기간 수정 (한국어만)
@@ -99,25 +118,16 @@ def test_edit_event(page: Page):
         expect(page.locator('[data-testid="toast_edit"]')).to_be_visible()
         page.wait_for_timeout(1000)
 
-        # ✅ JSON 업데이트
+        # ✅ 홈페이지 반영 확인
         event["event_name"] = new_event_name
         event["group_name"] = new_group_name
         event["display_period"] = f"{start_display}-{end_display}"
         event["popup_usage"] = new_popup
         event["popup_url"] = "instagram"
-        
-
-    update_event_json(events)
-    print("✅ 이벤트 수정 및 JSON 업데이트 완료")
-
-def test_verify_event_on_homepage(page: Page):
-    events = load_events()
-    assert events, "❌ 확인할 이벤트 데이터가 없습니다."
-
-    for event in events:
-        is_mobile = "모바일" in event["event_name"]
-        is_english = "영어" in event["event_name"]
         try:
             verify_event_on_homepage(page, event, is_mobile, is_english)
         except AssertionError as e:
-            print(f"❌ 홈페이지 노출 확인 실패: {event['event_name']} - {e}")
+            print(f"❌ 홈페이지 노출 확인 실패: {new_event_name} - {e}")
+
+    update_event_json(events)
+    print("✅ 이벤트 수정 및 JSON 업데이트 완료")

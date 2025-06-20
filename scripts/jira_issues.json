@@ -1,0 +1,13 @@
+[
+  {
+    "summary": "[자동화] Centurion 로그인 유효성 확인 테스트",
+    "description": "에러 메시지: ..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:528: TimeoutError\n\n파일: tests/test_cen_login.py\n테스트 이름: Centurion 로그인 유효성 확인 테스트\n\n스택 요약:\n → ============================= 1 failed in 40.33s ==============================",
+    "project": "CEN",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "auto-test",
+      "fail"
+    ]
+  }
+]

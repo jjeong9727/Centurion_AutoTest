@@ -7,6 +7,9 @@ from pathlib import Path
 
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + "/.."))
 
+from scripts.register_issue import process_issues
+from scripts.send_slack import send_slack_message
+
 TEST_RESULTS_FILE = "test_results.json"
 JSON_REPORT_FILE = "scripts/result.json"
 SUMMARY_FILE = "scripts/summary.json"
@@ -16,13 +19,13 @@ DEVICE_PROFILE_FILE = Path(__file__).resolve().parent.parent / "tests" / "device
 for path in [TEST_RESULTS_FILE, JSON_REPORT_FILE, SUMMARY_FILE]:
     if os.path.exists(path):
         os.remove(path)
-        print(f"🪩 기존 파일 제거: {path}")
+        print(f"🎩 기존 파일 제거: {path}")
 
 # 디바이스 목록 로드
 with open(DEVICE_PROFILE_FILE, encoding="utf-8") as f:
     DEVICE_PROFILES = json.load(f)
 
-devices = list(DEVICE_PROFILES.keys())  # 예: ["Windows Chrome", "iPhone 13", ...]
+devices = list(DEVICE_PROFILES.keys())
 
 # 테스트 결과 저장 함수
 def save_test_result(test_name, message, status="FAIL", file_name=None, stack_trace="", duration=None, device=None):
@@ -48,29 +51,33 @@ def save_test_result(test_name, message, status="FAIL", file_name=None, stack_tr
     with open(TEST_RESULTS_FILE, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
 
-# 전체 테스트 목록
-all_tests = [
-    # Ceramique
-    "tests/test_home_landing_nologin.py",
-    "tests/test_home_landing_login.py",
-    "tests/test_home_language.py",
-    "tests/test_home_reservation.py",
-    # Centurion
-    "tests/test_cen_login.py",
-    "tests/test_cen_customer_register.py",
-    "tests/test_cen_customer_edit.py",
-    "tests/test_cen_customer_search.py",
-    "tests/test_cen_grade.py",
-    "tests/test_cen_membership.py",
-    "tests/test_cen_reservation_accept.py",
-    "tests/test_cen_reservation_edit.py",
-    "tests/test_cen_reservation_search.py",
-    "tests/test_cen_reservation_register.py",
-    "tests/test_cen_record.py"
+
+# ✅ 모바일/PC 모두 실행할 테스트
+mobile_supported_tests = [
+    # "tests/test_home_landing_nologin.py",
+    # "tests/test_home_landing_login.py",
+    # "tests/test_home_language.py"
 ]
 
-multi_device_tests = set(all_tests[:3])  # 상위 3개만
-pc_only_tests = set(all_tests[3:])
+# ✅ PC에서만 실행할 테스트
+pc_only_tests = [
+    # "tests/test_home_reservation.py",
+    # "tests/test_cen_login.py",
+    # "tests/test_cen_customer_register.py",
+    # "tests/test_cen_customer_edit.py",
+    # "tests/test_cen_customer_search.py",
+    # "tests/test_cen_grade.py",
+    # "tests/test_cen_membership.py",
+    # "tests/test_cen_reservation_accept.py",
+    # "tests/test_cen_reservation_edit.py",
+    # "tests/test_cen_reservation_search.py",
+    # "tests/test_cen_reservation_register.py",
+    # "tests/test_cen_record.py"
+]
+
+# 전체 리스트는 아래에서 사용
+all_tests = mobile_supported_tests + pc_only_tests
+
 
 # 테스트 실행
 for device in devices:
@@ -78,9 +85,10 @@ for device in devices:
     print(f"\n🌐 디바이스: {device} 테스트 시작")
 
     for test_file in all_tests:
-        # 디바이스 조건: 상위 3개는 모든 디바이스에서, 나머지는 PC에서만
+        # ✅ PC 전용 테스트는 Windows에서만 실행
         if test_file in pc_only_tests and "Windows" not in device:
-            continue  # PC 전용 테스트는 비-Windows 환경에서 제외
+            continue
+
 
         test_name = os.path.splitext(os.path.basename(test_file))[0]
         print(f"\n🚀 {test_file} 테스트 실행 중...")
@@ -110,7 +118,7 @@ for device in devices:
             error_lines = full_output.strip().splitlines()
             parsed_message = ""
             for line in reversed(error_lines):
-                if "Error" in line or "Exception" in line or "Traceback" in line or "Assertion" in line:
+                if any(x in line for x in ["Error", "Exception", "Traceback", "Assertion"]):
                     parsed_message = line.strip()
                     break
             if not parsed_message and error_lines:
@@ -127,8 +135,20 @@ for device in devices:
                 device=device
             )
 
-
 print("\n🎯 모든 테스트 완료")
-print("\n📤 슬랙 메시지 전송 중...")
+
+# 결과 파싱 (summary_.json, jira_issues.json 생성)
 subprocess.run(["python", "scripts/parse.py"])
-subprocess.run(["python", "scripts/send_slack.py"])
+
+# Jira 이슈 처리 및 이슈 키 매핑 반환
+jira_issues_path = "scripts/jira_issues.json"
+if os.path.exists(jira_issues_path) and os.path.getsize(jira_issues_path) > 0:
+    issue_map = process_issues(jira_issues_path)  # ex: ["CEN-123", "HOME-456"]
+else:
+    issue_map = []
+
+# Slack 알림 전송 (이슈 키 포함)
+subprocess.run(["python", "scripts/send_slack.py", json.dumps(issue_map, ensure_ascii=False)])
+
+# Slack 알림 전송
+send_slack_message(issue_map)

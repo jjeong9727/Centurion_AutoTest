@@ -115,15 +115,13 @@ def fill_event_form(
     page.wait_for_timeout(1000)
     expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup.jpg")
     page.wait_for_timeout(1000)
-    page.fill('[data-testid="input_popup_link"]', URLS["home_event"])
-    page.wait_for_timeout(1000)
 
     # ✅ 마지막 등록 시: 중복 확인 유도 (유형 고의 중복 → 재설정)
     if last_register:
         # 현재 상태는 PC/한국어 → 등록 시도 → 중복 발생
         page.click('[data-testid="btn_complete"]')
         page.wait_for_timeout(500)
-        expect(page.locator('[data-testid="toast_duplicate"]')).to_be_visible(timeout=3000)
+        expect(page.locator('[data-testid="toast_duplicate_option"]')).to_be_visible(timeout=3000)
         page.wait_for_timeout(1000)
 
         # 다시 모바일/영어로 유형 변경
@@ -163,7 +161,7 @@ def test_register_event(page: Page):
     page.wait_for_timeout(1000)
 
     now = datetime.now().strftime("%m%d_%H%M")
-    group_name = f"자동화이벤트_{now}"
+    group_name = f"자동화그룹_{now}"
 
     options = [
         {"ui": (False, False), "label": (False, False)},  # PC + 한국어

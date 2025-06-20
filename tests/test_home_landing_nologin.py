@@ -34,7 +34,7 @@ def select_menu_and_verify_page(page, menu_key, device_profile):
     locator.wait_for(timeout=3000)
     locator.click(force=True)
     page.wait_for_load_state("load")
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(3000)
 
     current_url = page.url
     assert expected_url in current_url, f"❌ URL mismatch: expected '{expected_url}', got '{current_url}'"
@@ -65,7 +65,7 @@ def click_float_button(page, is_mobile: bool):
 
     # 다시 홈 > 예약 버튼 선택
     page.goto(URLS["home_discover"])
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(2000)
     page.locator('[data-testid="btn_reservation"]').first.click()
     page.wait_for_timeout(5000)
     assert "/login" in page.url, f"❌ 로그인 페이지 아님: {page.url}"

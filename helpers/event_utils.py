@@ -74,6 +74,10 @@ def set_visible_events_to_hidden(page: Page):
             toggle.scroll_into_view_if_needed()
             toggle.click()
             page.wait_for_timeout(1000)  # 토글 후 약간의 대기
+            page.click('[data-testid="btn_accept"]')
+            page.wait_for_timeout(500)
+            expect(page.locator('[data-testid="toast_status"]')).to_be_visible(timeout=3000)
+            page.wait_for_timeout(1000)
 
         print(f"✅ {count}개 항목 미노출 처리 완료")
 

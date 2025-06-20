@@ -20,7 +20,7 @@ URLS = {
     "home_reservation" : f"{home_base_url}/reservation",
     "home_complete" : f"{home_base_url}/complete",
     "home_mypage_profile": f"{home_base_url}/my-page/profile/edit",
-    "home_event" : f"{home_base_url}/",
+    "home_event" : f"{home_base_url}/events",
 
 
 
@@ -32,6 +32,7 @@ URLS = {
     "cen_reservation" : f"{cen_base_url}/reservations/management",
     "cen_grade" : f"{cen_base_url}/customers/memberships/grades",
     "cen_record" : f"{cen_base_url}/recordings/management",
+    "cen_event" : f"{cen_base_url}",
 
 
 

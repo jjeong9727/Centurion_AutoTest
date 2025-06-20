@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+import sys
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
@@ -15,10 +16,16 @@ KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
 seoul_time = now.strftime("%Y-%m-%d %H:%M:%S")
 
-# 테스트 파일명 → 한글 매핑
-test_file_to_korean = {
+# 이슈 맵 받아오기 (run_test.py에서 sys.argv[1]로 전달됨)
+if len(sys.argv) > 1:
+    try:
+        issue_map = json.loads(sys.argv[1])
+    except Exception:
+        issue_map = {}
+else:
+    issue_map = {}
 
-}
+print(f"💡 issue_map: {issue_map}")
 
 def load_test_results(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -39,7 +46,7 @@ def get_total_duration_from_results(results):
             continue
     return format_duration(total)
 
-def build_slack_message(test_results):
+def build_slack_message(test_results, issue_map):
     success_count = 0
     fail_count = 0
     skip_count = 0
@@ -48,24 +55,29 @@ def build_slack_message(test_results):
     for idx, result in enumerate(test_results, 1):
         status = result.get("status")
         message = result.get("message", "")
+        test_file = result.get("file", "")
+        print(f"💡 test_file: {test_file}")
+        test_name = result.get("name", result.get("test_name"))
 
-        korean_name = result.get("name", result.get("test_name"))
+        jira_id = issue_map.get(test_file) or issue_map.get(test_name)
 
         if status == "PASS":
             success_count += 1
-            detail_lines.append(f"{idx}. ✅[PASS] {korean_name}")
+            detail_lines.append(f"{idx}. ✅[PASS] {test_name}")
         elif status == "FAIL":
             fail_count += 1
-            detail_lines.append(f"{idx}. ❌[FAIL] {korean_name}\n   {message}")
+            if jira_id:
+                detail_lines.append(f"{idx}. ❌[FAIL] {test_name} → JIRA: `{jira_id}`\n   {message}")
+            else:
+                detail_lines.append(f"{idx}. ❌[FAIL] {test_name}\n   {message}")
         elif status == "SKIP":
             skip_count += 1
-            detail_lines.append(f"{idx}. [SKIP] {korean_name}")
+            detail_lines.append(f"{idx}. [SKIP] {test_name}")
 
     total_time = get_total_duration_from_results(test_results)
 
     slack_message = f":mega: *세라미크 자동화 테스트 결과* ({seoul_time})\n"
-    slack_message += f"총 수행 테스트 파일 수: {len(test_results)} | 성공: {success_count} | 실패: {fail_count} \n\n"
-    # slack_message += f":stopwatch: 전체 수행 시간: {total_time}\n\n"
+    slack_message += f"총 테스트 수: {len(test_results)} | ✅ 성공: {success_count} | ❌ 실패: {fail_count}\n\n"
     slack_message += "\n".join(detail_lines)
 
     return slack_message
@@ -80,6 +92,6 @@ def send_slack_message(message):
 
 if __name__ == "__main__":
     test_results = load_test_results(RESULT_FILE)
-    slack_message = build_slack_message(test_results)
+    slack_message = build_slack_message(test_results, issue_map)
     send_slack_message(slack_message)
     print("✅ 슬랙 알림이 전송되었습니다.")

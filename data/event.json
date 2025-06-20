@@ -1,6 +1,6 @@
 [
   {
-    "group_name": "자동화이벤트_0619_0943",
+    "group_name": "자동화그룹_0619_0943",
     "event_name": "이벤트_PC_한국어_0619_0943",
     "event_period": "상시 진행중",
     "display_period": "2025.06.19-2025.06.21",
@@ -9,7 +9,7 @@
     "popup_usage": "yes"
   },
   {
-    "group_name": "자동화이벤트_0619_0943",
+    "group_name": "자동화그룹_0619_0943",
     "event_name": "이벤트_모바일_한국어_0619_0943",
     "event_period": "-2025.07.19",
     "display_period": "2025.06.19-2025.06.21",
@@ -18,7 +18,7 @@
     "popup_usage": "yes"
   },
   {
-    "group_name": "자동화이벤트_0619_0943",
+    "group_name": "자동화그룹_0619_0943",
     "event_name": "이벤트_PC_영어_0619_0943",
     "event_period": "2025.06.19-미정",
     "display_period": "2025.06.19-2025.06.21",
@@ -27,7 +27,7 @@
     "popup_usage": "no"
   },
   {
-    "group_name": "자동화이벤트_0619_0943",
+    "group_name": "자동화그룹_0619_0943",
     "event_name": "이벤트_모바일_영어_0619_0943",
     "event_period": "2025.06.19-2025.07.19",
     "display_period": "2025.06.19-2025.06.21",
