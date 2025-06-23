@@ -174,3 +174,10 @@ def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool,
     expect(page.locator('[data-testid="txt_event_description"]')).not_to_be_empty()
 
     print(f"✅ '{event['event_name']}' 노출 확인 완료")
+
+    # 예약 하러 가기 버튼 동작 확인
+    page.wait_for_timeout(1000)
+    page.click(f'[data-testid="reservation"]')
+    page.wait_for_timeout(3000)
+    expect(page.locator('[data-testid="txt_login"]')).to_be_visible(timeout=3000)
+    print("✅ 예약하러가기 버튼 동작 확인 완료")

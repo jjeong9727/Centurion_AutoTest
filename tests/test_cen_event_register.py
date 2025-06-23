@@ -107,15 +107,6 @@ def fill_event_form(
     page.fill('[data-testid="input_description"]', description)
     page.wait_for_timeout(1000)
 
-    # ✅ 팝업 설정
-    if not is_english:
-        page.click('[data-testid="toggle_use"]')  # 한국어일 때만 ON
-        page.wait_for_timeout(1000)
-    page.set_input_files('[data-testid="upload_popup"]', img.popup_img)
-    page.wait_for_timeout(1000)
-    expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup.jpg")
-    page.wait_for_timeout(1000)
-
     # ✅ 마지막 등록 시: 중복 확인 유도 (유형 고의 중복 → 재설정)
     if last_register:
         # 현재 상태는 PC/한국어 → 등록 시도 → 중복 발생
@@ -133,6 +124,21 @@ def fill_event_form(
         page.wait_for_timeout(1000)
         page.click('text="영어"')
         page.wait_for_timeout(1000)
+
+        # ✅ 팝업 설정
+    if not is_english:
+        page.click('[data-testid="toggle_use"]')  # 한국어일 때만 ON
+        page.wait_for_timeout(1000)
+    # 이미지 없이 팝업 ON → 등록 시도 → 토스트 확인 
+    page.click('[data-testid="btn_complete"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="toast_image_empty"]')).to_be_visible()
+    page.wait_for_timeout(1000)
+    # 이미지 업로드
+    page.set_input_files('[data-testid="upload_popup"]', img.popup_img)
+    page.wait_for_timeout(1000)
+    expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup.jpg")
+    page.wait_for_timeout(1000)
         
     # ✅ 최종 저장
     page.click('[data-testid="btn_complete"]')
@@ -150,8 +156,6 @@ def fill_event_form(
         "popup_usage": "no" if is_english else "yes",
         "popup_url": "event"
     }
-
-
 
 def test_register_event(page: Page):
     cen_login(page)
