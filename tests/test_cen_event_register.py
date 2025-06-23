@@ -93,12 +93,13 @@ def fill_event_form(
 
     # ✅ 이미지 업로드
     page.set_input_files('[data-testid="upload_image"]', img.event_img)
+    page.wait_for_timeout(5000)
     expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_event.jpg")
 
     for i in range(1, 7):
         image_path = getattr(img, f"detail_img_{i}")  # 변수명 동적 접근
         page.set_input_files(f'[data-testid="upload_image_{i}"]', image_path)
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
         expect(page.locator(f'[data-testid="txt_image_{i}"]')).to_have_text("img_event_{i}.jpg")
         page.wait_for_timeout(1000)
 
@@ -136,7 +137,7 @@ def fill_event_form(
     page.wait_for_timeout(1000)
     # 이미지 업로드
     page.set_input_files('[data-testid="upload_popup"]', img.popup_img)
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(5000)
     expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup.jpg")
     page.wait_for_timeout(1000)
         

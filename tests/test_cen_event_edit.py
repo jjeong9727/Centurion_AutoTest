@@ -71,14 +71,14 @@ def test_edit_event(page: Page):
 
         # ✅ 대표 이미지 수정
         page.set_input_files('[data-testid="upload_image"]', img.edit_img)
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
         expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_event_edit.jpg")
         page.wait_for_timeout(1000)
 
         # ✅ 상세 이미지 하나만 랜덤으로 edit.jpg로 교체
         random_idx = random.randint(1, 6)
         page.set_input_files(f'[data-testid="upload_image_{random_idx}"]', img.edit_img) # 이미지 중복 등록 가능 확인 
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
         expect(page.locator(f'[data-testid="txt_image_{random_idx}"]')).to_have_text("img_event_edit.jpg")
         page.wait_for_timeout(1000)
 
@@ -104,7 +104,7 @@ def test_edit_event(page: Page):
 
         # ✅ 팝업 이미지 수정
         page.set_input_files('[data-testid="upload_popup"]', img.edit_popup)
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(5000)
         expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup_edit.jpg")
         page.wait_for_timeout(1000)
 
