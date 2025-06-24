@@ -124,10 +124,20 @@ def test_edit_event(page: Page):
         event["display_period"] = f"{start_display}-{end_display}"
         event["popup_usage"] = new_popup
         event["popup_url"] = "instagram"
+        
+        is_mobile = "모바일" in new_event_name
+        is_english = "영어" in new_event_name
+
         try:
-            verify_event_on_homepage(page, event, is_mobile, is_english)
+            verify_event_on_homepage(
+                page,
+                event,
+                is_mobile=is_mobile,
+                is_english=is_english
+            )
         except AssertionError as e:
             print(f"❌ 홈페이지 노출 확인 실패: {new_event_name} - {e}")
+
 
     update_event_json(events)
     print("✅ 이벤트 수정 및 JSON 업데이트 완료")

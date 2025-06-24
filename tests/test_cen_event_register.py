@@ -221,7 +221,13 @@ def test_register_event(page: Page):
     
     # ✅ 이벤트 등록 후 홈페이지 노출 확인
     for idx, event in enumerate(event_list):
-        is_mobile = "모바일" in display_name
-        is_english = "영어" in display_name
-        verify_event_on_homepage(page, event, is_mobile=is_mobile, is_english=is_english)
+        event_name = event.get("event_name", "")
+        is_mobile = "모바일" in event_name
+        is_english = "영어" in event_name
 
+        verify_event_on_homepage(
+            page,
+            event,
+            is_mobile=is_mobile,
+            is_english=is_english
+        )
