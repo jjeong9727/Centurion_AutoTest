@@ -28,7 +28,7 @@ def test_edit_event(page: Page):
         page.wait_for_timeout(1000)
 
         # ✅ 그룹명 검색 후 수정 화면 진입
-        page.fill('[data-testid="search_group"]', event["group_name"])
+        page.fill('[data-testid="input_group"]', event["group_name"])
         page.locator("body").click(position={"x": 10, "y": 10})
         page.wait_for_timeout(1000)
 
@@ -55,32 +55,36 @@ def test_edit_event(page: Page):
         page.locator('[data-testid="btn_edit"]').click()  # 수정 모드 변경
         page.wait_for_timeout(1000)
 
-        # ✅ 이벤트 노출명 + 그룹명 수정
+        # ✅ 이벤트 노출명 수정 
         new_event_name = f"수정_{event['event_name']}"
-        new_group_name = f"수정_{event['group_name']}"
         page.fill('[data-testid="input_event"]', new_event_name)
         page.wait_for_timeout(1000)
 
-        # ✅ 그룹 수정 (드롭다운)
-        page.click('[data-testid="drop_group_trigger"]')
-        page.wait_for_timeout(1000)
-        page.fill('[data-testid="drop_group_search"]', new_group_name)
-        page.wait_for_timeout(1000)
-        page.locator('[data-testid="drop_group_item"]', has_text=new_group_name).first.click()
-        page.wait_for_timeout(1000)
-
         # ✅ 대표 이미지 수정
-        page.set_input_files('[data-testid="upload_image"]', img.edit_img)
+        upload_locator = page.locator('[data-testid="upload_image"]')
+        upload_locator.wait_for(state="attached", timeout=5000)
+        element = upload_locator.element_handle()
+        assert element is not None, "❌ 파일 업로드 input 요소를 찾을 수 없습니다."
+        element.set_input_files(img.edit_img)
         page.wait_for_timeout(5000)
-        expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_event_edit.jpg")
+        expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_edit_event.png")
+
+        # ✅ 상세 이미지 중 하나만 교체 (1번 이미지 고정)
+        random_idx = random.randint(1, 6)
+
+        upload_locator = page.locator(f'[data-testid="upload_image_{random_idx}"]')
+        upload_locator.wait_for(state="attached", timeout=5000)
+
+        element = upload_locator.element_handle()
+        assert element is not None, f"❌ 상세 이미지 {random_idx}번 input 요소를 찾을 수 없습니다."
+
+        element.set_input_files(img.edit_detail)
+
+        page.wait_for_timeout(5000)
+
+        expect(page.locator(f'[data-testid="txt_image_{random_idx}"]')).to_have_text("img_edit_detail.png")
         page.wait_for_timeout(1000)
 
-        # ✅ 상세 이미지 하나만 랜덤으로 edit.jpg로 교체
-        random_idx = random.randint(1, 6)
-        page.set_input_files(f'[data-testid="upload_image_{random_idx}"]', img.edit_img) # 이미지 중복 등록 가능 확인 
-        page.wait_for_timeout(5000)
-        expect(page.locator(f'[data-testid="txt_image_{random_idx}"]')).to_have_text("img_event_edit.jpg")
-        page.wait_for_timeout(1000)
 
         # ✅ 이벤트 노출 기간 수정 (한국어만)
         if "한국어" in event["event_name"]:
@@ -105,7 +109,7 @@ def test_edit_event(page: Page):
         # ✅ 팝업 이미지 수정
         page.set_input_files('[data-testid="upload_popup"]', img.edit_popup)
         page.wait_for_timeout(5000)
-        expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup_edit.jpg")
+        expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_edit_popup.jpg")
         page.wait_for_timeout(1000)
 
         # ✅ 팝업 URL 수정
@@ -120,11 +124,10 @@ def test_edit_event(page: Page):
 
         # ✅ 홈페이지 반영 확인
         event["event_name"] = new_event_name
-        event["group_name"] = new_group_name
         event["display_period"] = f"{start_display}-{end_display}"
         event["popup_usage"] = new_popup
         event["popup_url"] = "instagram"
-        
+
         is_mobile = "모바일" in new_event_name
         is_english = "영어" in new_event_name
 

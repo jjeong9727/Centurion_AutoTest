@@ -97,13 +97,9 @@ def fill_event_form(
     # ✅ 이미지 업로드
     upload_locator = page.locator('[data-testid="upload_image"]')
     upload_locator.wait_for(state="attached", timeout=5000)
-
     element = upload_locator.element_handle()
     assert element is not None, "❌ 파일 업로드 input 요소를 찾을 수 없습니다."
-
     element.set_input_files(img.event_img)
-
-
     page.wait_for_timeout(5000)
     expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_event.jpg")
 
@@ -155,12 +151,18 @@ def fill_event_form(
         page.wait_for_timeout(500)
         expect(page.locator('[data-testid="toast_image_empty"]')).to_be_visible()
         page.wait_for_timeout(1000)
-    # 이미지 업로드
-    page.set_input_files('[data-testid="upload_popup"]', img.popup_img)
+
+    # 팝업 이미지 업로드
+    upload_locator = page.locator('[data-testid="upload_popup"]')
+    upload_locator.wait_for(state="attached", timeout=5000)
+
+    element = upload_locator.element_handle()
+    assert element is not None, "❌ 파일 업로드 input 요소를 찾을 수 없습니다."
+
+    element.set_input_files(img.popup_img)
+
     page.wait_for_timeout(5000)
     expect(page.locator('[data-testid="txt_popup_image"]')).to_have_text("img_popup.jpg")
-    page.wait_for_timeout(1000)
-        
     # ✅ 최종 저장
     page.click('[data-testid="btn_complete"]')
     page.wait_for_timeout(500)

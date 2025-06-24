@@ -10,11 +10,11 @@ detail_img_2  = str(FIXTURE_DIR / "img_event_2.png")
 detail_img_3  = str(FIXTURE_DIR / "img_event_3.png")
 detail_img_4  = str(FIXTURE_DIR / "img_event_4.jpg")
 detail_img_5  = str(FIXTURE_DIR / "img_event_5.jpg")
-detail_img_6  = str(FIXTURE_DIR / "img_event_6.webp")
+detail_img_6  = str(FIXTURE_DIR / "img_event_6.png")
 popup_img     = str(FIXTURE_DIR / "img_popup.jpg")
 
 # 이벤트 수정용 이미지
-edit_img      = str(FIXTURE_DIR / "img_edit_event.webp")
+edit_img      = str(FIXTURE_DIR / "img_edit_event.png")
 edit_detail   = str(FIXTURE_DIR / "img_edit_detail.png")
 edit_popup    = str(FIXTURE_DIR / "img_edit_popup.jpg")
 
