@@ -15,19 +15,45 @@ JSON_REPORT_FILE = "scripts/result.json"
 SUMMARY_FILE = "scripts/summary.json"
 DEVICE_PROFILE_FILE = Path(__file__).resolve().parent.parent / "tests" / "device_profile.json"
 
-# 초기화
+# ✅ 디바이스 정보 로드
+with open(DEVICE_PROFILE_FILE, encoding="utf-8") as f:
+    DEVICE_PROFILES = json.load(f)
+
+DEFAULT_DEVICE = "Windows_Chrome"
+
+# ✅ 모바일까지 실행할 테스트 정의
+mobile_supported_tests = {
+    "tests/test_home_language.py": ["Mobile_Chrome"],
+    "tests/test_home_landing_nologin.py": ["Mobile_Chrome"],
+    "tests/test_home_landing_login.py": ["Mobile_Chrome"]
+}
+
+# ✅ PC 만 실행할 테스트 
+pc_only_tests = [
+    "tests/test_home_reservation.py",
+    "tests/test_cen_event_register.py",
+    "tests/test_cen_login.py",
+    "tests/test_cen_customer_register.py",
+    "tests/test_cen_customer_edit.py",
+    "tests/test_cen_customer_search.py",
+    "tests/test_cen_grade.py",
+    "tests/test_cen_membership.py",
+    "tests/test_cen_reservation_accept.py",
+    "tests/test_cen_reservation_edit.py",
+    "tests/test_cen_reservation_search.py",
+    "tests/test_cen_reservation_register.py",
+    "tests/test_cen_record.py"
+]
+
+all_tests = list(set(pc_only_tests + list(mobile_supported_tests.keys())))
+
+# ✅ 기존 결과 파일 제거
 for path in [TEST_RESULTS_FILE, JSON_REPORT_FILE, SUMMARY_FILE]:
     if os.path.exists(path):
         os.remove(path)
         print(f"🎩 기존 파일 제거: {path}")
 
-# 디바이스 목록 로드
-with open(DEVICE_PROFILE_FILE, encoding="utf-8") as f:
-    DEVICE_PROFILES = json.load(f)
-
-devices = list(DEVICE_PROFILES.keys())
-
-# 테스트 결과 저장 함수
+# ✅ 테스트 결과 저장 함수
 def save_test_result(test_name, message, status="FAIL", file_name=None, stack_trace="", duration=None, device=None):
     result_data = {
         "test_name": test_name,
@@ -51,48 +77,19 @@ def save_test_result(test_name, message, status="FAIL", file_name=None, stack_tr
     with open(TEST_RESULTS_FILE, 'w', encoding='utf-8') as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
 
+# ✅ 테스트 실행
+for test_file in all_tests:
+    devices_to_run = [DEFAULT_DEVICE]  # 기본 디바이스는 PC
 
-# ✅ 모바일/PC 모두 실행할 테스트
-mobile_supported_tests = [
-    # "tests/test_home_landing_nologin.py",
-    # "tests/test_home_landing_login.py",
-    # "tests/test_home_language.py"
-]
+    # 모바일 디바이스 추가 조건
+    if test_file in mobile_supported_tests:
+        devices_to_run += mobile_supported_tests[test_file]
 
-# ✅ PC에서만 실행할 테스트
-pc_only_tests = [
-    # "tests/test_home_reservation.py",
-    # "tests/test_cen_login.py",
-    # "tests/test_cen_customer_register.py",
-    # "tests/test_cen_customer_edit.py",
-    # "tests/test_cen_customer_search.py",
-    # "tests/test_cen_grade.py",
-    # "tests/test_cen_membership.py",
-    # "tests/test_cen_reservation_accept.py",
-    # "tests/test_cen_reservation_edit.py",
-    # "tests/test_cen_reservation_search.py",
-    # "tests/test_cen_reservation_register.py",
-    # "tests/test_cen_record.py"
-]
-
-# 전체 리스트는 아래에서 사용
-all_tests = mobile_supported_tests + pc_only_tests
-
-
-# 테스트 실행
-for device in devices:
-    os.environ["TEST_DEVICE"] = device
-    print(f"\n🌐 디바이스: {device} 테스트 시작")
-
-    for test_file in all_tests:
-        # ✅ PC 전용 테스트는 Windows에서만 실행
-        if test_file in pc_only_tests and "Windows" not in device:
-            continue
-
+    for device in devices_to_run:
+        os.environ["TEST_DEVICE"] = device
+        print(f"\n🌐 디바이스: {device} | 테스트 파일: {test_file}")
 
         test_name = os.path.splitext(os.path.basename(test_file))[0]
-        print(f"\n🚀 {test_file} 테스트 실행 중...")
-
         start_time = datetime.now()
         try:
             result = subprocess.run(
@@ -102,7 +99,7 @@ for device in devices:
                 check=True
             )
             duration = (datetime.now() - start_time).total_seconds()
-            print(f"✅ {test_file} 테스트 완료")
+            print(f"✅ {test_file} 테스트 성공")
             save_test_result(
                 test_name=test_name,
                 message="테스트 성공",
@@ -114,20 +111,15 @@ for device in devices:
         except subprocess.CalledProcessError as e:
             duration = (datetime.now() - start_time).total_seconds()
             full_output = e.stderr or e.stdout or "출력 없음"
-
             error_lines = full_output.strip().splitlines()
-            parsed_message = ""
-            for line in reversed(error_lines):
-                if any(x in line for x in ["Error", "Exception", "Traceback", "Assertion"]):
-                    parsed_message = line.strip()
-                    break
-            if not parsed_message and error_lines:
-                parsed_message = error_lines[-1].strip()
+            parsed_message = next((line for line in reversed(error_lines)
+                                  if any(x in line for x in ["Error", "Exception", "Traceback", "Assertion"])),
+                                  error_lines[-1] if error_lines else "에러 메시지 없음")
 
             print(f"❌ {test_file} 테스트 실패")
             save_test_result(
                 test_name=test_name,
-                message=parsed_message,
+                message=parsed_message.strip(),
                 status="FAIL",
                 file_name=test_file,
                 stack_trace=full_output,
@@ -137,18 +129,14 @@ for device in devices:
 
 print("\n🎯 모든 테스트 완료")
 
-# 결과 파싱 (summary_.json, jira_issues.json 생성)
+# 결과 요약 및 알림 처리
 subprocess.run(["python", "scripts/parse.py"])
 
-# Jira 이슈 처리 및 이슈 키 매핑 반환
-jira_issues_path = "scripts/jira_issues.json"
-if os.path.exists(jira_issues_path) and os.path.getsize(jira_issues_path) > 0:
-    issue_map = process_issues(jira_issues_path)  # ex: ["CEN-123", "HOME-456"]
-else:
-    issue_map = []
+# jira_issues_path = "scripts/jira_issues.json"
+# if os.path.exists(jira_issues_path) and os.path.getsize(jira_issues_path) > 0:
+#     issue_map = process_issues(jira_issues_path)
+# else:
+issue_map = []
 
-# Slack 알림 전송 (이슈 키 포함)
 subprocess.run(["python", "scripts/send_slack.py", json.dumps(issue_map, ensure_ascii=False)])
-
-# Slack 알림 전송
 send_slack_message(issue_map)

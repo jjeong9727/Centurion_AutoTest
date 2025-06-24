@@ -47,7 +47,7 @@ def click_float_button(page, is_mobile: bool):
     login_with_token(page)
     switch_language_to_english(page, is_mobile)
 
-    # 예약 버튼 클릭 시 로그인 화면으로 이동
+    # 예약 버튼 클릭 시 예약 화면 으로 이동
     if is_mobile:
         page.locator('[data-testid="btn_float"]').click()
         page.wait_for_timeout(1000)
@@ -60,7 +60,7 @@ def click_float_button(page, is_mobile: bool):
 
 
     page.wait_for_load_state("load")
-    assert "/reservation" in page.url, f"❌ 예약 페이지 아님: {page.url}"
+    assert "/reservation" in page.url, f"❌ 예약 페이지 아님: 2{page.url}"
 
     # 다시 홈 > 예약 버튼 선택
     page.goto(URLS["home_discover"])

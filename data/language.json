@@ -44,10 +44,6 @@
       "ko": "예약 날짜",
       "en": "Date"
     },
-    "txt_time": {
-      "ko": "예약 시간",
-      "en": "Time"
-    },
     "txt_consent": {
       "ko": "[필수] 개인정보 수집 및 이용 동의",
       "en": "[Required] Consent to Collection and Use of Personal Information"

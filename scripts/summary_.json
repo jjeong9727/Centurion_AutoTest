@@ -1,9 +1,30 @@
 [
   {
-    "name": "Centurion 로그인 유효성 확인 테스트",
-    "file": "tests/test_cen_login.py",
+    "name": "비로그인 진입 시도 확인 테스트",
+    "file": "tests/test_home_landing_nologin.py",
     "status": "FAIL",
-    "message": "..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:528: TimeoutError",
-    "stack_summary": " → ============================= 1 failed in 40.33s =============================="
+    "message": "ERROR tests/test_home_landing_nologin.py::test_non_logged_in - ValueError: \\u274c...",
+    "stack_summary": " → ============================== 1 error in 1.75s ==============================="
+  },
+  {
+    "name": "비로그인 진입 시도 확인 테스트",
+    "file": "tests/test_home_landing_nologin.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": ""
+  },
+  {
+    "name": "다국어 확인 테스트",
+    "file": "tests/test_home_language.py",
+    "status": "FAIL",
+    "message": "ERROR tests/test_home_language.py::test_language_check_all - ValueError: \\u274c ...",
+    "stack_summary": " → ============================== 1 error in 2.15s ==============================="
+  },
+  {
+    "name": "다국어 확인 테스트",
+    "file": "tests/test_home_language.py",
+    "status": "FAIL",
+    "message": "FAILED tests/test_home_language.py::test_language_check_all - AssertionError:...",
+    "stack_summary": " → ============================= 1 failed in 11.19s =============================="
   }
 ]

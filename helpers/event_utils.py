@@ -6,6 +6,7 @@ from playwright.sync_api import Page, expect
 from datetime import datetime
 from typing import Dict
 from config import URLS
+from urllib.parse import urljoin
 
 EVENT_FILE_PATH = "data/event.json"
 
@@ -82,7 +83,7 @@ def set_visible_events_to_hidden(page: Page):
         print(f"✅ {count}개 항목 미노출 처리 완료")
 
         # 3. 다음 페이지 존재 여부 확인
-        next_button = page.locator('[data-testid="next_page"]')
+        next_button = page.locator('[data-testid="page_next"]')
         is_disabled = next_button.get_attribute("disabled") is not None
 
         if is_disabled:
@@ -113,11 +114,70 @@ def get_popup_url(is_mobile: bool, is_english: bool) -> str:
     base_url = URLS["home_main"]
     lang = "en" if is_english else "ko"
     path = f"/{lang}/m/removal" if is_mobile else f"/{lang}/removal"
-    return base_url + path
+    return urljoin(base_url, path)
+
+def get_event_list_url(is_mobile: bool, is_english: bool) -> str:
+    base_url = URLS["home_main"].rstrip("/")  
+    lang = "en" if is_english else "ko"
+    device = "/m" if is_mobile else ""
+    return f"{base_url}/{lang}{device}/events"
+
 
 # ✅ 이벤트 홈페이지 노출 확인 함수
 def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool, is_english: bool):
-    # ✅ 팝업 확인
+
+
+    # ✅ 이벤트 리스트 화면으로 이동 
+    event_url = get_event_list_url(is_mobile, is_english)
+    page.goto(event_url)
+    page.wait_for_timeout(3000)
+
+    # ✅ 이벤트 노출 여부 확인
+    visible_on_list = False
+    items = page.locator('[data-testid="txt_event_title"]')
+    count = items.count()
+
+    visible_on_list = False
+
+    for i in range(count):
+        title_el = items.nth(i)
+        title = title_el.inner_text().strip()
+
+        print(f"🔍 비교중: 화면='{title}', JSON='{event['event_name']}'")
+
+        if title == event["event_name"]:
+            # ✅ 타이틀 기준으로 상위 div에서 기간, 버튼 탐색
+            wrapper = title_el.locator("xpath=../../..")  # 타이틀에서 3단계 상위로 올라감 (div.flex.w-full.flex-col → div.flex.w-full.flex-col → div.flex-col)
+
+            period = wrapper.locator('[data-testid="txt_event_period"]').inner_text().strip()
+            print(f"📆 화면 기간='{period}', JSON 기간='{event['event_period']}'")
+
+            # if period == event["event_period"]:
+            visible_on_list = True
+            # ✅ 상세 보기 진입
+            wrapper.locator('[data-testid="btn_event"]').click()
+            page.wait_for_timeout(1000)
+            break
+
+    assert visible_on_list, f"❌ 리스트에 '{event['event_name']}' 노출되지 않음"
+
+
+    # ✅ 상세 정보 확인
+    title_expected = "Ceramique Event" if is_english else "세라미크 이벤트"
+    expect(page.locator('[data-testid="txt_title"]')).to_contain_text(title_expected)
+    expect(page.locator('[data-testid="txt_event_title"]')).to_have_text(event["event_name"])
+    expect(page.locator('[data-testid="txt_event_description"]')).not_to_be_empty()
+
+    print(f"✅ '{event['event_name']}' 노출 확인 완료")
+
+    # 예약 하러 가기 버튼 동작 확인
+    page.wait_for_timeout(1000)
+    page.click(f'[data-testid="btn_reservation"]')
+    page.wait_for_timeout(3000)
+    expect(page.locator('[data-testid="txt_login"]')).to_be_visible(timeout=3000)
+    print("✅ 예약하러가기 버튼 동작 확인 완료")
+
+    # # ✅ 팝업 확인
     popup_url = get_popup_url(is_mobile, is_english)
     page.goto(popup_url)
     page.wait_for_timeout(1000)
@@ -137,47 +197,14 @@ def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool,
         new_page = popup_info.value
         new_page.wait_for_load_state()
 
-        expected_url = URLS["home_event"] if event["popup_url"] == "event" else URLS["footer_instagram"]
         actual_url = new_page.url
 
-        assert actual_url.startswith(expected_url), (
-            f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {expected_url})"
-        )
+        if event["popup_url"] == "event":
+            assert actual_url.startswith(URLS["home_event"]), (
+                f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['home_event']})"
+            )
+        else:
+            assert actual_url.startswith(URLS["footer_instagram"]), (
+                f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['footer_instagram']})"
+            )
         print(f"✅ 팝업 URL 이동 확인 완료: {actual_url}")
-
-
-    # ✅ 이벤트 리스트 화면으로 이동 
-    page.goto(URLS["home_event"])
-    page.wait_for_timeout(1000)
-
-    # ✅ 이벤트 노출 여부 확인
-    visible_on_list = False
-    items = page.locator('[data-testid="txt_event_title"]')
-    count = items.count()
-
-    for i in range(count):
-        title = items.nth(i).inner_text().strip()
-        if title == event["event_name"]:
-            period = page.locator('[data-testid="txt_event_period"]').nth(i).inner_text().strip()
-            if period == event["event_period"]:
-                visible_on_list = True
-                # ✅ 상세 보기 진입
-                page.locator('[data-testid="btn_event"]').nth(i).click()
-                page.wait_for_timeout(1000)
-                break
-
-    assert visible_on_list, f"❌ 리스트에 '{event['event_name']}' 노출되지 않음"
-
-    # ✅ 상세 정보 확인
-    expect(page.locator('[data-testid="txt_title"]')).to_contain_text("세라미크 이벤트")
-    expect(page.locator('[data-testid="txt_event_title"]')).to_have_text(event["event_name"])
-    expect(page.locator('[data-testid="txt_event_description"]')).not_to_be_empty()
-
-    print(f"✅ '{event['event_name']}' 노출 확인 완료")
-
-    # 예약 하러 가기 버튼 동작 확인
-    page.wait_for_timeout(1000)
-    page.click(f'[data-testid="reservation"]')
-    page.wait_for_timeout(3000)
-    expect(page.locator('[data-testid="txt_login"]')).to_be_visible(timeout=3000)
-    print("✅ 예약하러가기 버튼 동작 확인 완료")

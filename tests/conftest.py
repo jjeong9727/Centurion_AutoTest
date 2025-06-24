@@ -21,9 +21,9 @@ def browser() -> Generator[Browser, None, None]:
 
 @pytest.fixture
 def device_profile():
-    test_device = os.getenv("TEST_DEVICE")
-    if not test_device or test_device not in DEVICE_PROFILES:
-        raise ValueError(f"❌ 환경 변수 TEST_DEVICE가 설정되지 않았거나 유효하지 않습니다: {test_device}")
+    test_device = os.getenv("TEST_DEVICE", "Windows_Chrome")  # ✅ 기본값 설정
+    if test_device not in DEVICE_PROFILES:
+        raise ValueError(f"❌ 유효하지 않은 TEST_DEVICE: {test_device}")
     return DEVICE_PROFILES[test_device]
 
 @pytest.fixture

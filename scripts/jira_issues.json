@@ -1,13 +1,38 @@
 [
   {
-    "summary": "[자동화] Centurion 로그인 유효성 확인 테스트",
-    "description": "에러 메시지: ..\\..\\..\\..\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\playwright\\_impl\\_connection.py:528: TimeoutError\n\n파일: tests/test_cen_login.py\n테스트 이름: Centurion 로그인 유효성 확인 테스트\n\n스택 요약:\n → ============================= 1 failed in 40.33s ==============================",
-    "project": "CEN",
+    "summary": "[자동화] 비로그인 진입 시도 확인 테스트",
+    "description": "에러 메시지: ERROR tests/test_home_landing_nologin.py::test_non_logged_in - ValueError: \\u274c...\n\n파일: tests/test_home_landing_nologin.py\n테스트 이름: 비로그인 진입 시도 확인 테스트\n\n스택 요약:\n → ============================== 1 error in 1.75s ===============================",
+    "project": "HOME",
     "issuetype": "Bug",
     "priority": "Medium",
     "labels": [
       "auto-test",
       "fail"
-    ]
+    ],
+    "file": "tests/test_home_landing_nologin.py"
+  },
+  {
+    "summary": "[자동화] 다국어 확인 테스트",
+    "description": "에러 메시지: ERROR tests/test_home_language.py::test_language_check_all - ValueError: \\u274c ...\n\n파일: tests/test_home_language.py\n테스트 이름: 다국어 확인 테스트\n\n스택 요약:\n → ============================== 1 error in 2.15s ===============================",
+    "project": "HOME",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "auto-test",
+      "fail"
+    ],
+    "file": "tests/test_home_language.py"
+  },
+  {
+    "summary": "[자동화] 다국어 확인 테스트",
+    "description": "에러 메시지: FAILED tests/test_home_language.py::test_language_check_all - AssertionError:...\n\n파일: tests/test_home_language.py\n테스트 이름: 다국어 확인 테스트\n\n스택 요약:\n → ============================= 1 failed in 11.19s ==============================",
+    "project": "HOME",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "auto-test",
+      "fail"
+    ],
+    "file": "tests/test_home_language.py"
   }
 ]

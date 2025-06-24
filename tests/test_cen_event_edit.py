@@ -45,11 +45,11 @@ def test_edit_event(page: Page):
         if is_mobile:
             page.click('[data-testid="drop_browser"]')
             page.wait_for_timeout(1000)
-            page.click('text="모바일"')
+            page.get_by_role("option", name="모바일").click()
         if is_english:
             page.click('[data-testid="drop_language"]')
             page.wait_for_timeout(1000)
-            page.click('text="영어"')
+            page.get_by_role("option", name="영어").click()
         page.wait_for_timeout(1000)
 
         page.locator('[data-testid="btn_edit"]').click()  # 수정 모드 변경
