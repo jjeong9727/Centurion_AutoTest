@@ -16,6 +16,10 @@ full_name_mapping = {
     "test_cen_reservation_register": "Centurion 예약 추가 확인",
     "test_cen_reservation_search": "Centurion 예약 검색 확인",
     "test_cen_record": "Centurion 녹취 확인",
+    "test_cen_event_validation": "Centurion 이벤트 유효성 확인",
+    "test_cen_event_register": "Centurion 이벤트 등록 확인",
+    "test_cen_event_edit": "Centurion 이벤트 수정 확인",
+
 
     # home
     "test_home_landing_login": "로그인 진입 확인",
@@ -31,7 +35,8 @@ category_prefix = {
     "grade": "멤버십 등급관리",
     "reservation": "예약관리",
     "landng": "홈페이지 진입",
-    "record" : "녹취"
+    "record" : "녹취",
+    "event" :"이벤트관리"
 }
 
 # 예쁜 이름
@@ -108,7 +113,8 @@ def extract_results(input_path="test_results.json", output_path="scripts/summary
             "file": item.get("file", ""),
             "status": status,
             "message": first_line,
-            "stack_summary": stack_summary
+            "stack_summary": stack_summary,
+            "device": item.get("device", "Unknown")
         }
         result.append(entry)
 

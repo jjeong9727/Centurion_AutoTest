@@ -46,6 +46,13 @@ def get_total_duration_from_results(results):
             continue
     return format_duration(total)
 
+def get_device_label(device_str):
+    if not device_str:
+        return "Unknown"
+    if "Mobile" in device_str:
+        return "Mobile"
+    return "PC"
+
 def build_slack_message(test_results, issue_map):
     success_count = 0
     fail_count = 0
@@ -56,28 +63,29 @@ def build_slack_message(test_results, issue_map):
         status = result.get("status")
         message = result.get("message", "")
         test_file = result.get("file", "")
-        print(f"💡 test_file: {test_file}")
         test_name = result.get("name", result.get("test_name"))
+        device_info = result.get("device", "")
+        device_label = get_device_label(device_info)
 
         jira_id = issue_map.get(test_file) or issue_map.get(test_name)
 
         if status == "PASS":
             success_count += 1
-            detail_lines.append(f"{idx}. ✅[PASS] {test_name}")
+            detail_lines.append(f"{idx}. ✅[PASS] [{device_label}] {test_name}")
         elif status == "FAIL":
             fail_count += 1
             if jira_id:
-                detail_lines.append(f"{idx}. ❌[FAIL] {test_name} → JIRA: `{jira_id}`\n   {message}")
+                detail_lines.append(f"{idx}. ❌[FAIL] [{device_label}] {test_name}  → JIRA: `{jira_id}`\n   {message}")
             else:
-                detail_lines.append(f"{idx}. ❌[FAIL] {test_name}\n   {message}")
+                detail_lines.append(f"{idx}. ❌[FAIL] [{device_label}] {test_name} \n   {message}")
         elif status == "SKIP":
             skip_count += 1
-            detail_lines.append(f"{idx}. [SKIP] {test_name}")
+            detail_lines.append(f"{idx}. [SKIP] [{device_label}] {test_name} ")
 
     total_time = get_total_duration_from_results(test_results)
 
-    slack_message = f":mega: *세라미크 자동화 테스트 결과* ({seoul_time})\n"
-    slack_message += f"총 테스트 수: {len(test_results)} | ✅ 성공: {success_count} | ❌ 실패: {fail_count}\n\n"
+    slack_message = f":mega: *Ceramique/Centurion* 자동화 테스트 결과 ({seoul_time})\n"
+    slack_message += f"Total: {len(test_results)} | ✅ PASS: {success_count} | ❌ FAIL: {fail_count}\n\n"
     slack_message += "\n".join(detail_lines)
 
     return slack_message

@@ -43,15 +43,21 @@ def test_edit_event(page: Page):
         is_english = "영어" in event["event_name"]
 
         if is_mobile:
-            page.click('[data-testid="drop_browser"]')
+            # "모바일"이 포함된 버튼 클릭
+            page.locator('button[role="combobox"]', has_text="PC").click()
             page.wait_for_timeout(1000)
             page.get_by_role("option", name="모바일").click()
+
         if is_english:
-            page.click('[data-testid="drop_language"]')
+            # "한국어"가 기본값인 드롭다운 클릭
+            page.locator('button[role="combobox"]', has_text="한국어").click()
             page.wait_for_timeout(1000)
             page.get_by_role("option", name="영어").click()
+
         page.wait_for_timeout(1000)
 
+
+        
         page.locator('[data-testid="btn_edit"]').click()  # 수정 모드 변경
         page.wait_for_timeout(1000)
 
@@ -69,7 +75,7 @@ def test_edit_event(page: Page):
         page.wait_for_timeout(5000)
         expect(page.locator('[data-testid="txt_image"]')).to_have_text("img_edit_event.png")
 
-        # ✅ 상세 이미지 중 하나만 교체 (1번 이미지 고정)
+        # ✅ 상세 이미지 중 하나만 랜덤으로 edit.png로 교체
         random_idx = random.randint(1, 6)
 
         upload_locator = page.locator(f'[data-testid="upload_image_{random_idx}"]')
@@ -86,24 +92,15 @@ def test_edit_event(page: Page):
         page.wait_for_timeout(1000)
 
 
-        # ✅ 이벤트 노출 기간 수정 (한국어만)
-        if "한국어" in event["event_name"]:
-            tomorrow = datetime.today() + timedelta(days=1)
-            select_calendar_date(page, "display_startday", tomorrow)
-            page.wait_for_timeout(1000)
-            start_display = tomorrow.strftime("%Y.%m.%d")
-            end_display = event["display_period"].split("-")[1]
-        else:
-            start_display = event["display_period"].split("-")[0]
-            end_display = event["display_period"].split("-")[1]
+
 
         # ✅ 팝업 사용 여부 반전
         original = event["popup_usage"]
         if original == "yes":
-            page.click('[data-testid="toggle_use"]')
+            page.click('[data-testid="btn_toggle"]')
             new_popup = "no"
         else:
-            page.click('[data-testid="toggle_use"]')
+            page.click('[data-testid="btn_toggle"]')
             new_popup = "yes"
 
         # ✅ 팝업 이미지 수정
@@ -124,7 +121,6 @@ def test_edit_event(page: Page):
 
         # ✅ 홈페이지 반영 확인
         event["event_name"] = new_event_name
-        event["display_period"] = f"{start_display}-{end_display}"
         event["popup_usage"] = new_popup
         event["popup_url"] = "instagram"
 

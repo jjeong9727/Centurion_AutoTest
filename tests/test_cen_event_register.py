@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from playwright.sync_api import Page, expect
 from config import URLS
 from helpers.customer_utils import cen_login
-from helpers.event_utils import select_calendar_date, save_events, verify_event_on_homepage
+from helpers.event_utils import select_calendar_date, save_events, verify_event_on_homepage, set_visible_events_to_hidden
 from helpers import image_assets as img
 from pathlib import Path
 def generate_display_name(mobile: bool, english: bool, now: str) -> str:
@@ -114,7 +114,7 @@ def fill_event_form(
 
         detail_element.set_input_files(image_path)
 
-        page.wait_for_timeout(5000)
+        page.wait_for_timeout(3000)
         expect(page.locator(f'[data-testid="txt_image_{i}"]')).to_have_text(Path(image_path).name)
         page.wait_for_timeout(1000)
 
@@ -135,11 +135,11 @@ def fill_event_form(
         # 다시 모바일/영어로 유형 변경
         page.click('[data-testid="drop_browser"]')
         page.wait_for_timeout(1000)
-        page.click('text="모바일"')
+        page.get_by_role("option", name="모바일").click()
         page.wait_for_timeout(1000)
         page.click('[data-testid="drop_language"]')
         page.wait_for_timeout(1000)
-        page.click('text="영어"')
+        page.get_by_role("option", name="영어").click()
         page.wait_for_timeout(1000)
 
         # ✅ 팝업 설정
@@ -186,6 +186,10 @@ def test_register_event(page: Page):
     page.wait_for_timeout(1000)
     
 
+    # # 노출 중인 이벤트 미노출로 모두 변경
+    # 🚫 이벤트 기간 경과 시 미노출로 전환 이슈 해결 후 확인 필요  CEN-490
+    # set_visible_events_to_hidden(page)
+
     now = datetime.now().strftime("%m%d_%H%M")
     group_name = f"자동화그룹_{now}"
 
@@ -193,8 +197,8 @@ def test_register_event(page: Page):
         {"ui": (False, False), "label": (False, False)},  # PC + 한국어
         {"ui": (True, False),  "label": (True, False)},   # 모바일 + 한국어
         {"ui": (False, True),  "label": (False, True)},   # PC + 영어
-        # {"ui": (False, False), "label": (True, True)}     # 🚫 UI는 PC+한글, Label은 모바일+영어
-        {"ui": (True, True), "label": (True, True)}     # 🚫 중복 미개발로 인해 중복 처리 미확인 
+        {"ui": (False, False), "label": (True, True)}     # UI는 PC+한글, Label은 모바일+영어
+         
     ]
         
     event_list = []

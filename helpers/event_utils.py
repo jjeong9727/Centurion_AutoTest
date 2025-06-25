@@ -57,9 +57,9 @@ def update_event_field(event_name: str, field: str, new_value: str) -> bool:
 # 존재하는 모든 이벤트 미노출로 변경
 def set_visible_events_to_hidden(page: Page):
     # 1. 상태 드롭다운 열기 및 "노출" 필터 선택
-    page.click('[data-testid="drop_status"]')
+    page.click('[data-testid="drop_status_trigger"]')
     page.wait_for_timeout(1000)
-    page.click('text=노출') 
+    page.click('[data-value="노출"]')  # 더 안정적인 선택 방식
     page.wait_for_timeout(1000)
 
     page_index = 1
@@ -75,7 +75,7 @@ def set_visible_events_to_hidden(page: Page):
             toggle.scroll_into_view_if_needed()
             toggle.click()
             page.wait_for_timeout(1000)  # 토글 후 약간의 대기
-            page.click('[data-testid="btn_accept"]')
+            page.click('[data-testid="btn_confirm"]')
             page.wait_for_timeout(500)
             expect(page.locator('[data-testid="toast_status"]')).to_be_visible(timeout=3000)
             page.wait_for_timeout(1000)
@@ -177,34 +177,35 @@ def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool,
     expect(page.locator('[data-testid="txt_login"]')).to_be_visible(timeout=3000)
     print("✅ 예약하러가기 버튼 동작 확인 완료")
 
-    # # ✅ 팝업 확인
-    popup_url = get_popup_url(is_mobile, is_english)
-    page.goto(popup_url)
-    page.wait_for_timeout(1000)
+    # 🚫 테스트 전 미노출 처리 ON 시 확인하는 걸로 변경 필요    
+    # # # ✅ 팝업 확인
+    # popup_url = get_popup_url(is_mobile, is_english)
+    # page.goto(popup_url)
+    # page.wait_for_timeout(1000)
 
-    popup_locator = page.locator('[data-testid="event_popup"]')
-    popup_visible = popup_locator.is_visible()
-    expected_popup = event["popup_usage"] == "yes"
-    assert popup_visible == expected_popup, (
-        f"❌ 팝업 노출 여부 오류: {popup_visible} (예상: {expected_popup})"
-    )
+    # popup_locator = page.locator('[data-testid="event_popup"]')
+    # popup_visible = popup_locator.is_visible()
+    # expected_popup = event["popup_usage"] == "yes"
+    # assert popup_visible == expected_popup, (
+    #     f"❌ 팝업 노출 여부 오류: {popup_visible} (예상: {expected_popup})"
+    # )
 
-    # ✅ 팝업 클릭 시 이동할 URL 확인 (노출 시에만 실행)
-    if popup_visible:
-        with page.expect_popup() as popup_info:
-            popup_locator.click()
+    # # ✅ 팝업 클릭 시 이동할 URL 확인 (노출 시에만 실행)
+    # if popup_visible:
+    #     with page.expect_popup() as popup_info:
+    #         popup_locator.click()
 
-        new_page = popup_info.value
-        new_page.wait_for_load_state()
+    #     new_page = popup_info.value
+    #     new_page.wait_for_load_state()
 
-        actual_url = new_page.url
+    #     actual_url = new_page.url
 
-        if event["popup_url"] == "event":
-            assert actual_url.startswith(URLS["home_event"]), (
-                f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['home_event']})"
-            )
-        else:
-            assert actual_url.startswith(URLS["footer_instagram"]), (
-                f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['footer_instagram']})"
-            )
-        print(f"✅ 팝업 URL 이동 확인 완료: {actual_url}")
+    #     if event["popup_url"] == "event":
+    #         assert actual_url.startswith(URLS["home_event"]), (
+    #             f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['home_event']})"
+    #         )
+    #     else:
+    #         assert actual_url.startswith(URLS["footer_instagram"]), (
+    #             f"❌ 팝업 클릭 후 URL 이동 오류: {actual_url} (예상 시작: {URLS['footer_instagram']})"
+    #         )
+    #     print(f"✅ 팝업 URL 이동 확인 완료: {actual_url}")

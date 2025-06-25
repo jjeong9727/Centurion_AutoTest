@@ -19,12 +19,12 @@ def test_event_validations(page: Page):
 
     check_invalid_upload(page, img.overspec_img, "toast_image_size")
     page.wait_for_timeout(1000)
-# 🚫이슈 해결 후 확인 가능  
-    # check_invalid_upload(page, img.nonspec_img, "toast_image_format")
-    # page.wait_for_timeout(1000)
-    # check_invalid_upload(page, img.nonspec_video, "toast_image_format")
-    # page.wait_for_timeout(1000)
-# 🚫이슈 해결 후 확인 가능 
+  
+    check_invalid_upload(page, img.nonspec_img, "toast_image_format")
+    page.wait_for_timeout(1000)
+    check_invalid_upload(page, img.nonspec_video, "toast_image_format")
+    page.wait_for_timeout(1000)
+ 
     # # ✅ [2] 미노출 그룹 노출 시도 → toggle 클릭 → 비활성화 토스트
     page.goto(URLS["cen_event"])
     page.wait_for_timeout(1000)
@@ -33,28 +33,28 @@ def test_event_validations(page: Page):
     page.wait_for_timeout(1000)
     # # 리스트에서 확인
     row = page.locator("table tbody tr").first
-    # row.locator('[data-testid="toggle_event"]').click()
-    # page.wait_for_timeout(1000)
-    # page.click('[data-testid="btn_confirm"]')
-    # page.wait_for_timeout(500)
-    # expect(page.locator('[data-testid="toast_inactive"]')).to_be_visible(timeout=3000)
-    # print("✅ 미노출 그룹의 토글 비활성화 토스트 확인 완료")
-    # page.wait_for_timeout(1000)
-# 🚫이슈 해결 후 확인 가능 
-    # # 수정화면 진입 후 확인
-    # row.locator("td").last.click()
-    # page.wait_for_timeout(1000)
-    # page.locator('[data-testid="btn_review"]').click()
-    # page.wait_for_timeout(1000)
-    # page.locator('[data-testid="btn_edit"]').click()
-    # page.wait_for_timeout(1000)
-    # page.locator('[data-testid="btn_show"]').click()
-    # page.wait_for_timeout(1000)
-    # page.click('[data-testid="btn_complete"]')
-    # page.wait_for_timeout(500)
-    # expect(page.locator('[data-testid="toast_period"]')).to_be_visible(timeout=3000)
-    # print("✅ 이벤트 기간 재설정 토스트 확인 완료")
-    # page.wait_for_timeout(1000)
+    row.locator('[data-testid="toggle_event"]').click()
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="toast_inactive"]')).to_be_visible(timeout=3000)
+    print("✅ 미노출 그룹의 토글 비활성화 토스트 확인 완료")
+    page.wait_for_timeout(1000)
+ 
+    # 수정화면 진입 후 확인
+    row.locator("td").last.click()
+    page.wait_for_timeout(1000)
+    page.locator('[data-testid="btn_review"]').click()
+    page.wait_for_timeout(1000)
+    page.locator('[data-testid="btn_edit"]').click()
+    page.wait_for_timeout(1000)
+    page.locator('[data-testid="btn_show"]').click()
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_complete"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="toast_period"]')).to_be_visible(timeout=3000)
+    print("✅ 이벤트 기간 재설정 토스트 확인 완료")
+    page.wait_for_timeout(1000)
 
 
     # ✅ [3] 그룹명 수정 유효성
