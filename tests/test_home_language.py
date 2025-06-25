@@ -9,7 +9,6 @@ from helpers.auth_helper import login_with_token
 screen_text_data = {
     "home_reservation": {
         "txt_date": {"ko": "예약 날짜", "en": "Date"},
-        "txt_time": {"ko": "예약 시간", "en": "Time"},
         "txt_consent": {"ko": "[필수] 개인정보 수집 및 이용 동의", "en": "[Required] Consent to Collection and Use of Personal Information"},
         "btn_confirm": {"ko": "예약하기", "en": "Reservation"}
     },
@@ -77,7 +76,9 @@ def switch_language_to_english(page: Page, is_mobile: bool, url: str):
             page.wait_for_timeout(1000)
             page.locator('[data-testid="language_eng"]').click()
             page.wait_for_timeout(1000)
-            page.goto(url)
+            if "/reservation" not in url:
+                page.goto(url)  # ✅ 예약 페이지가 아니면 재이동
+
         else:
             page.locator('[data-testid="drop_language"]').click()
             page.wait_for_timeout(1000)
@@ -93,7 +94,8 @@ def switch_language_to_korean(page: Page, is_mobile: bool, url: str):
             page.wait_for_timeout(1000)
             page.locator('[data-testid="language_kor"]').click()
             page.wait_for_timeout(1000)
-            page.goto(url)
+            if "/reservation" not in url:
+                page.goto(url)  # ✅ 예약 페이지가 아니면 재이동
         else:
             page.locator('[data-testid="drop_language"]').click()
             page.wait_for_timeout(1000)

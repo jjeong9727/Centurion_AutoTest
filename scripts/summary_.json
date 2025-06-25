@@ -1,6 +1,150 @@
 [
   {
-    "name": "test_cen_event_validation 테스트",
+    "name": "다국어 확인 테스트",
+    "file": "tests/test_home_language.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "다국어 확인 테스트",
+    "file": "tests/test_home_language.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "name": "비로그인 진입 시도 확인 테스트",
+    "file": "tests/test_home_landing_nologin.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "비로그인 진입 시도 확인 테스트",
+    "file": "tests/test_home_landing_nologin.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "name": "로그인 진입 확인 테스트",
+    "file": "tests/test_home_landing_login.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "로그인 진입 확인 테스트",
+    "file": "tests/test_home_landing_login.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "name": "예약 신청 확인 테스트",
+    "file": "tests/test_home_reservation.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 로그인 유효성 확인 테스트",
+    "file": "tests/test_cen_login.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 고객 등록 확인 테스트",
+    "file": "tests/test_cen_customer_register.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 고객 정보 수정 확인 테스트",
+    "file": "tests/test_cen_customer_edit.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 고객 검색 기능 확인 테스트",
+    "file": "tests/test_cen_customer_search.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 등급 관리 기능 확인 테스트",
+    "file": "tests/test_cen_grade.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 멤버십 충전/차감 확인 테스트",
+    "file": "tests/test_cen_membership.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 예약 확정/취소 확인 테스트",
+    "file": "tests/test_cen_reservation_accept.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 예약 정보 수정 확인 테스트",
+    "file": "tests/test_cen_reservation_edit.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 예약 검색 확인 테스트",
+    "file": "tests/test_cen_reservation_search.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 예약 추가 확인 테스트",
+    "file": "tests/test_cen_reservation_register.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 녹취 확인 테스트",
+    "file": "tests/test_cen_record.py",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "stack_summary": "",
+    "device": "Windows_Chrome"
+  },
+  {
+    "name": "Centurion 이벤트 유효성 확인 테스트",
     "file": "tests/test_cen_event_validation.py",
     "status": "PASS",
     "message": "테스트 성공",
@@ -8,7 +152,7 @@
     "device": "Windows_Chrome"
   },
   {
-    "name": "test_cen_event_register 테스트",
+    "name": "Centurion 이벤트 등록 확인 테스트",
     "file": "tests/test_cen_event_register.py",
     "status": "PASS",
     "message": "테스트 성공",
@@ -16,7 +160,7 @@
     "device": "Windows_Chrome"
   },
   {
-    "name": "test_cen_event_edit 테스트",
+    "name": "Centurion 이벤트 수정 확인 테스트",
     "file": "tests/test_cen_event_edit.py",
     "status": "PASS",
     "message": "테스트 성공",

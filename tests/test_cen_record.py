@@ -7,7 +7,6 @@ import pytest
 from playwright.sync_api import Page, expect, sync_playwright
 from config import URLS
 from helpers.customer_utils import cen_login
-from scripts.record_slack import send_custom_slack_message
 
 ALLOWED_EXTENSIONS = [".webm"]  # 결정된 확장자
 

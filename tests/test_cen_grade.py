@@ -1,17 +1,33 @@
-# 멤버십 등급 관리
-# 사용 중인 등급 비활성화 확인
-# 등급명 / 메모 수정 후 반영 확인
-# 등급명 수정 시 이름 중복 확인
-# ON/OFF 상태에 따른 노출/미노출 확인
-# 멤버십 등급 관리 테스트 - 등록, 수정, 토글까지 포함
-
+# 멤버십 등급 관리 테스트 - 등록, 수정, 토글 포함
 import random
 from playwright.sync_api import Page, expect
 from config import URLS
 from helpers.customer_utils import cen_login
 
+# ✅ 등급명 조건에 맞는 row 탐색 (페이지네이션 포함)
+def find_row_across_pages(page: Page, match_fn) -> Page:
+    while True:
+        rows = page.locator("table tbody tr")
+        row_count = rows.count()
+
+        for i in range(row_count):
+            row = rows.nth(i)
+            cell = row.locator("td").nth(1)
+            text = cell.inner_text().strip()
+            if match_fn(text):
+                return row
+
+        # 다음 페이지 버튼 확인
+        next_button = page.locator('[data-testid="page_next"]')
+        if next_button.is_disabled():
+            break
+        next_button.click()
+        page.wait_for_timeout(1500)
+
+    return None
+
 def test_membership_register_and_toggle(page: Page):
-    # ✅ 로그인 
+    # ✅ 로그인
     cen_login(page)
 
     # ✅ 등급 등록 팝업 진입 및 취소
@@ -42,61 +58,36 @@ def test_membership_register_and_toggle(page: Page):
     page.click('[data-testid="btn_cancel"]')
     page.wait_for_timeout(1000)
 
-    # ✅ "등급명수정" 또는 "등급명최종수정" 수정 처리
-    rows = page.locator("table tbody tr")
-    row_count = rows.count()
+    # ✅ "등급명수정" 또는 "등급명최종수정" 등급명을 찾아 수정
+    row = find_row_across_pages(page, lambda t: t in ["등급명수정", "등급명최종수정"])
+    assert row, "❌ '등급명수정' 또는 '등급명최종수정' 등급명을 찾지 못했습니다."
 
-    target_text = None
-    replacement_text = None
-    found = False
+    cell = row.locator("td").nth(1)
+    original_text = cell.inner_text().strip()
+    replacement_text = "등급명최종수정" if original_text == "등급명수정" else "등급명수정"
 
-    for i in range(row_count):
-        cell = rows.nth(i).locator("td").nth(1)
-        text = cell.inner_text().strip()
+    cell.click()
+    page.wait_for_timeout(500)
+    input_field = cell.locator("input")
+    input_field.fill(replacement_text)
+    page.wait_for_timeout(500)
+    input_field.press("Tab")
+    page.wait_for_timeout(500)
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(500)
+    expect(page.locator('[data-testid="toast_edit"]')).to_be_visible()
+    page.wait_for_timeout(1000)
 
-        if text in ["등급명수정", "등급명최종수정"]:
-            target_text = text
-            replacement_text = "등급명최종수정" if text == "등급명수정" else "등급명수정"
+    # ✅ "자동화" 등급명 찾아 toggle 처리
+    row = find_row_across_pages(page, lambda t: t == "자동화")
+    assert row, "❌ '자동화' 등급명을 가진 행을 찾지 못했습니다."
 
-            cell.click()
-            page.wait_for_timeout(500)
-
-            input_field = cell.locator("input")
-            input_field.fill(replacement_text)
-            page.wait_for_timeout(500)
-
-            input_field.press("Tab")
-            page.wait_for_timeout(500)
-
-            page.click('[data-testid="btn_confirm"]')
-            page.wait_for_timeout(1000)
-            expect(page.locator('[data-testid="toast_edit"]')).to_be_visible()
-            page.wait_for_timeout(2000)
-            found = True
-            break
-
-    assert found, "❌ '등급명수정' 또는 '등급명최종수정' 등급명을 찾지 못했습니다."
-
-    # ✅ "자동화" 등급명으로 다시 테이블 탐색 → toggle 테스트
-    toggle_found = False
-
-    for i in range(row_count):
-        row = rows.nth(i)
-        grade_name_cell = row.locator("td").nth(1)
-        grade_name = grade_name_cell.inner_text().strip()
-
-        if grade_name == "자동화":
-            row.locator('[data-testid="btn_toggle"]').click()
-            page.wait_for_timeout(2000)
-            page.click('[data-testid="btn_cancel"]')
-            page.wait_for_timeout(2000)
-            row.locator('[data-testid="btn_toggle"]').click()
-            page.wait_for_timeout(2000)
-            page.click('[data-testid="btn_confirm"]')
-            page.wait_for_timeout(500)
-            expect(page.locator('[data-testid="toast_using"]')).to_be_visible()
-            page.wait_for_timeout(1000)
-            toggle_found = True
-            break
-
-    assert toggle_found, "❌ '자동화' 등급명을 가진 행을 찾지 못했습니다."
+    row.locator('[data-testid="btn_toggle"]').click()
+    page.wait_for_timeout(2000)
+    page.click('[data-testid="btn_cancel"]')
+    page.wait_for_timeout(2000)
+    row.locator('[data-testid="btn_toggle"]').click()
+    page.wait_for_timeout(2000)
+    page.click('[data-testid="btn_confirm"]')
+    expect(page.locator('[data-testid="toast_using"]')).to_be_visible()
+    page.wait_for_timeout(1000)

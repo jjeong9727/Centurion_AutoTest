@@ -1,32 +1,212 @@
 [
   {
+    "test_name": "test_home_language",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:12:45",
+    "file": "tests/test_home_language.py",
+    "stack": "",
+    "duration": "108.62초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_home_language",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:13:03",
+    "file": "tests/test_home_language.py",
+    "stack": "",
+    "duration": "17.76초",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "test_name": "test_home_landing_nologin",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:14:11",
+    "file": "tests/test_home_landing_nologin.py",
+    "stack": "",
+    "duration": "68.07초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_home_landing_nologin",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:15:23",
+    "file": "tests/test_home_landing_nologin.py",
+    "stack": "",
+    "duration": "72.12초",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "test_name": "test_home_landing_login",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:16:17",
+    "file": "tests/test_home_landing_login.py",
+    "stack": "",
+    "duration": "53.76초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_home_landing_login",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:17:13",
+    "file": "tests/test_home_landing_login.py",
+    "stack": "",
+    "duration": "56.45초",
+    "device": "Mobile_Chrome"
+  },
+  {
+    "test_name": "test_home_reservation",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:19:08",
+    "file": "tests/test_home_reservation.py",
+    "stack": "",
+    "duration": "114.49초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_login",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:19:25",
+    "file": "tests/test_cen_login.py",
+    "stack": "",
+    "duration": "17.29초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_register",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:20:18",
+    "file": "tests/test_cen_customer_register.py",
+    "stack": "",
+    "duration": "52.88초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_edit",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:22:21",
+    "file": "tests/test_cen_customer_edit.py",
+    "stack": "",
+    "duration": "122.94초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_customer_search",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:23:03",
+    "file": "tests/test_cen_customer_search.py",
+    "stack": "",
+    "duration": "42.00초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_grade",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:23:42",
+    "file": "tests/test_cen_grade.py",
+    "stack": "",
+    "duration": "38.91초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_membership",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:24:38",
+    "file": "tests/test_cen_membership.py",
+    "stack": "",
+    "duration": "56.62초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_accept",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:25:22",
+    "file": "tests/test_cen_reservation_accept.py",
+    "stack": "",
+    "duration": "43.92초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_edit",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:28:03",
+    "file": "tests/test_cen_reservation_edit.py",
+    "stack": "",
+    "duration": "161.29초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_search",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:28:35",
+    "file": "tests/test_cen_reservation_search.py",
+    "stack": "",
+    "duration": "31.94초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_reservation_register",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:29:05",
+    "file": "tests/test_cen_reservation_register.py",
+    "stack": "",
+    "duration": "29.82초",
+    "device": "Windows_Chrome"
+  },
+  {
+    "test_name": "test_cen_record",
+    "status": "PASS",
+    "message": "테스트 성공",
+    "timestamp": "2025-06-25 16:29:58",
+    "file": "tests/test_cen_record.py",
+    "stack": "",
+    "duration": "52.97초",
+    "device": "Windows_Chrome"
+  },
+  {
     "test_name": "test_cen_event_validation",
     "status": "PASS",
     "message": "테스트 성공",
-    "timestamp": "2025-06-25 11:08:02",
+    "timestamp": "2025-06-25 16:30:40",
     "file": "tests/test_cen_event_validation.py",
     "stack": "",
-    "duration": "49.69초",
+    "duration": "41.32초",
     "device": "Windows_Chrome"
   },
   {
     "test_name": "test_cen_event_register",
     "status": "PASS",
     "message": "테스트 성공",
-    "timestamp": "2025-06-25 11:12:41",
+    "timestamp": "2025-06-25 16:34:53",
     "file": "tests/test_cen_event_register.py",
     "stack": "",
-    "duration": "278.35초",
+    "duration": "253.96초",
     "device": "Windows_Chrome"
   },
   {
     "test_name": "test_cen_event_edit",
     "status": "PASS",
     "message": "테스트 성공",
-    "timestamp": "2025-06-25 11:15:36",
+    "timestamp": "2025-06-25 16:36:25",
     "file": "tests/test_cen_event_edit.py",
     "stack": "",
-    "duration": "175.18초",
+    "duration": "91.75초",
     "device": "Windows_Chrome"
   }
 ]

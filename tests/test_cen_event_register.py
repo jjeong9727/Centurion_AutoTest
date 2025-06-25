@@ -5,6 +5,7 @@ from helpers.customer_utils import cen_login
 from helpers.event_utils import select_calendar_date, save_events, verify_event_on_homepage, set_visible_events_to_hidden
 from helpers import image_assets as img
 from pathlib import Path
+
 def generate_display_name(mobile: bool, english: bool, now: str) -> str:
     device = "모바일" if mobile else "PC"
     lang = "영어" if english else "한국어"
@@ -187,8 +188,8 @@ def test_register_event(page: Page):
     
 
     # # 노출 중인 이벤트 미노출로 모두 변경
-    # 🚫 이벤트 기간 경과 시 미노출로 전환 이슈 해결 후 확인 필요  CEN-490
-    # set_visible_events_to_hidden(page)
+    
+    set_visible_events_to_hidden(page)
 
     now = datetime.now().strftime("%m%d_%H%M")
     group_name = f"자동화그룹_{now}"
@@ -225,7 +226,7 @@ def test_register_event(page: Page):
     save_events(event_list)
 
     
-    # ✅ 이벤트 등록 후 홈페이지 노출 확인
+    # # ✅ 이벤트 등록 후 홈페이지 노출 확인
     for idx, event in enumerate(event_list):
         event_name = event.get("event_name", "")
         is_mobile = "모바일" in event_name
@@ -237,3 +238,5 @@ def test_register_event(page: Page):
             is_mobile=is_mobile,
             is_english=is_english
         )
+
+
