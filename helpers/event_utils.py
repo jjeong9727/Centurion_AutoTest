@@ -143,12 +143,12 @@ def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool,
             period = wrapper.locator('[data-testid="txt_event_period"]').inner_text().strip()
             print(f"📆 화면 기간='{period}', JSON 기간='{event['event_period']}'")
 
-            # if period == event["event_period"]:
-            visible_on_list = True
-            # ✅ 상세 보기 진입
-            wrapper.locator('[data-testid="btn_event"]').click()
-            page.wait_for_timeout(1000)
-            break
+            if period == event["event_period"]:
+                visible_on_list = True
+                # ✅ 상세 보기 진입
+                wrapper.locator('[data-testid="btn_event"]').click()
+                page.wait_for_timeout(1000)
+                break
 
     assert visible_on_list, f"❌ 리스트에 '{event['event_name']}' 노출되지 않음"
 
