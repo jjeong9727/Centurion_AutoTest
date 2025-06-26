@@ -10,7 +10,7 @@
     "grade": "자동화",
     "amount": 100,
     "mileage": 100,
-    "charged": 754500
+    "charged": 855100
   },
   {
     "name": "자동화외국인",
@@ -28,9 +28,9 @@
   {
     "name": "한국인수정",
     "chart_id": "",
-    "birth": "1978-10-02",
+    "birth": "1975-04-19",
     "gender": "여성",
-    "phone": "010-9106-5934",
+    "phone": "010-6131-9966",
     "email": "",
     "nationality": "한국인",
     "grade": "등급 없음",
@@ -41,10 +41,10 @@
   {
     "name": "외국인수정테스트",
     "chart_id": "",
-    "birth": "1976-10-29",
+    "birth": "1977-07-11",
     "gender": "남성",
     "phone": "",
-    "email": "3uru2zgu@test.com",
+    "email": "nfqgjiq0@test.com",
     "nationality": "외국인",
     "grade": "등급 없음",
     "amount": 0,

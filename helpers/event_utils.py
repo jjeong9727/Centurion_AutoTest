@@ -98,7 +98,9 @@ def select_calendar_date(page: Page, testid: str, target_date: datetime):
         page.wait_for_timeout(1000)
 
     day_str = target_date.strftime("%m%d")  # 예: 06월 19일 → 0619
-    page.click(f'[data-testid="btn_day_{day_str}"]')
+    locator = page.locator(f'[data-testid="btn_day_{day_str}"]')
+    locator.scroll_into_view_if_needed()
+    locator.click()
     page.wait_for_timeout(1000)
 
 def get_popup_url(is_mobile: bool, is_english: bool) -> str:

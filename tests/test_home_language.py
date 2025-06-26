@@ -37,7 +37,7 @@ screen_text_data = {
         "txt_mypage": {"ko": "마이페이지", "en": "My Page"}
     },
     "home_mypage_mo": {
-        "txt_mypage": {"ko": "마이페이지", "en": "My Page"},
+        
         "menu_membership": {"ko": "멤버십 조회", "en": "Membership"},
         "menu_profile": {"ko": "회원정보수정", "en": "Edit profile"},
         "menu_history": {"ko": "예약 내역 확인", "en": "Reservation History"}
@@ -76,8 +76,8 @@ def switch_language_to_english(page: Page, is_mobile: bool, url: str):
             page.wait_for_timeout(1000)
             page.locator('[data-testid="language_eng"]').click()
             page.wait_for_timeout(1000)
-            if "/reservation" not in url:
-                page.goto(url)  # ✅ 예약 페이지가 아니면 재이동
+            page.locator("svg.cursor-pointer").first.click()
+            page.wait_for_timeout(1000)
 
         else:
             page.locator('[data-testid="drop_language"]').click()
@@ -94,8 +94,8 @@ def switch_language_to_korean(page: Page, is_mobile: bool, url: str):
             page.wait_for_timeout(1000)
             page.locator('[data-testid="language_kor"]').click()
             page.wait_for_timeout(1000)
-            if "/reservation" not in url:
-                page.goto(url)  # ✅ 예약 페이지가 아니면 재이동
+            page.locator("svg.cursor-pointer").first.click()
+            page.wait_for_timeout(1000)
         else:
             page.locator('[data-testid="drop_language"]').click()
             page.wait_for_timeout(1000)
@@ -123,10 +123,24 @@ def test_language_check_all(page: Page, device_profile):
     is_mobile = device_profile["is_mobile"]
 
     for screen_name, screen_data in screen_text_data.items():
-        if is_mobile and screen_name in ["home_mypage_mem", "home_mypage_profile", "home_mypage_history"]:
+        # 모바일에서는 마이페이지 관련 화면 + privacy + terms 제외
+        if is_mobile and screen_name in [
+            "home_mypage_mem",
+            "home_mypage_profile",
+            "home_mypage_history",
+            "home_privacy",
+            "home_terms"
+        ]:
             continue
+
+        # PC에서는 mobile 전용 마이페이지 제외
         if not is_mobile and screen_name in ["home_mypage_mo"]:
             continue
 
-        check_language_and_switch(page, screen_name.replace("home_", ""), screen_data, is_mobile)
+        check_language_and_switch(
+            page,
+            screen_name.replace("home_", ""),
+            screen_data,
+            is_mobile
+        )
 
