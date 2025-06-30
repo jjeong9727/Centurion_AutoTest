@@ -32,6 +32,11 @@ URLS = {
     "cen_grade" : f"{cen_base_url}/customers/memberships/grades",
     "cen_record" : f"{cen_base_url}/recordings/management",
     "cen_event" : f"{cen_base_url}/homepage/events",
+    "cen_category" : f"{cen_base_url}/", # 상품 분류
+    "cen_treat" : f"{cen_base_url}/", # 시술 관리
+    "cen_product" : f"{cen_base_url}/", # 상품 관리
+    "cen_page" : f"{cen_base_url}/", # 상품 페이지 관리
+
 
 
 
