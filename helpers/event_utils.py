@@ -94,8 +94,10 @@ def select_calendar_date(page: Page, testid: str, target_date: datetime):
     # 현재 달과 목표 달이 다르면 달 이동 (예: 다음달 버튼 클릭)
     current = datetime.today()
     if current.month != target_date.month:
-        page.click('[data-testid="btn_next"]')
-        page.wait_for_timeout(1000)
+        next_btn = page.locator('button[name="next-month"]')
+        next_btn.scroll_into_view_if_needed()
+        next_btn.wait_for(state="visible", timeout=5000)
+        next_btn.click()
 
     day_str = target_date.strftime("%m%d")  # 예: 06월 19일 → 0619
     locator = page.locator(f'[data-testid="btn_day_{day_str}"]')

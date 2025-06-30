@@ -81,7 +81,7 @@ def test_event_validations(page: Page):
     page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(500)
     expect(page.locator('[data-testid="toast_required"]')).to_be_visible(timeout=3000)
-    print("✅ 그룹명 공백 입력 시 toast_required 확인 완료")
+    print("✅ 그룹명 공백 입력 시 토스트 확인 완료")
     page.wait_for_timeout(1000)
     
     # 중복 이름 입력 후 포커스 아웃
@@ -90,7 +90,7 @@ def test_event_validations(page: Page):
     page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(500)
     expect(page.locator('[data-testid="toast_duplicate"]')).to_be_visible(timeout=3000)
-    print("✅ 그룹명 중복 입력 시 toast_duplicate_option 확인 완료")
+    print("✅ 그룹명 중복 입력 시 토스트  확인 완료")
     page.wait_for_timeout(1000)
 
     # 정상 입력 후 포커스 아웃

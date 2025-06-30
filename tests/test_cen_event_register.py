@@ -65,7 +65,8 @@ def fill_event_form(
 
     if idx == 0:
         # 상시 진행중: 시작일/종료일 없음
-        pass
+        # pass
+        end_event = today + timedelta(days=30)
     elif idx == 1:
         end_event = today + timedelta(days=30)
     elif idx == 2:

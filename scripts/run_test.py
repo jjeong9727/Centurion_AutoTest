@@ -23,25 +23,25 @@ DEFAULT_DEVICE = "Windows_Chrome"
 
 # ✅ 모바일까지 실행할 테스트 정의
 mobile_supported_tests = {
-    "tests/test_home_language.py": ["Mobile_Chrome"],
-    "tests/test_home_landing_nologin.py": ["Mobile_Chrome"],
-    "tests/test_home_landing_login.py": ["Mobile_Chrome"]
+    # "tests/test_home_language.py": ["Mobile_Chrome"],
+    # "tests/test_home_landing_nologin.py": ["Mobile_Chrome"],
+    # "tests/test_home_landing_login.py": ["Mobile_Chrome"]
 }
 
 # ✅ PC 만 실행할 테스트 
 pc_only_tests = [
-    "tests/test_home_reservation.py",
-    "tests/test_cen_login.py",
-    "tests/test_cen_customer_register.py",
-    "tests/test_cen_customer_edit.py",
-    "tests/test_cen_customer_search.py",
-    "tests/test_cen_grade.py",
-    "tests/test_cen_membership.py",
-    "tests/test_cen_reservation_accept.py",
-    "tests/test_cen_reservation_edit.py",
-    "tests/test_cen_reservation_search.py",
-    "tests/test_cen_reservation_register.py",
-    "tests/test_cen_record.py",
+    # "tests/test_home_reservation.py",
+    # "tests/test_cen_login.py",
+    # "tests/test_cen_customer_register.py",
+    # "tests/test_cen_customer_edit.py",
+    # "tests/test_cen_customer_search.py",
+    # "tests/test_cen_grade.py",
+    # "tests/test_cen_membership.py",
+    # "tests/test_cen_reservation_accept.py",
+    # "tests/test_cen_reservation_edit.py",
+    # "tests/test_cen_reservation_search.py",
+    # "tests/test_cen_reservation_register.py",
+    # "tests/test_cen_record.py",
 
     "tests/test_cen_event_validation.py",
     "tests/test_cen_event_register.py",

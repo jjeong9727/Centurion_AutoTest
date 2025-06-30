@@ -1,6 +1,6 @@
 {
   "Windows_Chrome": {
-    "viewport": { "width": 1200, "height": 800 },
+    "viewport": { "width": 1500, "height": 800 },
     "device_scale_factor": 1,
     "is_mobile": false,
     "has_touch": false,

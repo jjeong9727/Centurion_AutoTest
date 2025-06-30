@@ -11,7 +11,6 @@ URLS = {
     "home_lifting" : f"{home_base_url}/lifting/info",
     "home_privacy" : f"{home_base_url}/privacy",
     "home_terms" : f"{home_base_url}/terms",
-    "home_privilege" : f"{home_base_url}/privilege",
     "home_discover" : f"{home_base_url}/discover",
     "home_mypage_mem" : f"{home_base_url}/my-page/membership",
     "home_mypage_profile" : f"{home_base_url}/my-page/profile/edit",
@@ -89,7 +88,7 @@ MENU_META_nologin = {
     },
     "privilege": {
         "testid": "menu_privilege",
-        "path": "/events/privilege"
+        "path": "/events"
     },
     "login": {
         "testid": "menu_login",
@@ -111,7 +110,7 @@ MENU_META_login = {
     },
     "privilege": {
         "testid": "menu_privilege",
-        "path": "/events/privilege"
+        "path": "/events"
     },
     "mypage": {
         "testid": "menu_mypage",

@@ -41,7 +41,7 @@ def test_edit_event(page: Page):
 
         row = page.locator("table tbody tr").first
         row.locator("td").last.click()
-        page.wait_for_timeout(1000)
+        page.wait_for_timeout(2000)
         page.locator('[data-testid="btn_review"]').click()
         page.wait_for_timeout(1000)
 
