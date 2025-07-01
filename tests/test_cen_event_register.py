@@ -90,11 +90,11 @@ def fill_event_form(
     if not start_event and not end_event:
         event_period = "상시 진행중"
     elif not start_event and end_event:
-        event_period = f"-{end_event.strftime('%Y.%m.%d')}"
+        event_period = f"-{end_event.strftime('%y.%m.%d')}"
     elif start_event and not end_event:
-        event_period = f"{start_event.strftime('%Y.%m.%d')}-미정"
+        event_period = f"{start_event.strftime('%y.%m.%d')}-미정"
     else:
-        event_period = f"{start_event.strftime('%Y.%m.%d')}-{end_event.strftime('%Y.%m.%d')}"
+        event_period = f"{start_event.strftime('%y.%m.%d')}-{end_event.strftime('%y.%m.%d')}"
 
     # ✅ 이미지 업로드
     upload_locator = page.locator('[data-testid="upload_image"]')

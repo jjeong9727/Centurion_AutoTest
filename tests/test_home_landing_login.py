@@ -35,8 +35,8 @@ def select_menu_and_verify_page(page, menu_key, device_profile):
     locator = page.locator(f'[data-testid="{meta["testid"]}"]')
     locator.wait_for(timeout=3000)
     locator.click(force=True)
-    page.wait_for_load_state("load")
-    page.wait_for_timeout(1000)
+    page.wait_for_timeout(3000)
+
 
     current_url = page.url
     assert expected_url in current_url, f"❌ URL mismatch: expected '{expected_url}', got '{current_url}'"
