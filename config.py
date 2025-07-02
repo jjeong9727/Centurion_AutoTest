@@ -20,6 +20,7 @@ URLS = {
     "home_complete" : f"{home_base_url}/complete",
     "home_mypage_profile": f"{home_base_url}/my-page/profile/edit",
     "home_event" : f"{home_base_url}/events",
+    "home_product" : f"{home_base_url}", # 홈페이지 상품페이지
 
 
 

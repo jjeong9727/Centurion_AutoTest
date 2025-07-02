@@ -1,0 +1,12 @@
+{
+  "main": "대분류수정테스트",
+  "sub": "중분류수정테스트",
+  "treat" :"시술명수정테스트",
+  "product" :"상품명수정테스트",
+  "title" :"상품페이지명수정테스트",
+  "new_main" :"",
+  "new_sub" :"",
+  "new_treat" :"",
+  "new_product" :"",
+  "new_title" :""
+}
