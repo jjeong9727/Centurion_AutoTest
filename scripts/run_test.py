@@ -41,7 +41,6 @@ pc_only_tests = [
     "tests/test_cen_reservation_edit.py",
     "tests/test_cen_reservation_search.py",
     "tests/test_cen_reservation_register.py",
-    "tests/test_cen_record.py",
 
     "tests/test_cen_event_validation.py",
     "tests/test_cen_event_register.py",

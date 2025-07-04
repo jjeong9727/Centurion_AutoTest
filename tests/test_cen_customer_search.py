@@ -35,7 +35,7 @@ def test_search_field(page: Page):
     # 1. 고객명 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_name"]', cust["name"])
     page.wait_for_timeout(1000)
-    page.click("body")
+    page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(1000)
 
     first_row = page.locator("table tbody tr").first
@@ -52,7 +52,7 @@ def test_search_field(page: Page):
     # 2. 생년월일 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_birth"]', cust["birth"])
     page.wait_for_timeout(1000)
-    page.click("body")
+    page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(1000)
     first_row = page.locator("table tbody tr").first
     birth_cell = first_row.locator("td").nth(2)
@@ -65,7 +65,7 @@ def test_search_field(page: Page):
     page.locator('[data-testid="drop_search_gender_trigger"]').click()
     page.get_by_role("option", name=cust["gender"]).click()
     page.wait_for_timeout(1000)
-    page.click("body")
+    page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(1000)
     first_row = page.locator("table tbody tr").first
     gender_cell = first_row.locator("td").nth(3)
@@ -81,7 +81,7 @@ def test_search_field(page: Page):
     # 4. 전화번호 검색 → 확인 → 초기화
     page.fill('[data-testid="input_search_phone"]', cust["phone"])
     page.wait_for_timeout(1000)
-    page.click("body")
+    page.locator("body").click(position={"x": 10, "y": 10})
     page.wait_for_timeout(1000)
 
     first_row = page.locator("table tbody tr").first
