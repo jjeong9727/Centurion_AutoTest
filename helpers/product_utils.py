@@ -11,7 +11,7 @@ from config import URLS
 COUNT_FILE = Path("data/daily_count.json")
 PRODUCT_FILE = Path("data/product.json")
 
-# ✅검색 기능 확인 
+# ✅검색 기능 확인 (⚠️개발되는 형식 보고 수정 필요 )
 def search_and_verify(
     page: Page,
     type_trigger_id: str = "",
@@ -76,6 +76,140 @@ def search_and_verify(
     restored_count = page.locator(table_selector).count()
     assert restored_count == initial_count, f"❌ 초기화 후 행 개수 {restored_count} ≠ 초기 개수 {initial_count}"
     print(f"✅ 초기화 후 행 개수 복원 완료 ({restored_count}건)")
+
+# ✅ 카테고리 선택 함수 
+def select_category(page, level: str, keyword: str):
+    assert level in ['main', 'mid', 'sub'], f"❌ 잘못된 레벨: {level}"
+    # 테스트 아이디 구성
+    trigger_id = f'drop_{level}_trigger'
+    search_id = f'drop_{level}_search'
+    item_id = f'drop_{level}_item'
+    # 트리거 클릭
+    page.click(f'[data-testid="{trigger_id}"]')
+    page.wait_for_timeout(1000)
+    # 검색어 입력
+    page.fill(f'[data-testid="{search_id}"]', keyword)
+    page.wait_for_timeout(1000)
+    # 항목 선택 (첫 번째 결과 기준)
+    page.locator(f'[data-testid="{item_id}"]').first.click()
+    page.wait_for_timeout(1000)
+
+def level_mapping(level: str) -> str:
+    return {
+        "main": "대분류",
+        "mid": "중분류",
+        "sub": "소분류"
+    }[level]
+
+# ✅ 카테고리 수정 함수 
+def update_category_name(
+    page,
+    level: str,
+    current_value: str,
+    new_value: str,
+    toastid: str
+):
+    assert level in ['main', 'mid', 'sub'], f"❌ 잘못된 level 값: {level}"
+
+    if level != 'main':
+        page.click('[data-testid="drop_type_trigger"]')
+        page.wait_for_timeout(1000)
+        page.locator('[data-testid="drop_type_item"]', has_text=level_mapping(level)).click()
+        page.wait_for_timeout(2000)
+
+    # 현재 선택 상태인지 확인 (검색)
+    page.fill('[data-testid="search_name"]', current_value)
+    page.locator("body").click(position={"x": 10, "y": 10})
+    page.wait_for_timeout(1000)
+
+    # # 수정 진입 방법 수정 필요 
+    # row = page.locator("table tbody tr").first
+    # row.locator("td").last.click()
+    # page.wait_for_timeout(2000)
+    # page.locator('[data-testid="btn_review"]').click()
+    # page.wait_for_timeout(1000)
+
+    # page.locator('[data-testid="btn_edit"]').click()
+    # page.wait_for_timeout(1000)
+
+    # 입력 필드 채우기 (테스트 아이디는 input_{level}_ko 형태)
+    page.fill(f'[data-testid="input_{level}_ko"]', new_value)
+    page.wait_for_timeout(1000)
+
+    # 완료 버튼 클릭
+    page.click('[data-testid="btn_complete"]')
+    page.wait_for_timeout(500)
+
+    # 토스트 팝업 확인 
+    expect(page.locator(f'[data-testid="{toastid}"]')).to_be_visible(timeout=3000)
+    print(f"✅ {level_mapping(level)} 토스트 확인 완료")
+
+# 수정 팝업에서 노출 후 미노출 처리 함수
+def disable_category(
+    page,
+    level: str,
+    category_name: str,
+    using_name: str,
+    popup_text: str,
+):
+    def search_and_enter_detail(name: str):
+        if level != 'main':
+            page.click('[data-testid="drop_type_trigger"]')
+            page.wait_for_timeout(1000)
+            page.locator('[data-testid="drop_type_item"]', has_text=level_mapping(level)).click()
+            page.wait_for_timeout(2000)
+
+        page.fill('[data-testid="search_name"]', name)
+        page.locator("body").click(position={"x": 10, "y": 10})
+        page.wait_for_timeout(1000)
+        # 수정 팝업 진입 방법 수정 필요 
+        # row = page.locator("table tbody tr").first
+        # row.locator("td").last.click()
+        # page.wait_for_timeout(1000)
+
+        # page.locator('[data-testid="btn_review"]').click()
+        # page.wait_for_timeout(1000)
+
+    # ✅ 1. category_name 으로 노출 전환
+    search_and_enter_detail(category_name)
+    page.locator(f'[data-testid="btn_show"]').click()
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(500)
+
+    expect(page.locator(f'[data-testid="toast_edit_{level}"]')).to_be_visible(timeout=3000)
+    print(f"✅ {level_mapping(level)} 수정 완료 토스트 확인")
+
+    # ✅ 2. category_name 으로 재검색 후 미노출 전환 → 확인  → 안내 팝업 → 완료
+    search_and_enter_detail(category_name)
+    page.locator(f'[data-testid="btn_hide"]').click()
+    page.wait_for_timeout(1000)
+    
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(1000)
+
+    # 팝업 문구 확인
+    expect(page.locator(f'[data-testid="txt_disable_{level}"]')).to_have_text(popup_text, timeout=3000)
+    page.locator('[data-testid="btn_yes"]').click()
+    page.wait_for_timeout(500)
+    expect(page.locator(f'[data-testid="toast_edit_{level}"]')).to_be_visible(timeout=3000)
+    print(f"✅ {level_mapping(level)} 미노출 전환 완료 토스트 확인")
+
+    # ✅ 3. using_name 으로 미노출 시도 → 사용 중 토스트 확인
+    search_and_enter_detail(using_name)
+    page.locator(f'[data-testid="btn_hide"]').click()
+    page.wait_for_timeout(1000)
+    page.click('[data-testid="btn_confirm"]')
+    page.wait_for_timeout(1000)
+    expect(page.locator(f'[data-testid="txt_disable_{level}"]')).to_have_text(popup_text, timeout=3000)
+    page.wait_for_timeout(1000)
+    page.locator('[data-testid="btn_yes"]').click()
+    page.wait_for_timeout(500)
+    expect(page.locator(f'[data-testid="toast_using_{level}"]')).to_be_visible(timeout=3000)
+    print(f"⚠️ {level_mapping(level)} 사용 중 토스트 확인")
+    page.wait_for_timeout(1000)
+
+
 
 
 # ✅이탈 팝업 확인
@@ -157,10 +291,10 @@ def switch_to_visible(
 def generate_names(type: str) -> tuple[str, str]:
     type_map = {
         "대분류": "main",
-        "중분류": "sub",
+        "중분류": "mid",
+        "소분류" : "sub",
         "시술명": "treat",
-        "상품명": "product",
-        "페이지명": "title"
+        "상품명": "product"
     }
     # 오늘 날짜 (MMDD 형식)
     today_key = datetime.now().strftime("%m%d")

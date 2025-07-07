@@ -5,7 +5,8 @@ from helpers.customer_utils import cen_login
 from helpers import image_assets as img
 from helpers.product_utils import (
     generate_names, update_product_fields, check_save_popup, get_product_fields, 
-    verify_dropdown_values, generate_descriptions, generate_price_info, fill_group_price_info, upload_image
+    verify_dropdown_values, generate_descriptions, generate_price_info, fill_group_price_info, upload_image,
+    select_category
 
 )
 
@@ -15,8 +16,11 @@ def test_product_register(page: Page):
     print(product_ko)  # 상품명_0701_1
     print(product_en)  # product_0701_1
     # 시술 불러오기
-    fields = get_product_fields("new_treat")
+    fields = get_product_fields("new_treat", "new_main", "new_mid", "new_sub")
     treat = fields["new_treat"]
+    main = fields["new_main"]
+    mid = fields["new_mid"]
+    sub = fields["new_sub"]
     # 상품 가격 생성 
     price_info_1 = generate_price_info() 
 
@@ -25,6 +29,11 @@ def test_product_register(page: Page):
     page.wait_for_timeout(2000)
     page.click('[data-testid="btn_register"]')  
     page.wait_for_timeout(1000)
+
+    select_category(page, "main", main)
+    select_category(page, "mid", mid)
+    select_category(page, "sub", sub)
+
     page.fill('[data-testid="input_name"]', product_ko)
     page.wait_for_timeout(1000)
     # 설명 입력
@@ -36,12 +45,7 @@ def test_product_register(page: Page):
     upload_image(page, img.detail_img_5, "img_event_5.jpg")
     
     # 시술선택
-    page.click('[data-testid="drop_treat_trigger"]') 
-    page.wait_for_timeout(1000)
-    page.fill('[data-testid="drop_treat_search"]', treat) 
-    page.wait_for_timeout(1000)
-    page.locator('[data-testid="drop_treat_item"]', has_text=treat).first.click()
-    page.wait_for_timeout(1000)
+    select_category(page, "treat", treat)
     fill_group_price_info(page, 1, price_info_1)
     
     # 영어로 전환하여 정보 입력 
