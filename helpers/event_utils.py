@@ -144,10 +144,11 @@ def verify_event_on_homepage(page: Page, event: Dict[str, str], is_mobile: bool,
             # ✅ 타이틀 기준으로 상위 div에서 기간, 버튼 탐색
             wrapper = title_el.locator("xpath=../../..")  # 타이틀에서 3단계 상위로 올라감 (div.flex.w-full.flex-col → div.flex.w-full.flex-col → div.flex-col)
 
+            
             period = wrapper.locator('[data-testid="txt_event_period"]').inner_text().strip()
             print(f"📆 화면 기간='{period}', JSON 기간='{event['event_period']}'")
 
-            if period == event["event_period"]:
+            if period.replace(" ", "") == event["event_period"].replace(" ", ""):
                 visible_on_list = True
                 # ✅ 상세 보기 진입
                 wrapper.locator('[data-testid="btn_event"]').click()

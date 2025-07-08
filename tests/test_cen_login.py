@@ -26,8 +26,8 @@ def test_login_flow(page: Page):
     page.fill('[data-testid="input_pw"]', Account["wrongpw"])
     page.wait_for_timeout(1000)
     page.click('[data-testid="btn_login"]')
-    page.wait_for_timeout(500)
-    expect(page.locator('[data-testid="alert_mismatch"]')).to_be_visible()
+    expect(page.locator('[data-testid="alert_wrong_pw"]')).to_be_visible(timeout=3000)
+    page.wait_for_timeout(1000)
 
     # 5. 올바른 비밀번호 입력 → 로그인 성공 및 메인 진입 확인
     page.fill('[data-testid="input_pw"]', Account["testpw"])

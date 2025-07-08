@@ -136,14 +136,6 @@
     "device": "Windows_Chrome"
   },
   {
-    "name": "Centurion 녹취 확인 테스트",
-    "file": "tests/test_cen_record.py",
-    "status": "PASS",
-    "message": "테스트 성공",
-    "stack_summary": "",
-    "device": "Windows_Chrome"
-  },
-  {
     "name": "Centurion 이벤트 유효성 확인 테스트",
     "file": "tests/test_cen_event_validation.py",
     "status": "PASS",
