@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "summary": "[자동화] Centurion 이벤트 등록 확인 테스트",
+    "description": "에러 메시지: FAILED tests/test_cen_event_register.py::test_register_event - AssertionError...\n\n파일: tests/test_cen_event_register.py\n테스트 이름: Centurion 이벤트 등록 확인 테스트\n\n스택 요약:\n → ======================== 1 failed in 253.77s (0:04:13) ========================",
+    "project": "CEN",
+    "issuetype": "Bug",
+    "priority": "Medium",
+    "labels": [
+      "auto-test",
+      "fail"
+    ],
+    "file": "tests/test_cen_event_register.py"
+  }
+]

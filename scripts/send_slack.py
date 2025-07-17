@@ -16,6 +16,24 @@ KST = timezone(timedelta(hours=9))
 now = datetime.now(KST)
 seoul_time = now.strftime("%Y-%m-%d %H:%M:%S")
 
+# 버전 정보 불러오기
+def load_version():
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    version_path = os.path.join(base_path, "..", "tests", "version_info.json")
+
+    try:
+        with open(version_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            return {
+                "version_home": data.get("version_home", "버전 정보 없음"),
+                "version_cen": data.get("version_cen", "버전 정보 없음")
+            }
+    except FileNotFoundError:
+        return {
+            "version_home": "버전 정보 없음",
+            "version_cen": "버전 정보 없음"
+        }
+
 # 이슈 맵 받아오기 (run_test.py에서 sys.argv[1]로 전달됨)
 if len(sys.argv) > 1:
     try:
@@ -54,6 +72,7 @@ def get_device_label(device_str):
     return "PC"
 
 def build_slack_message(test_results, issue_map):
+    version = load_version()
     success_count = 0
     fail_count = 0
     skip_count = 0
@@ -84,7 +103,9 @@ def build_slack_message(test_results, issue_map):
 
     total_time = get_total_duration_from_results(test_results)
 
-    slack_message = f":mega: *Ceramique/Centurion* 자동화 테스트 결과 ({seoul_time})\n"
+    slack_message = f":mega: *Ceramique/CenturionAdmin* 자동화 테스트 결과 ({seoul_time})\n"
+    slack_message += f"🏠 세라미크 버전: `{version['version_home']}`  | "
+    slack_message += f":centurionlogo: 센트리온 버전: `{version['version_cen']}`\n"
     slack_message += f"Total: {len(test_results)} | ✅ PASS: {success_count} | ❌ FAIL: {fail_count}\n\n"
     slack_message += "\n".join(detail_lines)
 

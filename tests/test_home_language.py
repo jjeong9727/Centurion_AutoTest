@@ -1,9 +1,10 @@
 import pytest
+import os
 import json
 from playwright.sync_api import Page, expect
 from config import URLS
 from helpers.auth_helper import login_with_token
-
+file_path = os.path.join(os.path.dirname(__file__), "version_info.json")
 
 # 화면별 언어 데이터
 screen_text_data = {
@@ -143,4 +144,86 @@ def test_language_check_all(page: Page, device_profile):
             screen_data,
             is_mobile
         )
+
+def test_contact_language(page:Page):
+    version_text = page.locator('span.self-end.text-font-14-400').inner_text().strip()
+    version = version_text.replace('"', '').strip()
+    print(f"✅ 버전: {version}")
+    version_data = {
+        "version_home": version_text
+    }
+
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump({"version_home": version_text}, f, ensure_ascii=False, indent=2)
+
+
+    BASE_URL = URLS["home_main"]
+    kakao_URL = URLS["kakaoch"]
+    insta_ko_URL = URLS["footer_instagram"]
+    insta_en_URL = URLS["footer_instagram_eng"]
+    test_URLS = {
+        "discover_en": f"{BASE_URL}/en/discover",
+        "discover_ko": f"{BASE_URL}/ko/discover",
+    }
+    contact_ko = "02.6205.3430"
+    contact_en = "+82 10.7609.4217"
+# 한국어 화면
+    page.goto(test_URLS["discover_ko"])
+    page.wait_for_timeout(1000)
+    page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+    page.wait_for_timeout(1000)
+    # 전화번호 확인
+    expect(page.locator("data-testid=contact_phone")).to_have_text(contact_ko, timeout=3000)
+    page.wait_for_timeout(1000)
+    # 카톡 채널 이동 확인
+    with page.expect_popup() as popup_info:
+        page.click('[data-testid="contact_kakaotalk"]')  
+        page.wait_for_timeout(1000)
+    new_page = popup_info.value
+    assert new_page.url.startswith(kakao_URL), f"❌ URL 불일치: {new_page.url} (예상 접두사: {kakao_URL})"
+    print(f"✅ 새 탭 URL 확인 완료: {new_page.url}")
+    new_page.close()
+    page.wait_for_timeout(1000)
+    # 인스타 이동 확인
+    with page.expect_popup() as popup_info:
+        page.click('[data-testid="contact_instagram"]')  
+        page.wait_for_timeout(1000)
+    new_page = popup_info.value
+    assert new_page.url.startswith(insta_ko_URL), f"❌ URL 불일치: {new_page.url} (예상 접두사: {insta_ko_URL})"
+    print(f"✅ 새 탭 URL 확인 완료: {new_page.url}")
+    new_page.close()
+    page.wait_for_timeout(2000)
+
+# 영어 화면
+    page.goto(test_URLS["discover_en"])
+    page.wait_for_timeout(2000)
+    page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+    page.wait_for_timeout(1000)
+    # 전화번호 확인
+    expect(page.locator("data-testid=contact_phone")).to_have_text(contact_en, timeout=3000)
+    page.wait_for_timeout(1000)
+    # 카톡 채널 이동 확인
+    with page.expect_popup() as popup_info:
+        page.click('[data-testid="contact_kakaotalk"]')  
+        page.wait_for_timeout(1000)
+    new_page = popup_info.value
+    assert new_page.url.startswith(kakao_URL), f"❌ URL 불일치: {new_page.url} (예상 접두사: {kakao_URL})"
+    print(f"✅ 새 탭 URL 확인 완료: {new_page.url}")
+    new_page.close()
+    page.wait_for_timeout(1000)
+    # 인스타 이동 확인
+    with page.expect_popup() as popup_info:
+        page.click('[data-testid="contact_instagram"]')  
+        page.wait_for_timeout(1000)
+    new_page = popup_info.value
+    assert new_page.url.startswith(insta_en_URL), f"❌ URL 불일치: {new_page.url} (예상 접두사: {insta_en_URL})"
+    print(f"✅ 새 탭 URL 확인 완료: {new_page.url}")
+    new_page.close()
+    page.wait_for_timeout(1000)
+
+
+
+
+
+
 

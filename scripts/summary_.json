@@ -146,9 +146,9 @@
   {
     "name": "Centurion 이벤트 등록 확인 테스트",
     "file": "tests/test_cen_event_register.py",
-    "status": "PASS",
-    "message": "테스트 성공",
-    "stack_summary": "",
+    "status": "FAIL",
+    "message": "FAILED tests/test_cen_event_register.py::test_register_event - AssertionError...",
+    "stack_summary": " → ======================== 1 failed in 253.77s (0:04:13) ========================",
     "device": "Windows_Chrome"
   },
   {

@@ -15,7 +15,8 @@ with open(DEVICE_JSON_PATH, encoding="utf-8") as f:
 @pytest.fixture(scope="session")
 def browser() -> Generator[Browser, None, None]:
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        # browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         yield browser
         browser.close()
 

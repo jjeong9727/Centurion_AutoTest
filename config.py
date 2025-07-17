@@ -42,9 +42,11 @@ URLS = {
 
 
     # ==============외부 URL==============
-    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 링크 
+    "footer_instagram" : "https://www.instagram.com/ceramique_clinic/", # 인스타그램 세라미크 계정 링크 (한국어)
+    "footer_instagram_eng" : "https://www.instagram.com/ceramique_eng/", # 인스타그램 세라미크 계정 링크(영어) 
     "naver" : "https://booking.naver.com/booking/13/bizes/1048655", # 네이버 플레이스 링크
-    "whatsapp" : "https://api.whatsapp.com/send/?phone=821076094217&text&type=phone_number&app_absent=0" #왓츠앱 앱 설치 링크 
+    "whatsapp" : "https://api.whatsapp.com/send/?phone=821076094217&text&type=phone_number&app_absent=0", #왓츠앱 앱 설치 링크 
+    "kakaoch" : "https://pf.kakao.com/_xkixoJn" # 카카오톡 채널
 }
 
 Account = {
